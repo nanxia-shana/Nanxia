@@ -29,8 +29,10 @@ import {} from "vue";
 <style scoped>
 /* Butterfly loader created by WerlynDev in Uiverse.io*/
 .loader-bg {
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
+  width: inherit;
+  height: inherit;
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
   position: relative;

@@ -10,16 +10,18 @@
           fill="#17202A"></path>
       </svg> -->
     </button>
-    <input :type="type" name="text" class="input__search" v-model="inputMsg" :placeholder="placeholder" />
+    <input ref="input" :type="type" name="text" class="input__search" v-model="inputMsg" :placeholder="placeholder" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, defineExpose } from "vue";
+import { ref, defineExpose, onMounted } from "vue";
 defineProps<{ type: string; placeholder: string }>();
+// 获取页面的实例对象
+const input = ref<null | HTMLElement>(null);
 const inputMsg = ref("");
-
-defineExpose({ inputMsg });
+onMounted(() => {});
+defineExpose({ inputMsg, input });
 </script>
 
 <style scoped>
@@ -80,7 +82,7 @@ defineExpose({ inputMsg });
   border-radius: 20px;
   outline: none;
   border: none;
-  padding: 8px 12px;
+  padding: 8px 15px;
   position: relative;
 }
 </style>
