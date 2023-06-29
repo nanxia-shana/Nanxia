@@ -11,5 +11,9 @@ export default {
     chinese: "简体中文",
     english: "English",
     japanese: "日本語",
+    hello: "Hello",
+    home: " Home ",
+    person: " Person ",
+    setting: " Setting ",
   },
 };

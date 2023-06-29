@@ -13,12 +13,9 @@ app.use(pinia);
 import i18n from "./locale";
 app.use(i18n);
 // 导入ant-design-vue
-import { Button, message, Layout, Menu, Breadcrumb, Switch } from "ant-design-vue";
-// import "ant-design-vue/dist/antd.variable.min.css";
+import { Button, message, Layout, Menu, Breadcrumb, Switch, Image, DatePicker, ConfigProvider, Radio } from "ant-design-vue";
 import "ant-design-vue/dist/antd.less";
-// import "ant-design-vue/dist/antd.min.css";
-// import "ant-design-vue/dist/antd.dark.css";
-app.use(Button).use(Layout).use(Menu).use(Breadcrumb).use(Switch);
+app.use(Button).use(Layout).use(Menu).use(Breadcrumb).use(Switch).use(Image).use(DatePicker).use(ConfigProvider).use(Radio);
 app.config.globalProperties.$message = message;
 // 导入svg-icon管理和组件
 import "virtual:svg-icons-register";

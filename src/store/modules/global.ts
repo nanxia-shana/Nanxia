@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 const global = defineStore("global", {
   state: () => {
     return {
-      language: "zh-CN",
+      language: "zh_CN",
     };
   },
 });
