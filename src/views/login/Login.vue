@@ -3,10 +3,10 @@
     <div class="loginBox">
       <span class="title">Login</span>
       <Input ref="userInput" :type="'text'" :placeholder="'Username'" class="inputItem">
-        <img src="./assets/userIcon.svg" alt="user" />
+        <svg-icon name="user" className="icon-input"></svg-icon>
       </Input>
       <Input ref="passwordInput" :type="'password'" :placeholder="'Password'" class="inputItem">
-        <img src="./assets/passwordIcon.svg" alt="password" />
+        <svg-icon name="unlock" className="icon-input"></svg-icon>
       </Input>
       <Button @click="submit" class="loginBtn" />
     </div>
@@ -30,8 +30,9 @@ onMounted(() => {
 const submit = () => {
   loading.value = true;
   if (userInput.value?.inputMsg && passwordInput.value?.inputMsg) {
+    console.log(userInput.value?.inputMsg, passwordInput.value?.inputMsg);
     setTimeout(() => {
-      router.push("/main");
+      router.push("/noFound");
       loading.value = false;
     }, 1500);
   } else {
@@ -42,13 +43,13 @@ const submit = () => {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .bg {
   width: 100%;
   height: 100%;
   min-height: 100vh;
   background-color: #1e1e1e;
-  background-image: url("./assets/night-sea.jpg");
+  background-image: url("../../assets/images/night-sea.jpg");
   background-position: 0 0;
   background-size: 100% 100%;
   color: #fff;
@@ -73,7 +74,7 @@ const submit = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: box-spin 8s infinite;
+  /* animation: box-spin 8s infinite; */
 }
 @keyframes box-spin {
   0% {
@@ -95,6 +96,11 @@ const submit = () => {
 .inputItem {
   width: 330px;
   margin: 15px 0;
+}
+.icon-input {
+  width: 22px;
+  height: 22px;
+  color: #333333;
 }
 .loginBtn {
   margin-top: 20px;

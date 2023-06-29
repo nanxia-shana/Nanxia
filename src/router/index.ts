@@ -1,28 +1,37 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import layout from "@/layout/index.vue";
 
 const routes = [
   {
-    path: "/login",
-    name: "登录",
-    component: () => import("../views/login/Login.vue"),
-    meta: {
-      requireAuth: false,
-    },
-  },
-  {
     path: "/",
-    name: "",
-    component: () => import("../views/login/Login.vue"),
+    component: layout,
     meta: {
-      requireAuth: false,
+      title: {
+        "/zh-CN": "首页",
+        "/en-US": "Home Page",
+      },
     },
   },
   {
-    path: "/main",
-    name: "主页",
-    component: () => import("../views/Main.vue"),
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/login/Login.vue"),
     meta: {
-      requireAuth: true,
+      title: {
+        "/zh-CN": "首页",
+        "/en-US": "Home Page",
+      },
+    },
+  },
+  {
+    path: "/noFound",
+    name: "NoFound",
+    component: () => import("@/views/noFound.vue"),
+    meta: {
+      title: {
+        "/zh-CN": "404",
+        "/en-US": "404",
+      },
     },
   },
 ];
