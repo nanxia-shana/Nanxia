@@ -1,0 +1,27 @@
+:root {
+  /* 全局主色 */
+  --primary-color: #1cce42;
+  /* 链接色 */
+  --link-color: #1cce42;
+  /* 成功色 */
+  --success-color: #52c41a;
+  /* 警告色 */
+  --warning-color: #faad14;
+  /* 错误色 */
+  --error-color: #f5222d;
+  /* 标题色 */
+  --heading-color: rgba(0, 0, 0, 0.85);
+  /* 主文本色 */
+  --text-color: rgba(0, 0, 0, 0.65);
+  /* 次文本色 */
+  --text-color-secondary: rgba(0, 0, 0, 0.45);
+  /* 失效色 */
+  --disabled-color: rgba(0, 0, 0, 0.25);
+  /* 边框色 */
+  --border-color-base: #d9d9d9;
+  /* 浮层阴影 */
+  --box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  /* 主色链接色 */
+  --primary-color1: #95e4a6;
+}

@@ -1,0 +1,10 @@
+:root {
+  /* 背景主色 */
+  --background-color1: #f0f2f5; /* 主色 */
+  --background-color2: #e3e3e5; /* 深主色 */
+  --background-color3: #ffffff; /* 浅主色 */
+
+  /* 文字主色 */
+  --font-color1: #252529; /* 主色 */
+  --font-color2: #999999; /* 深主色 */
+}

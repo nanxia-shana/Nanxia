@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import zhCN from "ant-design-vue/es/locale/zh_CN";
 import enUS from "ant-design-vue/es/locale/en_US";
 import jaJP from "ant-design-vue/es/locale/ja_JP";
@@ -24,8 +24,18 @@ const locale = ref(zhCN);
 watch(language, (val: string) => {
   locale.value = val == "zh_CN" ? zhCN : val == "en_US" ? enUS : jaJP;
 });
+onMounted(() => {
+  store.switchLang(localStorage.getItem("Shana-locale") ? localStorage.getItem("Shana-locale") : "zh_CN");
+  store.switchTheme(localStorage.getItem("Shana-theme") ? localStorage.getItem("Shana-theme") : "violet");
+  store.switchMode(localStorage.getItem("Shana-mode") ? localStorage.getItem("Shana-mode") : "light");
+});
 </script>
 <style>
+* {
+  transition: background-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0s,
+    background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+    padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 .buttonP:hover,
 .buttonP:focus {
   color: #fff !important;

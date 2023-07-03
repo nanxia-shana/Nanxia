@@ -20,12 +20,12 @@ export default defineConfig({
         // 各个主题文件的位置
         multipleScopeVars: [
           {
-            scopeName: "theme-light",
-            path: path.resolve("src/theme/light.less"),
+            scopeName: "theme-violet",
+            path: path.resolve("src/theme/violet.less"),
           },
           {
-            scopeName: "theme-dark",
-            path: path.resolve("src/theme/dark.less"),
+            scopeName: "theme-green",
+            path: path.resolve("src/theme/green.less"),
           },
         ],
       },

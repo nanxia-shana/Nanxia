@@ -1,26 +1,39 @@
 <template>
   <a-layout style="height: 100vh">
-    <a-layout-sider v-model:collapsed="collapsed" theme="light" :trigger="null" collapsible>
-      <div class="logo" />
-      <div class="paint"></div>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="light" mode="inline" @select="menuItem">
-        <a-menu-item key="1">
+    <a-layout-sider v-model:collapsed="collapsed" :theme="curMode" :trigger="null" collapsible>
+      <div class="logo">
+        <img src="@/assets/images/logo.png" alt="" />
+      </div>
+      <div class="paintBox">
+        <div class="paint" @click="() => (collapsed = !collapsed)">
+          <svg-icon name="huiyuan" className="paint-icon"></svg-icon>
+          <svg-icon name="jiankong" className="paint-icon"></svg-icon>
+          <svg-icon name="search" className="paint-icon"></svg-icon>
+          <svg-icon name="sanceng" className="paint-icon"></svg-icon>
+          <svg-icon name="kanban" className="paint-icon"></svg-icon>
+          <svg-icon name="tuceng" className="paint-icon"></svg-icon>
+          <svg-icon name="schedule" className="paint-icon"></svg-icon>
+          <svg-icon name="threeSix" className="paint-icon"></svg-icon>
+        </div>
+      </div>
+      <a-menu v-model:selectedKeys="selectedKeys" :theme="curMode" mode="inline" @select="menuItem">
+        <a-menu-item key="/home">
           <home-outlined />
           <span> {{ t("common.home") }} </span>
         </a-menu-item>
-        <a-menu-item key="2">
+        <a-menu-item key="/portfolio">
           <video-camera-outlined />
-          <span> {{ t("common.home") }} </span>
+          <span> {{ t("common.portfolio") }} </span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <upload-outlined />
-          <span> {{ t("common.home") }} </span>
+        <a-menu-item key="/schedule">
+          <field-time-outlined />
+          <span> {{ t("common.schedule") }} </span>
         </a-menu-item>
-        <a-menu-item key="4">
+        <a-menu-item key="/person">
           <user-outlined />
           <span> {{ t("common.person") }} </span>
         </a-menu-item>
-        <a-menu-item key="5">
+        <a-menu-item key="/setting">
           <setting-outlined />
           <span> {{ t("common.setting") }} </span>
         </a-menu-item>
@@ -29,105 +42,116 @@
         <right-outlined class="trigger" />
       </div>
     </a-layout-sider>
-    <a-layout>
+    <a-layout class="right">
       <a-layout-header style="padding: 0">
         <nan-header></nan-header>
       </a-layout-header>
-      <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
-        <a-button type="primary" class="buttonP">Primary Button</a-button>
-        <a-button>Default Button</a-button>
-        <a-button type="dashed">Dashed Button</a-button>
-        <a-button type="text">Text Button</a-button>
-        <a-button type="link">Link Button</a-button>
-        <a-radio-group v-model:value="lang" @change="changeLang">
-          <a-radio-button value="zh_CN">zh_CN</a-radio-button>
-          <a-radio-button value="en_US">en_US</a-radio-button>
-          <a-radio-button value="ja_JP">ja_JP</a-radio-button>
-        </a-radio-group>
-        <!-- 开关切换主题 -->
-        <a-switch v-model:checked="checked" checked-children="绿" un-checked-children="黄" @change="change" />
+      <a-layout-content :style="{ margin: '24px 16px', padding: '24px', minHeight: '280px' }" class="content">
+        <router-view v-slot="{ Component }">
+          <!-- <transition name="fade"> -->
+          <component :is="Component" />
+          <!-- </transition> -->
+        </router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 <script lang="ts" setup>
-import { toggleTheme } from "@zougt/vite-plugin-theme-preprocessor/dist/browser-utils.js";
 import {
   HomeOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  UploadOutlined,
+  FieldTimeOutlined,
   RightOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue";
 import NanHeader from "@/layout/components/header/index.vue";
-import { ref, onMounted } from "vue";
-// import { useRouter } from "vue-router";
-// const router = useRouter();
-const checked = ref<boolean>(false);
-const selectedKeys = ref<string[]>(["1"]);
-const collapsed = ref<boolean>(false);
-onMounted(() => {
-  console.log(language.value, lang.value);
-});
-// -----> 切换语言
+import { ref, onMounted, watch } from "vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+import { useRouter } from "vue-router";
 import useGlobalStore from "@/store/modules/global";
 import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
-const { t, locale } = useI18n();
 const store = useGlobalStore();
-const { language } = storeToRefs(store);
-const lang = ref<string>(language.value);
-const changeLang = (e) => {
-  language.value = e.target.value;
-  locale.value = e.target.value;
-};
-// <------------
-// 切换主题回调
-const change = (value: boolean) => {
-  // 如果开关打开，就切换为绿色主题，否则默认黄色主题
-  if (value) {
-    toggleTheme({
-      scopeName: "theme-dark",
-    });
-  } else {
-    toggleTheme({
-      scopeName: "theme-light",
-    });
-  }
-};
+const { mode } = storeToRefs(store);
+const router = useRouter();
+const selectedKeys = ref<string[]>(["/home"]);
+const collapsed = ref<boolean>(false);
+const curMode = ref<string>(mode.value);
+watch(mode, (val: string) => {
+  curMode.value = val;
+});
+watch(
+  () => router.currentRoute.value.path,
+  (newValue) => {
+    selectedKeys.value.length = 0;
+    selectedKeys.value.push(newValue);
+  },
+  { immediate: true },
+);
+onMounted(() => {
+  console.log("Layout-Page");
+});
 const menuItem = (e) => {
-  console.log(e);
-  // router.push("/noFound");
+  // console.log(e);
+  router.push(e.key);
 };
 </script>
 <style lang="less" scoped>
+.right {
+  background-color: var(--background-color1);
+}
+.content {
+  background-color: var(--background-color3);
+}
 .logo {
   width: 100%;
   height: 64px;
-  background-color: #ebe2ff;
+  // background-color: var(--primary-color1);
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+.paintBox {
+  width: calc(100% - 40px);
+  height: 200px;
 }
 .paint {
-  width: calc(100% - 40px);
-  height: 64px;
+  overflow: hidden;
+  width: 100%;
+  // height: 70px;
+  max-height: 184px;
   margin: 10px 0 50px;
-  background-color: #a883f7;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color1);
+  border-radius: 10px;
+  cursor: pointer;
+  &-icon {
+    width: 30px;
+    height: 30px;
+    margin: 8px 4px;
+  }
 }
 .triggerBox {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #ebe2ff;
+  background-color: var(--primary-color1);
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: left 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
   .trigger {
     font-size: 20px;
-    color: #a07bff;
-    transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1) 0s;
+    color: var(--primary-color);
+    transition: all 0.6s cubic-bezier(0.2, 0, 0, 1) 0s;
   }
 }
 .triggerFold {
