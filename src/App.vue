@@ -31,6 +31,11 @@ onMounted(() => {
 });
 </script>
 <style>
+#app {
+  min-width: 1200px;
+  min-height: 800px;
+  height: 100vh;
+}
 * {
   transition: background-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0s,
     background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), border-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),

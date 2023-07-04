@@ -1,6 +1,7 @@
 import { Directive, createApp } from "vue";
 import App from "./App.vue";
 const app = createApp(App);
+
 // 导入初始化css
 import "../src/assets/css/reset.css";
 // 导入router
@@ -13,9 +14,33 @@ app.use(pinia);
 import i18n from "./locale";
 app.use(i18n);
 // 导入ant-design-vue
-import { Button, message, Layout, Menu, Breadcrumb, Switch, Image, DatePicker, ConfigProvider, Radio } from "ant-design-vue";
+import {
+  Button,
+  message,
+  Layout,
+  Menu,
+  Breadcrumb,
+  Switch,
+  Image,
+  DatePicker,
+  ConfigProvider,
+  Radio,
+  Tooltip,
+  Tag,
+} from "ant-design-vue";
 import "ant-design-vue/dist/antd.less";
-app.use(Button).use(Layout).use(Menu).use(Breadcrumb).use(Switch).use(Image).use(DatePicker).use(ConfigProvider).use(Radio);
+app
+  .use(Button)
+  .use(Layout)
+  .use(Menu)
+  .use(Breadcrumb)
+  .use(Switch)
+  .use(Image)
+  .use(DatePicker)
+  .use(ConfigProvider)
+  .use(Radio)
+  .use(Tooltip)
+  .use(Tag);
 app.config.globalProperties.$message = message;
 // 导入svg-icon管理和组件
 import "virtual:svg-icons-register";

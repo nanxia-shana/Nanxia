@@ -77,4 +77,4 @@ const getWeekDateJP = (date: Date): string => {
   var week = weeks[day];
   return week;
 };
-export { timeFormat, getWeekDate };
+export { timeFormatCN, timeFormat, getWeekDate };
