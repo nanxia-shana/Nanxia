@@ -41,7 +41,6 @@ const isVisibility = ref(true);
 // 由于渲染时候对数据的两次赋值，则会出现一次闪现，需要防抖
 
 onMounted(() => {
-  console.log(Math.floor(Math.random() * 16777215).toString(16));
   for (let i = 0; i < 100; i++) {
     cardList.push({
       num: `${i}`,
@@ -80,10 +79,10 @@ function equallyCard() {
 function caLFlex() {
   let arr1 = []; // 第一列的值
   let arr2 = []; // 第二列的值
-  let arr3 = []; // 第二列的值
+  let arr3 = []; // 第三列的值
   let heightArry_1 = []; // 第一列的卡片高度
   let heightArry_2 = []; // 第二列的卡片高度
-  let heightArry_3 = []; // 第二列的卡片高度
+  let heightArry_3 = []; // 第三列的卡片高度
   Array.from(document.querySelectorAll(".card-item")).forEach((item, index) => {
     if (index === 0) {
       // 第一行中的元素无需判断，直接加到新的数组中
@@ -132,19 +131,24 @@ function caLFlex() {
 <style lang="less" scoped>
 .waterfallFlow {
   width: 100%;
-  height: 100%;
-  // overflow: hidden;
+  user-select: none;
+  background-color: #fff;
+  position: relative;
+  z-index: 3;
   .card {
+    padding-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    pointer-events: none;
     .card-item {
       visibility: hidden;
-      // width: 100%;
       width: 70px;
-      margin-bottom: 5px;
-      border-radius: 16px;
+      border-radius: 4px;
       text-align: center;
+      .text {
+        margin-bottom: 1em;
+      }
     }
     .visibles {
       visibility: visible;

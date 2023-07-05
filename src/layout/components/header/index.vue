@@ -61,8 +61,8 @@ import { storeToRefs } from "pinia";
 import { watch, ref } from "vue";
 const store = useGlobalStore();
 const { language } = storeToRefs(store);
-let today: string = timeFormat(new Date(), language.value);
-let week: string = getWeekDate(new Date(), language.value);
+let today: string = timeFormat(new Date(), language.value, "yyyy-MM-dd");
+let week: string = getWeekDate(new Date(), language.value, 3);
 const isFold = ref<boolean>(true);
 const menuUnfold = () => {
   isFold.value = false;
@@ -71,8 +71,8 @@ const menuFold = () => {
   isFold.value = true;
 };
 watch(language, (val: string) => {
-  today = timeFormat(new Date(), val);
-  week = getWeekDate(new Date(), val);
+  today = timeFormat(new Date(), val, "yyyy-MM-dd");
+  week = getWeekDate(new Date(), val, 3);
 });
 </script>
 <style lang="less" scoped>

@@ -4,20 +4,32 @@
       <span class="title" @click="toPortfolio">{{ t("common.portfolio") }}</span>
       <div class="box">
         <div class="box-item">
-          <span class="box-item-name" @click="toMobile">移动端 :</span>
+          <span class="box-item-name" @click="toMobile">{{ t("portfolio.mobile") }} :</span>
           <div class="box-item-box">
-            <a-tag :color="tagColorList[index % 7]" v-for="index in 20" :key="index">pink</a-tag>
+            <a-tag
+              :color="tagColorList[index % 7]"
+              v-for="(item, index) in mobileDemoList"
+              :key="index"
+              @click="toMobileDemo(item)"
+              >{{ item.name }}</a-tag
+            >
           </div>
         </div>
         <div class="box-item">
-          <span class="box-item-name" @click="toComputer">电脑端 :</span>
+          <span class="box-item-name" @click="toComputer">{{ t("portfolio.computer") }} :</span>
           <div class="box-item-box">
             <a-tag :color="tagColorList[index % 7]" v-for="index in 20" :key="index">pink</a-tag>
           </div>
         </div>
       </div>
     </div>
-    <div class="right" :class="{ rightFold: rightRoute }">
+    <div class="right" :class="[rightRoute ? (rightRoute == 'mobile' ? 'rightFoldM' : 'rightFoldC') : '']">
+      <div class="title" :class="{ titleShow: !rightRoute }">
+        <span class="title-name">{{ refreshBtnName }}</span>
+        <a-button shape="circle" @click="router.go(0)">
+          <template #icon><reload-outlined /></template>
+        </a-button>
+      </div>
       <router-view v-slot="{ Component }">
         <!-- <transition name="fade"> -->
         <component :is="Component" />
@@ -27,30 +39,44 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ReloadOutlined } from "@ant-design/icons-vue";
+import { reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 const { t } = useI18n();
-const tagColorList = ref(["pink", "red", "orange", "green", "cyan", "blue", "purple"]);
 const router = useRouter();
-const rightRoute = ref<boolean>(false);
+const rightRoute = ref<string>("");
+const refreshBtnName = ref<string>("");
+const tagColorList = ref(["pink", "red", "orange", "green", "cyan", "blue", "purple"]);
+const mobileDemoList = reactive([
+  {
+    name: `${t("portfolio.waterfallFlow")}`,
+    route: "/portfolio/mobile/waterfallFlow",
+  },
+]);
 const toPortfolio = () => {
-  rightRoute.value = false;
+  rightRoute.value = "";
   router.push("/portfolio");
 };
 const toMobile = () => {
-  rightRoute.value = true;
+  rightRoute.value = "mobile";
   router.push("/portfolio/mobile");
 };
 const toComputer = () => {
-  rightRoute.value = true;
+  rightRoute.value = "computer";
   router.push("/portfolio/computer");
+};
+const toMobileDemo = (item: any) => {
+  router.push(item.route);
 };
 watch(
   () => router.currentRoute.value.path,
   (newValue) => {
-    if (newValue === "/portfolio") rightRoute.value = false;
-    else rightRoute.value = true;
+    let lastRouteName = newValue.split("/").reverse()[0];
+    refreshBtnName.value = t(`portfolio.${lastRouteName}`);
+    if (newValue === "/portfolio") rightRoute.value = "";
+    else if (newValue.indexOf("/mobile") != -1) rightRoute.value = "mobile";
+    else rightRoute.value = "computer";
   },
   { immediate: true },
 );
@@ -77,6 +103,7 @@ watch(
       color: var(--primary-color);
       transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
+
     .box {
       width: fit-content;
       padding: 0 20px 20px;
@@ -106,7 +133,8 @@ watch(
           border-radius: 4px;
         }
         &-box {
-          width: 100%;
+          // width: 100%;
+          width: fit-content;
           padding: 6px;
           border: 1px solid #c0a8ff;
           border-radius: 4px;
@@ -125,10 +153,34 @@ watch(
     border-left: 2px solid rgba(255, 255, 255, 0);
     display: flex;
     justify-content: center;
+    position: relative;
     box-sizing: border-box;
     transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+    .title {
+      position: absolute;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+      &-name {
+        margin-right: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        white-space: nowrap;
+      }
+    }
+    .titleShow {
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
   }
-  .rightFold {
+  .rightFoldM {
+    width: 900px;
+    border-left: 2px solid var(--primary-color);
+    transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  .rightFoldC {
     width: 1000px;
     border-left: 2px solid var(--primary-color);
     transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);

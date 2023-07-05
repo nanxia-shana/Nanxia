@@ -2,6 +2,7 @@ export default {
   common: {
     username: "用户名",
     password: "密码",
+    cancel: "取消",
     save: "保存",
     edit: "编辑",
     update: "更新",
@@ -27,5 +28,13 @@ export default {
     theme: "主题",
     violet: "紫罗兰",
     green: "绿色",
+  },
+  portfolio: {
+    mobile: "移动端",
+    computer: "电脑端",
+    mactips: "使用触控ID或输入密码",
+    enterpassword: "输入密码",
+    visitor: "访客",
+    waterfallFlow: "瀑布流",
   },
 };

@@ -2,6 +2,7 @@ export default {
   common: {
     username: "username",
     password: "password",
+    cancel: "Cancel",
     save: "Save",
     edit: "Edit",
     update: "Update",
@@ -27,5 +28,13 @@ export default {
     theme: "Theme",
     violet: "Violet",
     green: "Green",
+  },
+  portfolio: {
+    mobile: "Mobile Terminal",
+    computer: "Computer Terminal",
+    enterpassword: "Enter password",
+    mactips: "Use your touch ID or enter your password",
+    visitor: "Visitor",
+    waterfallFlow: "Waterfall Flow",
   },
 };

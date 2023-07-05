@@ -2,6 +2,7 @@ export default {
   common: {
     username: "ユーザ名",
     password: "パスワード ",
+    cancel: "キャンセル",
     save: "保存",
     edit: "編集",
     update: "更新",
@@ -27,5 +28,13 @@ export default {
     theme: "テーマ",
     violet: "ヴァイオレット",
     green: "グリーン",
+  },
+  portfolio: {
+    mobile: "携帯端末",
+    computer: "コンピュータ端末",
+    mactips: "タッチIDを使うかパスワードを入力します",
+    enterpassword: "パスワードを入力",
+    visitor: "訪問者",
+    waterfallFlow: "瀑布流",
   },
 };

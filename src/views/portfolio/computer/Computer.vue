@@ -2,20 +2,67 @@
   <div class="computer">
     <div class="computer-box">
       <img src="@/assets/images/MAC.png" alt="iphone" />
-      <div class="computer-box-mac"></div>
+      <div class="computer-box-desktop">
+        <div class="computer-box-desktop-topbar">
+          <span style="margin-right: 1%">{{ curTime }}</span>
+          <span style="margin-right: 0.5%">{{ week }}</span>
+          <span style="margin-left: 1%">{{ today }}</span>
+          <svg-icon name="iphonewifi" className="macIcon"></svg-icon>
+          <svg-icon name="iphonebattery" className="macIcon"></svg-icon>
+          <svg-icon name="mackeyboard" className="macIcon1"></svg-icon>
+          <span>ABC</span>
+        </div>
+        <div class="computer-box-desktop-avatar">
+          <img src="@/assets/images/Iraina6.jpg" alt="avatar" />
+        </div>
+        <span class="computer-box-desktop-name">Iraina</span>
+        <input
+          class="computer-box-desktop-password"
+          type="password"
+          maxlength="6"
+          :placeholder="t('portfolio.enterpassword')" />
+        <span class="computer-box-desktop-tips">{{ t("portfolio.mactips") }}</span>
+        <div class="computer-box-desktop-btn">
+          <div class="computer-box-desktop-btn-item">
+            <div class="computer-box-desktop-btn-item-icon">
+              <svg-icon name="close" className="macBtnIcon"></svg-icon>
+            </div>
+            <span>{{ t("common.cancel") }}</span>
+          </div>
+          <div class="computer-box-desktop-btn-item">
+            <div class="computer-box-desktop-btn-item-icon">
+              <svg-icon name="macuser" className="macBtnIcon"></svg-icon>
+            </div>
+            <span>{{ t("portfolio.visitor") }}</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="computer-box-mac"></div> -->
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-// import { useI18n } from "vue-i18n";
-import { timeFormatCN } from "@/utils/tools";
-// const { t } = useI18n();
-const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm"));
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+import { timeFormatCN, timeFormat, getWeekDate } from "@/utils/tools";
+import useGlobalStore from "@/store/modules/global";
+import { storeToRefs } from "pinia";
+// import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+const store = useGlobalStore();
+const { language } = storeToRefs(store);
+// const router = useRouter();
+const { t } = useI18n();
+const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm:ss"));
+let today: string = timeFormat(new Date(), language.value, "yyyy年MM月dd日");
+let week: string = getWeekDate(new Date(), language.value, 2);
 const setIphoneTime = () => {
-  curTime.value = timeFormatCN(new Date(), "hh:mm");
+  curTime.value = timeFormatCN(new Date(), "hh:mm:ss");
 };
 let nowtime = ref();
+watch(language, (val: string) => {
+  today = timeFormat(new Date(), val, "yyyy年MM月dd");
+  week = getWeekDate(new Date(), val, 2);
+});
 onMounted(() => {
   //启动定时器
   nowtime.value = setInterval(() => {
@@ -36,19 +83,143 @@ onBeforeUnmount(() => {
   align-items: center;
   &-box {
     width: 80%;
+    margin-top: 100px;
     position: relative;
+    // transform-style: preserve-3d;
+    // transform: rotateX(15deg) rotateY(-20deg) translateX(-20px);
     img {
       width: 100%;
       object-fit: contain;
+      position: relative;
+      z-index: 3;
     }
-    &-mac {
+    &-desktop {
       width: 91.8%;
       height: 63.8%;
-      background-color: rgba(200, 162, 22, 0.6);
+      background-image: url(../../../assets/images/night-sea.jpg);
+      background-position: 0 0;
+      background-size: 100% 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       position: absolute;
       top: 4.6%;
-      left: 4.1%;
+      left: 4%;
+      z-index: 4;
+      &-topbar {
+        width: 100%;
+        height: 4%;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        filter: blur(0.4px);
+        span {
+          font-size: 12px;
+          color: #fff;
+          letter-spacing: 1px;
+          transform: scale(0.8);
+        }
+      }
+      &-avatar {
+        width: 10%;
+        height: calc(width);
+        margin-top: 10%;
+        border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: contain;
+        }
+      }
+      &-name {
+        margin: 1% 0;
+        font-size: 1vw;
+        font-weight: 600;
+        color: #ccc;
+      }
+      &-password {
+        width: 14%;
+        padding: 0 1%;
+        border-radius: 10px;
+        background-color: #5f5f5f;
+        font-size: 12px;
+        color: #ddd;
+      }
+      &-password::placeholder {
+        color: #aaa;
+      }
+      &-tips {
+        margin: 1% 0 14%;
+        font-size: 12px;
+        color: #fff;
+        letter-spacing: 1px;
+        text-indent: 1px;
+        transform: scale(0.7);
+      }
+      &-btn {
+        width: 14%;
+        height: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          cursor: pointer;
+          &-icon {
+            width: 2vw;
+            height: 2vw;
+            min-width: 20px;
+            min-height: 20px;
+            max-width: 30px;
+            max-height: 30px;
+            border-radius: 50%;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          span {
+            font-size: 12px;
+            color: #fff;
+            letter-spacing: 1px;
+            text-indent: 1px;
+            transform: scale(0.76);
+          }
+        }
+      }
+    }
+    &-mac {
+      overflow: auto;
+      width: 91.8%;
+      height: 63.8%;
+      position: absolute;
+      top: 4.6%;
+      left: 4%;
+      z-index: 5;
+    }
+    &-mac::-webkit-scrollbar {
+      display: none;
     }
   }
+}
+.macIcon {
+  width: 12px;
+  height: 12px;
+  margin-left: 1%;
+  fill: #fff;
+}
+.macIcon1 {
+  width: 12px;
+  height: 12px;
+  margin-right: 1%;
+  fill: #fff;
+}
+.macBtnIcon {
+  width: 100%;
+  height: 100%;
+  fill: #999;
 }
 </style>

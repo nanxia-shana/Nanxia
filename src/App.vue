@@ -2,7 +2,7 @@
   <a-config-provider :locale="locale">
     <router-view v-slot="{ Component }">
       <transition name="fade">
-        <component :is="Component" />
+        <component :is="Component" @contextmenu.stop="rightClick" />
       </transition>
     </router-view>
   </a-config-provider>
@@ -21,6 +21,9 @@ const store = useGlobalStore();
 const { language } = storeToRefs(store);
 dayjs.locale("zh-cn");
 const locale = ref(zhCN);
+const rightClick = (e) => {
+  console.log(e);
+};
 watch(language, (val: string) => {
   locale.value = val == "zh_CN" ? zhCN : val == "en_US" ? enUS : jaJP;
 });

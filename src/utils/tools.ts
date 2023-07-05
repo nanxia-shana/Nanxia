@@ -1,17 +1,17 @@
 // 转换为日期格式
-const timeFormat = (date: Date, lang: string): string => {
+const timeFormat = (date: Date, lang: string, fmt: string): string => {
   if (lang == "zh_CN") {
-    return timeFormatCN(date, "yyyy-MM-dd");
+    return timeFormatCN(date, fmt);
   } else if (lang == "en_US") {
     return timeFormatEN(date);
   } else {
-    return timeFormatCN(date, "yyyy-MM-dd");
+    return timeFormatCN(date, fmt);
   }
 };
 // 转换星期格式
-const getWeekDate = (date: Date, lang: string): string => {
+const getWeekDate = (date: Date, lang: string, fmt: number): string => {
   if (lang == "zh_CN") {
-    return getWeekDateCN(date);
+    return getWeekDateCN(date, fmt);
   } else if (lang == "en_US") {
     return getWeekDateEN(date);
   } else {
@@ -43,10 +43,15 @@ const timeFormatCN = (date: Date, fmt: string): string => {
   return fmt;
 };
 // 转换为中国星期格式
-const getWeekDateCN = (date: Date): string => {
-  var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+const getWeekDateCN = (date: Date, fmt: number): string => {
+  var weeks2 = new Array("周日", "周一", "周二", "周三", "周四", "周五", "周六");
+  var weeks3 = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
   var day = date.getDay();
-  var week = weeks[day];
+  if (fmt == 2) {
+    var week = weeks2[day];
+  } else {
+    var week = weeks3[day];
+  }
   return week;
 };
 // 转换为英语格式日期
