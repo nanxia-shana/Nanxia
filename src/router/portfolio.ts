@@ -1,4 +1,4 @@
-const portfolioChildren = [
+const portfolioRouter = [
   {
     path: "/portfolio/mobile",
     name: "Mobile",
@@ -12,8 +12,44 @@ const portfolioChildren = [
     children: [
       {
         path: "/portfolio/mobile/waterfallFlow",
-        name: "WaterfallFlow",
+        name: "WaterfallFlowM",
         component: () => import("@/views/portfolio/mobile/WaterfallFlow.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "瀑布流",
+            "/en-US": "WaterfallFlow",
+          },
+        },
+      },
+      {
+        path: "/portfolio/mobile/instantMusicVideo",
+        name: "InstantMusicVideo",
+        component: () => import("@/views/portfolio/mobile/InstantMusicVideo.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "瀑布流",
+            "/en-US": "Instant Music Video",
+          },
+        },
+      },
+    ],
+  },
+  {
+    path: "/portfolio/computer",
+    name: "Computer",
+    component: () => import("@/views/portfolio/computer/Computer.vue"),
+    meta: {
+      title: {
+        "/zh-CN": "电脑端",
+        "/en-US": "Computer Terminal",
+      },
+      "/en-US": "WaterfallFlow",
+    },
+    children: [
+      {
+        path: "/portfolio/computer/waterfallFlow",
+        name: "WaterfallFlowC",
+        component: () => import("@/views/portfolio/computer/WaterfallFlow.vue"),
         meta: {
           title: {
             "/zh-CN": "瀑布流",
@@ -25,4 +61,4 @@ const portfolioChildren = [
   },
 ];
 
-export default portfolioChildren;
+export default portfolioRouter;

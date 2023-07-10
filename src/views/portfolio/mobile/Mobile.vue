@@ -4,8 +4,8 @@
       <img src="@/assets/images/iphone.png" alt="iphone" />
       <div class="mobile-item-iphone">
         <div class="mobile-item-iphone-content backVideo" :class="{ isWindow: isWindow }">
-          <div class="isWindowTime mobile-item-iphone-content-time">{{ curTime }}</div>
-          <div class="mobile-item-iphone-content-status">
+          <div class="isWindowItem mobile-item-iphone-content-time">{{ curTime }}</div>
+          <div class="isWindowItem mobile-item-iphone-content-status">
             <svg-icon name="iphonesignal" className="iphoneIcon1"></svg-icon>
             <svg-icon name="iphonebattery" className="iphoneIcon2"></svg-icon>
           </div>
@@ -26,13 +26,17 @@
         @mouseout="mouseout"
         @mousemove="mousemove($event)">
         <router-view v-slot="{ Component }">
-          <!-- <transition name="fade"> -->
-          <component :is="Component" />
-          <!-- </transition> -->
+          <transition
+            name="custom-classes"
+            enter-active-class="animate__animated animate__backInUp"
+            leave-active-class="animate__animated animate__backOutDown">
+            <component :is="Component" />
+          </transition>
         </router-view>
       </div>
     </div>
-    <div class="mobile-item mobile-right">
+    <!-- Right -->
+    <div class="mobile-item mobile-right" @click="rightStart">
       <img src="@/assets/images/iphone.png" alt="iphone" />
       <div class="mobile-item-iphone">
         <div class="mobile-item-iphone-content">
@@ -49,8 +53,10 @@
             </div>
           </div>
         </div>
+        <div class="mobile-item-iphone-lock" :class="{ noStart: rightIsStart }">
+          <video class="mobile-item-iphone-lock-video" src="@/assets/videos/earthstar.mp4" muted autoplay loop></video>
+        </div>
       </div>
-      <div class="mobile-item-window"></div>
     </div>
   </div>
 </template>
@@ -69,8 +75,13 @@ const isWindow = ref<boolean>(false);
 const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm"));
 const iphone = ref(null); // 使用 ref 引用 DOM 元素
 let flag = ref<boolean>(false); //判断鼠标是否在iphone内且按住未松
-let today: string = timeFormat(new Date(), language.value, "yyyy年MM月dd日");
+let today: string = timeFormat(new Date(), language.value, "yyyy/MM/dd");
 let week: string = getWeekDate(new Date(), language.value, 3);
+const rightIsStart = ref<boolean>(false);
+const lockRightTime = setTimeout(() => {
+  rightIsStart.value = false;
+  console.log("object");
+}, 15000);
 const setIphoneTime = () => {
   curTime.value = timeFormatCN(new Date(), "hh:mm");
 };
@@ -86,10 +97,13 @@ const mouseout = () => {
 };
 const mousemove = (e: any) => {
   if (flag.value) {
-    console.log(e);
     // 保证下滑时页面相同方向滚动
     iphone.value.scrollTop -= e.movementY;
   }
+};
+const rightStart = () => {
+  rightIsStart.value = true;
+  lockRightTime;
 };
 watch(
   () => router.currentRoute.value.path,
@@ -101,7 +115,7 @@ watch(
   { immediate: true },
 );
 watch(language, (val: string) => {
-  today = timeFormat(new Date(), val, "yyyy年MM月dd日");
+  today = timeFormat(new Date(), val, "yyyy/MM/dd");
   week = getWeekDate(new Date(), val, 3);
 });
 onMounted(() => {
@@ -113,6 +127,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   // 在组件消费前，销毁定时器
   clearInterval(nowtime.value);
+  clearTimeout(lockRightTime);
 });
 </script>
 <style lang="less" scoped>
@@ -125,6 +140,7 @@ onBeforeUnmount(() => {
     width: 300px;
     height: 600px;
     margin-top: 60px;
+    border-radius: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,43 +148,61 @@ onBeforeUnmount(() => {
     img {
       width: 300px;
       height: 600px;
+      border-radius: 40px;
       object-fit: contain;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 4;
+      z-index: 5;
+      cursor: pointer;
       user-select: none;
     }
     &-iphone {
       width: 260px;
       height: 565px;
-      // padding: 0 8px 2px;
-      // display: flex;
-      // flex-wrap: wrap;
-      // justify-content: space-between;
       position: absolute;
       top: 18.3px;
       left: 20.3px;
       z-index: 3;
-      cursor: default;
+      &-lock {
+        width: 272px;
+        height: 565px;
+        position: absolute;
+        top: 0;
+        left: -6px;
+        z-index: 4;
+        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        &-video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .noStart {
+        filter: blur(6px);
+        opacity: 0;
+        transform: scale(0);
+        transition: all 1s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0s 1s;
+      }
       .backVideo {
         background-image: url("../../../assets/images/deskBack2.jpeg");
       }
       &-content {
         overflow-x: hidden;
         overflow-y: scroll;
-        width: 100%;
+        width: 101%;
         // height: calc(100% - 26px);
         height: 100%;
-        border-radius: 26px;
+        margin-left: -1px;
+        border-radius: 20px;
         background-image: url("../../../assets/images/deskBack.jpeg");
         background-position: 0 0;
         background-size: 100% 100%;
         position: relative;
         &-time {
-          width: 40%;
+          width: 50%;
           height: 20px;
-          margin: 4px 0 0 12px;
+          padding: 2px 0 20px 12px;
           font-size: 14px;
           color: #fff;
           font-weight: bolder;
@@ -176,17 +210,19 @@ onBeforeUnmount(() => {
           position: absolute;
           top: 0;
           left: 0;
+          transition: all 0s;
         }
         &-status {
-          width: 40%;
-          height: 20px;
-          margin: 4px 12px 0 0;
+          width: 50%;
+          height: 22px;
+          padding: 4px 12px 0 0;
           display: flex;
           justify-content: flex-end;
           align-items: center;
           position: absolute;
           top: 0;
           right: 0;
+          transition: all 0s;
         }
         &-desktop {
           width: 100%;
@@ -195,7 +231,7 @@ onBeforeUnmount(() => {
           align-items: center;
           position: absolute;
           top: 0;
-          right: 0;
+          left: 0;
           z-index: 2;
           &-time {
             margin-top: 40px;
@@ -219,37 +255,48 @@ onBeforeUnmount(() => {
         display: none;
       }
     }
+
     &-window {
       overflow-x: hidden;
       overflow-y: scroll;
-      width: calc(100% - 40px);
+      width: calc(100% - 41px);
       height: calc(100% - 57px);
-      border-radius: 2px 2px 26px 26px;
+      border-radius: 0 0 20px 20px;
       position: absolute;
       top: 40px;
-      left: 20px;
+      left: 21px;
       z-index: 5;
     }
     &-window::-webkit-scrollbar {
       display: none;
     }
   }
+
   &-left {
     margin-left: 2%;
     margin-right: 4%;
+    // transform-style: preserve-3d;
+    // transform: rotateX(15deg) rotateY(20deg);
+  }
+  &-right {
+    // transform-style: preserve-3d;
+    // transform: rotateX(15deg) rotateY(-20deg);
   }
 }
 .isWindow {
-  background-color: #fff;
-  background-image: none !important;
-  .isWindowTime {
-    color: #333;
+  // background-image: none !important;
+  .isWindowItem {
+    // color: #333;
+    background-color: #333;
+    transition: all 0s 0.6s;
   }
   .iphoneIcon1 {
-    fill: #333;
+    // fill: #333;
+    transition: all 0s 0.6s;
   }
   .iphoneIcon2 {
-    fill: #333;
+    // fill: #333;
+    transition: all 0s 0.6s;
   }
 }
 .iphoneIcon1 {
@@ -257,11 +304,18 @@ onBeforeUnmount(() => {
   height: 14px;
   margin-right: 6px;
   fill: #fff;
+  transition: all 0s;
 }
 .iphoneIcon2 {
   width: 18px;
   height: 18px;
   margin-right: 2px;
   fill: #fff;
+  transition: all 0s;
+}
+.animate__animated.animate__backInUp,
+.animate__animated.animate__backOutDown {
+  --animate-duration: 0.6s;
+  --animate-delay: 0s;
 }
 </style>

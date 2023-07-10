@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import layout from "@/layout/index.vue";
 import personRouter from "./person";
+import portfolioRouter from "./portfolio";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,43 +36,7 @@ const routes: Array<RouteRecordRaw> = [
             "/en-US": "Portfilio Page",
           },
         },
-        children: [
-          {
-            path: "/portfolio/mobile",
-            name: "Mobile",
-            component: () => import("@/views/portfolio/mobile/Mobile.vue"),
-            meta: {
-              title: {
-                "/zh-CN": "移动端",
-                "/en-US": "Mobile Terminal",
-              },
-            },
-            children: [
-              {
-                path: "/portfolio/mobile/waterfallFlow",
-                name: "WaterfallFlow",
-                component: () => import("@/views/portfolio/mobile/WaterfallFlow.vue"),
-                meta: {
-                  title: {
-                    "/zh-CN": "瀑布流",
-                    "/en-US": "WaterfallFlow",
-                  },
-                },
-              },
-            ],
-          },
-          {
-            path: "/portfolio/computer",
-            name: "Computer",
-            component: () => import("@/views/portfolio/computer/Computer.vue"),
-            meta: {
-              title: {
-                "/zh-CN": "电脑端",
-                "/en-US": "Computer Terminal",
-              },
-            },
-          },
-        ],
+        children: [...portfolioRouter],
       },
       {
         path: "/schedule",

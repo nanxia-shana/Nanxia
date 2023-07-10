@@ -10,7 +10,7 @@
               :color="tagColorList[index % 7]"
               v-for="(item, index) in mobileDemoList"
               :key="index"
-              @click="toMobileDemo(item)"
+              @click="toDemo(item)"
               >{{ item.name }}</a-tag
             >
           </div>
@@ -18,7 +18,13 @@
         <div class="box-item">
           <span class="box-item-name" @click="toComputer">{{ t("portfolio.computer") }} :</span>
           <div class="box-item-box">
-            <a-tag :color="tagColorList[index % 7]" v-for="index in 20" :key="index">pink</a-tag>
+            <a-tag
+              :color="tagColorList[6 - (index % 7)]"
+              v-for="(item, index) in computerDemoList"
+              :key="index"
+              @click="toDemo(item)"
+              >{{ item.name }}</a-tag
+            >
           </div>
         </div>
       </div>
@@ -31,16 +37,14 @@
         </a-button>
       </div>
       <router-view v-slot="{ Component }">
-        <!-- <transition name="fade"> -->
         <component :is="Component" />
-        <!-- </transition> -->
       </router-view>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { ReloadOutlined } from "@ant-design/icons-vue";
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 const { t } = useI18n();
@@ -52,6 +56,16 @@ const mobileDemoList = reactive([
   {
     name: `${t("portfolio.waterfallFlow")}`,
     route: "/portfolio/mobile/waterfallFlow",
+  },
+  {
+    name: `${t("portfolio.instantMusicVideo")}`,
+    route: "/portfolio/mobile/instantMusicVideo",
+  },
+]);
+const computerDemoList = reactive([
+  {
+    name: `${t("portfolio.waterfallFlow")}`,
+    route: "/portfolio/computer/waterfallFlow",
   },
 ]);
 const toPortfolio = () => {
@@ -66,20 +80,26 @@ const toComputer = () => {
   rightRoute.value = "computer";
   router.push("/portfolio/computer");
 };
-const toMobileDemo = (item: any) => {
+const toDemo = (item: any) => {
   router.push(item.route);
 };
 watch(
   () => router.currentRoute.value.path,
   (newValue) => {
-    let lastRouteName = newValue.split("/").reverse()[0];
-    refreshBtnName.value = t(`portfolio.${lastRouteName}`);
+    let lastRouteName = newValue.split("/").reverse();
+    if (lastRouteName.length < 3) return;
+    refreshBtnName.value = t(`portfolio.${lastRouteName[0]}`);
     if (newValue === "/portfolio") rightRoute.value = "";
     else if (newValue.indexOf("/mobile") != -1) rightRoute.value = "mobile";
     else rightRoute.value = "computer";
   },
   { immediate: true },
 );
+onMounted(() => {
+  if (router.currentRoute.value.path === "/portfolio") rightRoute.value = "";
+  else if (router.currentRoute.value.path.indexOf("/mobile") != -1) rightRoute.value = "mobile";
+  else rightRoute.value = "computer";
+});
 </script>
 <style lang="less" scoped>
 .portfolio {
@@ -151,6 +171,7 @@ watch(
   .right {
     width: 0;
     border-left: 2px solid rgba(255, 255, 255, 0);
+    // background: linear-gradient(to right, #c0a8ff, #ed7275);
     display: flex;
     justify-content: center;
     position: relative;
@@ -158,9 +179,10 @@ watch(
     transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
     .title {
       position: absolute;
-      top: 0;
+      top: 10px;
       display: flex;
       justify-content: center;
+      align-items: baseline;
       transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       &-name {
         margin-right: 10px;

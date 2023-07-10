@@ -36,5 +36,6 @@ export default {
     mactips: "Use your touch ID or enter your password",
     visitor: "Visitor",
     waterfallFlow: "Waterfall Flow",
+    instantMusicVideo: "Instant Music Video",
   },
 };

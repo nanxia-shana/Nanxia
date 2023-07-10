@@ -2,12 +2,14 @@
   <div class="waterfallFlow">
     <div class="card">
       <div class="coloum1">
+        <!-- :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]" -->
         <div
           class="card-item"
           v-for="(item, index) in cardList1"
           :key="index"
-          :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]"
-          :class="{ visibles: isVisibility }">
+          :class="{ visibles: isVisibility }"
+          :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]">
+          <!-- <img class="image" :src="getImageUrl(item.name)" alt="" /> -->
           <p class="text">{{ item.num }}</p>
         </div>
       </div>
@@ -16,8 +18,9 @@
           class="card-item"
           v-for="(item, index) in cardList2"
           :key="index"
-          :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]"
-          :class="{ visibles: isVisibility }">
+          :class="{ visibles: isVisibility }"
+          :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]">
+          <!-- <img class="image" :src="getImageUrl(item.name)" alt="" /> -->
           <p class="text">{{ item.num }}</p>
         </div>
       </div>
@@ -26,8 +29,9 @@
           class="card-item"
           v-for="(item, index) in cardList3"
           :key="index"
-          :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]"
-          :class="{ visibles: isVisibility }">
+          :class="{ visibles: isVisibility }"
+          :style="[{ background: item.color }, { height: item.height }, { lineHeight: item.height }]">
+          <!-- <img class="image" :src="getImageUrl(item.name)" alt="" /> -->
           <p class="text">{{ item.num }}</p>
         </div>
       </div>
@@ -39,11 +43,16 @@ import { ref, onMounted, reactive, nextTick } from "vue";
 const cardList = reactive([]);
 const isVisibility = ref(true);
 // 由于渲染时候对数据的两次赋值，则会出现一次闪现，需要防抖
-
+// const pictureList = ["deskBack02", "file01", "file02", "file03", "file04", "file05", "file06"];
+// const getImageUrl = (name: string) => {
+//   return new URL(`/src/assets/images/${name}.jepg`, import.meta.url).href;
+// };
 onMounted(() => {
-  for (let i = 0; i < 100; i++) {
+  console.log(Math.floor(Math.random() * 6));
+  for (let i = 0; i < 40; i++) {
     cardList.push({
       num: `${i}`,
+      // name: pictureList[Math.floor(Math.random() * 6)],
       color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
       height: `${Math.random() * 10 + 5}`,
     });
@@ -146,6 +155,10 @@ function caLFlex() {
       width: 70px;
       border-radius: 4px;
       text-align: center;
+      .image {
+        width: 70px;
+        object-fit: contain;
+      }
       .text {
         margin-bottom: 1em;
       }

@@ -37,7 +37,13 @@
           </div>
         </div>
       </div>
-      <!-- <div class="computer-box-mac"></div> -->
+      <div class="computer-box-mac" :class="{ macShow: !macShow }">
+        <router-view v-slot="{ Component }">
+          <!-- <transition name="fade"> -->
+          <component :is="Component" />
+          <!-- </transition> -->
+        </router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -46,23 +52,33 @@ import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import { timeFormatCN, timeFormat, getWeekDate } from "@/utils/tools";
 import useGlobalStore from "@/store/modules/global";
 import { storeToRefs } from "pinia";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 const store = useGlobalStore();
 const { language } = storeToRefs(store);
-// const router = useRouter();
+const router = useRouter();
 const { t } = useI18n();
 const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm:ss"));
-let today: string = timeFormat(new Date(), language.value, "yyyy年MM月dd日");
+const macShow = ref<boolean>(true);
+let today: string = timeFormat(new Date(), language.value, "yyyy/MM/dd");
 let week: string = getWeekDate(new Date(), language.value, 2);
 const setIphoneTime = () => {
   curTime.value = timeFormatCN(new Date(), "hh:mm:ss");
 };
 let nowtime = ref();
 watch(language, (val: string) => {
-  today = timeFormat(new Date(), val, "yyyy年MM月dd");
+  today = timeFormat(new Date(), val, "yyyy/MM/dd");
   week = getWeekDate(new Date(), val, 2);
 });
+watch(
+  () => router.currentRoute.value.path,
+  (newValue) => {
+    let lastRouteName = newValue.split("/").reverse()[0];
+    if (lastRouteName === "portfolio" || lastRouteName === "computer" || lastRouteName === "mobile") macShow.value = true;
+    else macShow.value = false;
+  },
+  { immediate: true },
+);
 onMounted(() => {
   //启动定时器
   nowtime.value = setInterval(() => {
@@ -86,7 +102,7 @@ onBeforeUnmount(() => {
     margin-top: 100px;
     position: relative;
     // transform-style: preserve-3d;
-    // transform: rotateX(15deg) rotateY(-20deg) translateX(-20px);
+    // transform: rotateX(10deg) rotateY(-15deg) translateX(10px);
     img {
       width: 100%;
       object-fit: contain;
@@ -184,6 +200,7 @@ onBeforeUnmount(() => {
           span {
             font-size: 12px;
             color: #fff;
+            white-space: nowrap;
             letter-spacing: 1px;
             text-indent: 1px;
             transform: scale(0.76);
@@ -199,9 +216,17 @@ onBeforeUnmount(() => {
       top: 4.6%;
       left: 4%;
       z-index: 5;
+      transform: scale(0);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
     &-mac::-webkit-scrollbar {
       display: none;
+    }
+    .macShow {
+      transform: scale(1);
+      opacity: 1;
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
   }
 }

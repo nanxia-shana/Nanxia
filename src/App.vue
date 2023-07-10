@@ -1,9 +1,9 @@
 <template>
   <a-config-provider :locale="locale">
     <router-view v-slot="{ Component }">
-      <transition name="fade">
-        <component :is="Component" @contextmenu.stop="rightClick" />
-      </transition>
+      <!-- <transition name="fade"> -->
+      <component :is="Component" @contextmenu.stop="rightClick" />
+      <!-- </transition> -->
     </router-view>
   </a-config-provider>
 </template>
@@ -47,6 +47,10 @@ onMounted(() => {
 .buttonP:hover,
 .buttonP:focus {
   color: #fff !important;
+}
+:root {
+  --animate-duration: 0.3s;
+  --animate-delay: 0s;
 }
 /* .logo {
   height: 6em;

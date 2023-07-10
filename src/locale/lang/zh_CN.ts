@@ -36,5 +36,6 @@ export default {
     enterpassword: "输入密码",
     visitor: "访客",
     waterfallFlow: "瀑布流",
+    instantMusicVideo: "短视频",
   },
 };

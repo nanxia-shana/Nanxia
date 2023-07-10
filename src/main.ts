@@ -1,7 +1,7 @@
 import { Directive, createApp } from "vue";
 import App from "./App.vue";
 const app = createApp(App);
-
+import "animate.css";
 // 导入初始化css
 import "../src/assets/css/reset.css";
 // 导入router
