@@ -27,6 +27,8 @@ import {
   Radio,
   Tooltip,
   Tag,
+  Modal,
+  Upload,
 } from "ant-design-vue";
 import "ant-design-vue/dist/antd.less";
 app
@@ -40,7 +42,9 @@ app
   .use(ConfigProvider)
   .use(Radio)
   .use(Tooltip)
-  .use(Tag);
+  .use(Tag)
+  .use(Modal)
+  .use(Upload);
 app.config.globalProperties.$message = message;
 // 导入svg-icon管理和组件
 import "virtual:svg-icons-register";
@@ -59,5 +63,4 @@ import * as directives from "./directives";
 Object.keys(directives).forEach((key) => {
   app.directive(key, (directives as { [key: string]: Directive })[key]);
 });
-
 app.mount("#app");

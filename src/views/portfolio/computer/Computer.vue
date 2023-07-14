@@ -20,7 +20,8 @@
           class="computer-box-desktop-password"
           type="password"
           maxlength="6"
-          :placeholder="t('portfolio.enterpassword')" />
+          :placeholder="t('portfolio.enterpassword')"
+          @keydown.enter="keydown" />
         <span class="computer-box-desktop-tips">{{ t("portfolio.mactips") }}</span>
         <div class="computer-box-desktop-btn">
           <div class="computer-box-desktop-btn-item">
@@ -62,10 +63,13 @@ const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm:ss"));
 const macShow = ref<boolean>(true);
 let today: string = timeFormat(new Date(), language.value, "yyyy/MM/dd");
 let week: string = getWeekDate(new Date(), language.value, 2);
+let nowtime = ref();
 const setIphoneTime = () => {
   curTime.value = timeFormatCN(new Date(), "hh:mm:ss");
 };
-let nowtime = ref();
+const keydown = () => {
+  console.log("object");
+};
 watch(language, (val: string) => {
   today = timeFormat(new Date(), val, "yyyy/MM/dd");
   week = getWeekDate(new Date(), val, 2);

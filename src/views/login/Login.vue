@@ -3,10 +3,10 @@
     <div class="loginBox">
       <span class="title">Login</span>
       <Input ref="userInput" :type="'text'" :placeholder="'Username'" class="inputItem">
-        <svg-icon name="user" className="icon-input"></svg-icon>
+        <svg-icon name="user" className="icon-input" @click="iconClick(1)"></svg-icon>
       </Input>
       <Input ref="passwordInput" :type="'password'" :placeholder="'Password'" class="inputItem">
-        <svg-icon name="unlock" className="icon-input"></svg-icon>
+        <svg-icon name="unlock" className="icon-input" @click="iconClick(2)"></svg-icon>
       </Input>
       <Button @click="submit" class="loginBtn" />
     </div>
@@ -26,19 +26,37 @@ const router = useRouter();
 const loading = ref(false);
 onMounted(() => {
   userInput.value?.input?.focus();
+  passwordInput.value?.input.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      submit();
+    }
+  });
+  userInput.value?.button.addEventListener("focus", () => {
+    userInput.value?.input?.focus();
+  });
+  passwordInput.value?.button.addEventListener("focus", () => {
+    passwordInput.value?.input?.focus();
+  });
 });
 const submit = () => {
   loading.value = true;
   if (userInput.value?.inputMsg && passwordInput.value?.inputMsg) {
     console.log(userInput.value?.inputMsg, passwordInput.value?.inputMsg);
     setTimeout(() => {
-      router.push("/noFound");
+      router.push("/");
       loading.value = false;
     }, 1500);
   } else {
     setTimeout(() => {
       loading.value = false;
     }, 1500);
+  }
+};
+const iconClick = (num) => {
+  if (num === 1) {
+    userInput.value?.input?.focus();
+  } else if (num === 2) {
+    passwordInput.value?.input?.focus();
   }
 };
 </script>

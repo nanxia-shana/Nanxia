@@ -1,6 +1,6 @@
 // 封装类
 import axios from "axios";
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosInstance, AxiosRequestConfig } from "axios";
 const DEFAULT_LOADING = true;
 // 自建一个用于匹配interceptors的类型
 interface ZWRequestInterceptors {

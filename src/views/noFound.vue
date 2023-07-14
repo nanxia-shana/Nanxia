@@ -2,9 +2,9 @@
   <div class="main">
     <!-- <Test></Test> -->
     <p>{{ t("common.username") }}</p>
-    <a-button type="primary" @click="changeLang('zh_CN')">{{ t("common.chinese") }}</a-button>
-    <a-button @click="changeLang('en_US')">{{ t("common.english") }}</a-button>
-    <a-button type="dashed" @click="changeLang('jp_JP')">{{ t("common.japanese") }}</a-button>
+    <a-button type="primary" class="buttonP" @click="changeLang('zh_CN')">{{ t("setting.chinese") }}</a-button>
+    <a-button @click="changeLang('en_US')">{{ t("setting.english") }}</a-button>
+    <a-button type="dashed" @click="changeLang('ja_JP')">{{ t("setting.japanese") }}</a-button>
 
     <a-date-picker v-model:value="value1" />
     <a-date-picker v-model:value="value2" picker="week" />

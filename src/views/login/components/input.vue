@@ -1,7 +1,7 @@
 <template>
   <div class="input__container">
     <div class="shadow__input"></div>
-    <button class="input__button__shadow">
+    <button ref="button" class="input__button__shadow">
       <slot></slot>
     </button>
     <input ref="input" :type="type" name="text" class="input__search" v-model="inputMsg" :placeholder="placeholder" />
@@ -12,10 +12,11 @@
 import { ref, defineExpose, onMounted } from "vue";
 defineProps<{ type: string; placeholder: string }>();
 // 获取页面的实例对象
+const button = ref<null | HTMLElement>(null);
 const input = ref<null | HTMLElement>(null);
 const inputMsg = ref("");
 onMounted(() => {});
-defineExpose({ inputMsg, input });
+defineExpose({ input, button, inputMsg });
 </script>
 
 <style lang="less" scoped>
@@ -30,8 +31,8 @@ defineExpose({ inputMsg, input });
   border-radius: 22px;
   max-width: 300px;
   transition: transform 400ms;
-  /* transform-style: preserve-3d; */
-  /* transform: rotateX(15deg) rotateY(-20deg); */
+  // transform-style: preserve-3d;
+  // transform: rotateX(15deg) rotateY(-20deg);
   perspective: 500px;
 }
 

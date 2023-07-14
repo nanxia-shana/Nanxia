@@ -60,11 +60,11 @@ const timeFormatEN = (date: Date): string => {
   var y = date.getFullYear(); //年份
   var M = month[date.getMonth()]; //月份
   var d = date.getDate(); //日
-  var h = date.getHours(); //小时
-  var m = date.getMinutes(); //分
-  var s = date.getSeconds(); //秒
-  var j = Math.floor((date.getMonth() + 3) / 3); //季度
-  var S = date.getMilliseconds(); //毫秒
+  // var h = date.getHours(); //小时
+  // var m = date.getMinutes(); //分
+  // var s = date.getSeconds(); //秒
+  // var j = Math.floor((date.getMonth() + 3) / 3); //季度
+  // var S = date.getMilliseconds(); //毫秒
   return d + " " + M + " " + y;
 };
 

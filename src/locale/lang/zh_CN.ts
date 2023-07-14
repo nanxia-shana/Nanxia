@@ -35,7 +35,7 @@ export default {
     mactips: "使用触控ID或输入密码",
     enterpassword: "输入密码",
     visitor: "访客",
-    waterfallFlow: "瀑布流",
+    waterfallFlow: "瀑布流布局",
     instantMusicVideo: "短视频",
   },
 };

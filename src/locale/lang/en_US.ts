@@ -35,7 +35,7 @@ export default {
     enterpassword: "Enter password",
     mactips: "Use your touch ID or enter your password",
     visitor: "Visitor",
-    waterfallFlow: "Waterfall Flow",
+    waterfallFlow: "Waterfall Flow Layout",
     instantMusicVideo: "Instant Music Video",
   },
 };

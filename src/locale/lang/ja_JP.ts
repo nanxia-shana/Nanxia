@@ -35,7 +35,7 @@ export default {
     mactips: "タッチIDを使うかパスワードを入力します",
     enterpassword: "パスワードを入力",
     visitor: "訪問者",
-    waterfallFlow: "瀑布流",
-    instantMusicVideo: "Instant Music Video",
+    waterfallFlow: "ウォーターフォールレイアウト",
+    instantMusicVideo: "ショートビデオ",
   },
 };

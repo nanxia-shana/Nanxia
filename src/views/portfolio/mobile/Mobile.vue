@@ -18,13 +18,7 @@
           </div>
         </div>
       </div>
-      <div
-        class="mobile-item-window"
-        ref="iphone"
-        @mousedown="mousedown"
-        @mouseup="mouseup"
-        @mouseout="mouseout"
-        @mousemove="mousemove($event)">
+      <div class="mobile-item-window">
         <router-view v-slot="{ Component }">
           <transition
             name="custom-classes"
@@ -73,34 +67,17 @@ const { language } = storeToRefs(store);
 const router = useRouter();
 const isWindow = ref<boolean>(false);
 const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm"));
-const iphone = ref(null); // 使用 ref 引用 DOM 元素
-let flag = ref<boolean>(false); //判断鼠标是否在iphone内且按住未松
 let today: string = timeFormat(new Date(), language.value, "yyyy/MM/dd");
 let week: string = getWeekDate(new Date(), language.value, 3);
 const rightIsStart = ref<boolean>(false);
 const lockRightTime = setTimeout(() => {
   rightIsStart.value = false;
-  console.log("object");
 }, 15000);
 const setIphoneTime = () => {
   curTime.value = timeFormatCN(new Date(), "hh:mm");
 };
 let nowtime = ref();
-const mousedown = () => {
-  flag.value = true;
-};
-const mouseup = () => {
-  flag.value = false;
-};
-const mouseout = () => {
-  flag.value = false;
-};
-const mousemove = (e: any) => {
-  if (flag.value) {
-    // 保证下滑时页面相同方向滚动
-    iphone.value.scrollTop -= e.movementY;
-  }
-};
+
 const rightStart = () => {
   rightIsStart.value = true;
   lockRightTime;
@@ -257,8 +234,9 @@ onBeforeUnmount(() => {
     }
 
     &-window {
-      overflow-x: hidden;
-      overflow-y: scroll;
+      // overflow-x: hidden;
+      // overflow-y: scroll;
+      overflow: hidden;
       width: calc(100% - 41px);
       height: calc(100% - 57px);
       border-radius: 0 0 20px 20px;
@@ -266,9 +244,6 @@ onBeforeUnmount(() => {
       top: 40px;
       left: 21px;
       z-index: 5;
-    }
-    &-window::-webkit-scrollbar {
-      display: none;
     }
   }
 
