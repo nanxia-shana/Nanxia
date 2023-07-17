@@ -29,6 +29,7 @@ import {
   Tag,
   Modal,
   Upload,
+  Input,
 } from "ant-design-vue";
 import "ant-design-vue/dist/antd.less";
 app
@@ -44,7 +45,8 @@ app
   .use(Tooltip)
   .use(Tag)
   .use(Modal)
-  .use(Upload);
+  .use(Upload)
+  .use(Input);
 app.config.globalProperties.$message = message;
 // 导入svg-icon管理和组件
 import "virtual:svg-icons-register";

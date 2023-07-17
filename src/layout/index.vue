@@ -51,12 +51,7 @@
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', minHeight: '280px' }" class="content">
         <router-view v-slot="{ Component }">
-          <transition
-            name="fade"
-            enter-active-class="animate__animated animate__fadeIn"
-            leave-active-class="animate__animated animate__fadeOut">
-            <component :is="Component" />
-          </transition>
+          <component :is="Component" />
         </router-view>
       </a-layout-content>
     </a-layout>
@@ -208,10 +203,5 @@ const menuItem = (e) => {
   position: absolute;
   top: 88px;
   left: 54px;
-}
-.animate__animated.animate__fadeIn,
-.animate__animated.animate__fadeOut {
-  --animate-duration: 0.2s;
-  --animate-delay: 0s;
 }
 </style>

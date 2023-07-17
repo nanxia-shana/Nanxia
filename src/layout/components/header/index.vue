@@ -31,7 +31,7 @@
               <code-sandbox-outlined />
               <span>信息中心</span>
             </div>
-            <div class="avatar-menu-mid-item">
+            <div class="avatar-menu-mid-item" @click="logout">
               <poweroff-outlined />
               <span>退出登录</span>
             </div>
@@ -59,6 +59,8 @@ const { t } = useI18n();
 import useGlobalStore from "@/store/modules/global";
 import { storeToRefs } from "pinia";
 import { watch, ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const store = useGlobalStore();
 const { language } = storeToRefs(store);
 let today: string = timeFormat(new Date(), language.value, "yyyy-MM-dd");
@@ -69,6 +71,9 @@ const menuUnfold = () => {
 };
 const menuFold = () => {
   isFold.value = true;
+};
+const logout = () => {
+  router.push("/login");
 };
 watch(language, (val: string) => {
   today = timeFormat(new Date(), val, "yyyy-MM-dd");

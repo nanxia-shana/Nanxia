@@ -29,6 +29,7 @@
         </div>
       </div>
     </div>
+    
     <div class="right" :class="[rightRoute ? (rightRoute == 'mobile' ? 'rightFoldM' : 'rightFoldC') : '']">
       <div class="title" :class="{ titleShow: !rightRoute }">
         <span class="title-name">{{ refreshBtnName }}</span>

@@ -8,11 +8,35 @@
           <edit-outlined :style="{ fontSize: '40px', color: '#aaa' }" />
         </div>
       </div>
+      <div class="message-nickname">
+        <span class="message-nickname-name">Nickname :</span>
+        <div class="message-nickname-input">
+          <a-input
+            :disabled="!isEditNickname"
+            v-model:value="nickname"
+            show-count
+            allow-clear
+            :maxlength="8"
+            @pressEnter="submitNickname" />
+        </div>
+        <edit-outlined
+          v-if="!isEditNickname"
+          :style="{ fontSize: '22px', color: '#aaa' }"
+          style="cursor: pointer"
+          @click="isEditNickname = true" />
+        <check-circle-outlined
+          v-else
+          :style="{ fontSize: '22px', color: '#aaa' }"
+          style="cursor: pointer"
+          @click="isEditNickname = false" />
+      </div>
     </div>
     <a-button type="primary" class="buttonP" @click="toCharacter">Character Card</a-button>
-    <a-modal v-model:visible="visible" title="Title" width="800px" :confirm-loading="confirmLoading" @ok="handleOk">
+    <a-modal v-model:visible="visible" title="Avatar" width="800px" :confirm-loading="confirmLoading" @ok="handleOk">
       <div class="modalBox">
-        <div class="modalBox-left"></div>
+        <div class="modalBox-left">
+          <img src="@/assets/images/Iraina3.jpg" alt="avater" />
+        </div>
         <div class="modalBox-right">
           <a-upload-dragger
             v-model:fileList="fileList"
@@ -37,7 +61,7 @@
 <script lang="ts" setup>
 import { ref, getCurrentInstance } from "vue";
 import type { UploadChangeParam } from "ant-design-vue";
-import { EditOutlined, InboxOutlined } from "@ant-design/icons-vue";
+import { EditOutlined, InboxOutlined, CheckCircleOutlined } from "@ant-design/icons-vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 const instance: any = getCurrentInstance();
@@ -47,6 +71,8 @@ const avaterIsModify = ref<boolean>(false);
 const visible = ref<boolean>(false);
 const confirmLoading = ref<boolean>(false);
 const fileList = ref([]);
+const nickname = ref<string>("Iraina");
+const isEditNickname = ref<boolean>(false);
 const avaterModify = () => {
   visible.value = true;
 };
@@ -77,6 +103,10 @@ const handleChange = (info: UploadChangeParam) => {
     instance.proxy.$message.error(`${info.file.name} file upload failed.`);
   }
 };
+const submitNickname = (nickname: any) => {
+  isEditNickname.value = false;
+  nickname.value = nickname;
+};
 const toCharacter = () => {
   router.push("/person/character");
 };
@@ -92,12 +122,13 @@ const toCharacter = () => {
   }
   .message {
     width: 100%;
+    padding: 40px 20px 20px;
     display: flex;
     flex-direction: column;
     &-avater {
       width: 200px;
       height: 200px;
-      margin-top: 40px;
+      margin-bottom: 50px;
       border-radius: 50%;
       position: relative;
       cursor: pointer;
@@ -125,14 +156,51 @@ const toCharacter = () => {
       opacity: 1;
       transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
+    &-nickname {
+      width: 100%;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      &-name {
+        width: 100px;
+        margin-right: 60px;
+        font-size: 18px;
+        font-weight: 600;
+        display: inline-block;
+        text-align: end;
+      }
+      &-input {
+        width: 220px;
+        margin-right: 30px;
+      }
+    }
   }
 }
 .modalBox {
   width: 100%;
+  height: 200px;
   display: flex;
+  align-items: center;
   &-left {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid var(--primary-color);
+    img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+    }
   }
   &-right {
+    width: 70%;
+    padding: 0 5%;
   }
+}
+</style>
+<style>
+.ant-modal-footer .ant-btn + .ant-btn:not(.ant-dropdown-trigger):hover,
+.ant-modal-footer .ant-btn + .ant-btn:not(.ant-dropdown-trigger):focus {
+  color: #fff !important;
 }
 </style>

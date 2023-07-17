@@ -4,19 +4,40 @@
     <button ref="button" class="input__button__shadow">
       <slot></slot>
     </button>
-    <input ref="input" :type="type" name="text" class="input__search" v-model="inputMsg" :placeholder="placeholder" />
+    <input
+      ref="input"
+      :type="type"
+      name="text"
+      class="input__search"
+      v-model="inputMsg"
+      :class="{ paddingR30: type == 'password' || isVisible }"
+      :placeholder="placeholder"
+      maxlength="20"
+      @input="passInput" />
+    <div v-if="isShow" @click="$emit('switchVisible')">
+      <svg-icon v-if="isVisible" name="visible" className="inputIcon"></svg-icon>
+      <svg-icon v-else name="invisible" className="inputIcon"></svg-icon>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, defineExpose, onMounted } from "vue";
-defineProps<{ type: string; placeholder: string }>();
+defineProps<{ type: string; placeholder: string; isShow: boolean; isVisible: boolean }>();
+const emit = defineEmits(["passInput", "update:modelValue"]);
 // 获取页面的实例对象
 const button = ref<null | HTMLElement>(null);
 const input = ref<null | HTMLElement>(null);
 const inputMsg = ref("");
+const passInput = (e: any) => {
+  let length = e.target.value.length;
+  emit("passInput", length);
+};
+const modifyInput = (e: string) => {
+  inputMsg.value = e;
+};
 onMounted(() => {});
-defineExpose({ input, button, inputMsg });
+defineExpose({ input, button, inputMsg, modifyInput });
 </script>
 
 <style lang="less" scoped>
@@ -73,12 +94,25 @@ defineExpose({ input, button, inputMsg });
 }
 
 .input__search {
-  width: 100%;
+  width: 220px;
   border-radius: 20px;
   outline: none;
   border: none;
-  padding: 8px 15px;
+  padding: 4px 15px;
   position: relative;
   color: #333333;
+}
+.paddingR30 {
+  width: 215px;
+  padding-right: 30px;
+}
+.inputIcon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-10px);
+  cursor: pointer;
 }
 </style>

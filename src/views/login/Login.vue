@@ -1,34 +1,78 @@
 <template>
   <div class="bg" v-loading="loading">
-    <div class="loginBox">
-      <span class="title">Login</span>
-      <Input ref="userInput" :type="'text'" :placeholder="'Username'" class="inputItem">
+    <div ref="background" class="backgrounb"></div>
+    <div class="loginBox" :class="{ loginPage: isLoginPage }">
+      <div class="title" @click="switchMode">Sign In / <span>Sign Up</span></div>
+      <span class="titleName">Sign In</span>
+      <Input ref="userInput" :type="'text'" :placeholder="'Username'" class="inputItem" :isShow="false" :isVisible="false">
         <svg-icon name="user" className="icon-input" @click="iconClick(1)"></svg-icon>
       </Input>
-      <Input ref="passwordInput" :type="'password'" :placeholder="'Password'" class="inputItem">
+      <Input
+        ref="passwordInput"
+        :type="passwordLoginT"
+        :placeholder="'Password'"
+        class="inputItem"
+        :isShow="true"
+        :isVisible="passwordLoginV"
+        @switch-visible="switchVisible('login')"
+        @pass-input="passInput">
         <svg-icon name="unlock" className="icon-input" @click="iconClick(2)"></svg-icon>
       </Input>
-      <Button @click="submit" class="loginBtn" />
+      <span class="forget">Forgot Password?</span>
+      <Button @click="login" class="loginBtn" text="Login" />
     </div>
-    <Base />
+    <div class="registerBox" :class="{ registerPage: !isLoginPage }">
+      <div class="title" @click="switchMode"><span>Sign In</span> / Sign Up</div>
+      <span class="titleName">Sign Up</span>
+      <Input ref="userInputR" :type="'text'" :placeholder="'Username'" class="inputItem" :isShow="false" :isVisible="false">
+        <svg-icon name="user" className="icon-input" @click="iconClick(1)"></svg-icon>
+      </Input>
+      <Input
+        ref="passwordInputR"
+        :type="passwordRegisterT"
+        :placeholder="'Password'"
+        class="inputItem"
+        :isShow="true"
+        :isVisible="passwordRegisterV"
+        @switch-visible="switchVisible('register')"
+        @pass-input="passInput">
+        <svg-icon name="unlock" className="icon-input" @click="iconClick(2)"></svg-icon>
+      </Input>
+      <span class="forget"> &nbsp </span>
+      <Button @click="register" class="loginBtn" text="Register" />
+    </div>
+    <!-- <Base /> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import Input from "./components/input.vue";
 import Button from "./components/button.vue";
-import Base from "./components/base.vue";
+// import Base from "./components/base.vue";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-const userInput = ref<InstanceType<typeof Input>>();
-const passwordInput = ref<InstanceType<typeof Input>>();
+const userInput = ref<InstanceType<typeof Input>>(null);
+const passwordInput = ref<InstanceType<typeof Input>>(null);
+const userInputR = ref<InstanceType<typeof Input>>(null);
+const passwordInputR = ref<InstanceType<typeof Input>>(null);
+const background = ref<null | HTMLElement>(null);
+const passwordLoginT = ref<string>("password");
+const passwordLoginV = ref<boolean>(false);
+const passwordRegisterT = ref<string>("password");
+const passwordRegisterV = ref<boolean>(false);
 const router = useRouter();
+const isLoginPage = ref<boolean>(true);
 const loading = ref(false);
 onMounted(() => {
   userInput.value?.input?.focus();
   passwordInput.value?.input.addEventListener("keydown", (event) => {
     if (event.keyCode === 13) {
-      submit();
+      login();
+    }
+  });
+  passwordInputR.value?.input.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      register();
     }
   });
   userInput.value?.button.addEventListener("focus", () => {
@@ -37,11 +81,16 @@ onMounted(() => {
   passwordInput.value?.button.addEventListener("focus", () => {
     passwordInput.value?.input?.focus();
   });
+  userInputR.value?.button.addEventListener("focus", () => {
+    userInputR.value?.input?.focus();
+  });
+  passwordInputR.value?.button.addEventListener("focus", () => {
+    passwordInputR.value?.input?.focus();
+  });
 });
-const submit = () => {
+const login = () => {
   loading.value = true;
   if (userInput.value?.inputMsg && passwordInput.value?.inputMsg) {
-    console.log(userInput.value?.inputMsg, passwordInput.value?.inputMsg);
     setTimeout(() => {
       router.push("/");
       loading.value = false;
@@ -52,12 +101,37 @@ const submit = () => {
     }, 1500);
   }
 };
-const iconClick = (num) => {
+const register = () => {};
+const iconClick = (num: number) => {
   if (num === 1) {
     userInput.value?.input?.focus();
+    userInputR.value?.input?.focus();
   } else if (num === 2) {
     passwordInput.value?.input?.focus();
+    passwordInputR.value?.input?.focus();
   }
+};
+const switchVisible = (type: string) => {
+  if (type == "login") {
+    passwordLoginT.value = passwordLoginT.value == "text" ? "password" : "text";
+    passwordLoginV.value = !passwordLoginV.value;
+  } else {
+    passwordRegisterT.value = passwordRegisterT.value == "text" ? "password" : "text";
+    passwordRegisterV.value = !passwordRegisterV.value;
+  }
+};
+const switchMode = () => {
+  isLoginPage.value = !isLoginPage.value;
+  setTimeout(() => {
+    userInput.value?.modifyInput("");
+    userInputR.value?.modifyInput("");
+    passwordInput.value?.modifyInput("");
+    passwordInputR.value?.modifyInput("");
+  }, 300);
+};
+const passInput = (length: number) => {
+  const blurValue = 20 - length * 2;
+  background.value.style.filter = `blur(${blurValue}px)`;
 };
 </script>
 
@@ -66,53 +140,97 @@ const iconClick = (num) => {
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  background-color: #1e1e1e;
-  background-image: url("../../assets/images/night-sea.jpg");
-  background-position: 0 0;
-  background-size: 100% 100%;
   color: #fff;
-  overflow: scroll;
+  overflow: hidden;
   position: relative;
 }
-.loginBox {
-  width: 500px;
-  padding: 30px;
-  margin: 200px auto 0;
+.backgrounb {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
 
-  border: 1px solid rgba(255, 255, 255, 0.125);
+  background: url("../../assets/images/beauty01.jpg") no-repeat center center/cover;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  filter: blur(20px);
+  transition: all 0.2s ease-out;
+}
+.loginBox,
+.registerBox {
+  width: 500px;
+  height: 400px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 14px;
-  background-color: rgba(255, 255, 255, 0.1);
+  // background-color: rgba(74, 74, 74, 0.7);
+  background-color: rgba(180, 180, 180, 0.1);
   box-shadow: 0 0.75rem 2rem 0 rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(2px);
 
   transform-style: preserve-3d;
-  transform: rotateX(15deg) rotateY(-20deg) translateX(-20px);
-  transition: all 0.5s;
+  transform: rotateX(15deg) rotateY(-20deg) translateX(-250px) translateY(-250px) translateZ(60px);
+  opacity: 0.4;
+  filter: blur(1px);
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* animation: box-spin 8s infinite; */
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
 }
-@keyframes box-spin {
-  0% {
-    transform: rotateX(15deg) rotateY(-20deg) translateX(-20px);
+.loginPage {
+  filter: none;
+  opacity: 1;
+  box-shadow: 0 0.75rem 2rem 0 rgba(0, 0, 0, 0.1), inset 0 0.5rem 2rem 0 rgba(255, 255, 255, 0.125);
+  transform: rotateX(15deg) rotateY(-20deg) translateX(-250px) translateY(-250px);
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 3;
+  .titleName {
+    opacity: 1;
   }
-  30% {
-    transform: rotateX(5deg) rotateY(-6deg) translateX(-20px);
-  }
-  100% {
-    transform: rotateX(15deg) rotateY(-20deg) translateX(-20px);
+}
+.registerPage {
+  filter: none;
+  opacity: 1;
+  box-shadow: 0 0.75rem 2rem 0 rgba(0, 0, 0, 0.1), inset 0 0.5rem 2rem 0 rgba(255, 255, 255, 0.125);
+  transform: rotateX(15deg) rotateY(-20deg) translateX(-250px) translateY(-250px);
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 3;
+  .titleName {
+    opacity: 1;
   }
 }
 .title {
+  font-size: 20px;
+  font-weight: bold;
+  color: rgba(160, 123, 255, 0.7);
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  cursor: pointer;
+  user-select: none;
+  span {
+    color: rgba(204, 204, 204, 0.4);
+  }
+}
+.titleName {
+  margin: 10px 0 30px;
+  opacity: 0.3;
   font-size: 30px;
   font-weight: bold;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
-  margin: 10px 0 30px;
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .inputItem {
-  width: 330px;
   margin: 15px 0;
 }
 .icon-input {
@@ -120,7 +238,17 @@ const iconClick = (num) => {
   height: 22px;
   color: #333333;
 }
-.loginBtn {
-  margin-top: 20px;
+.forget {
+  margin: -10px 100px 20px 0;
+  font-size: 14px;
+  // color: rgba(160, 123, 255, 0.6);
+  letter-spacing: 1px;
+  align-self: flex-end;
+  transition: color 0.2s ease-out;
+  cursor: pointer;
+}
+.forget:hover {
+  color: var(--primary-color);
+  user-select: none;
 }
 </style>

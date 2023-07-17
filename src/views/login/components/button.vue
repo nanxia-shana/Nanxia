@@ -1,6 +1,6 @@
 <template>
   <button class="btn" type="button">
-    <strong>Login</strong>
+    <strong style="user-select: none">{{ text }}</strong>
     <div id="container-stars">
       <div id="stars"></div>
     </div>
@@ -12,7 +12,9 @@
   </button>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+defineProps<{ text: string }>();
+</script>
 
 <style scoped>
 .btn {

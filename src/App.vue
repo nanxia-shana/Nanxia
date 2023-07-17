@@ -1,9 +1,7 @@
 <template>
   <a-config-provider :locale="locale">
     <router-view v-slot="{ Component }">
-      <!-- <transition name="fade"> -->
       <component :is="Component" @contextmenu.stop="rightClick" />
-      <!-- </transition> -->
     </router-view>
   </a-config-provider>
 </template>
