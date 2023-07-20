@@ -88,7 +88,7 @@ const getList = () => {
     font-size: 20px;
     line-height: 20px;
     text-align: center;
-    color: red;
+    color: rgba(160, 123, 255, 0.8);
     text-align: center;
     font-weight: bolder;
     position: absolute;

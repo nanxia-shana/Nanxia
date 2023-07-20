@@ -79,8 +79,12 @@ const setIphoneTime = () => {
 let nowtime = ref();
 
 const rightStart = () => {
-  rightIsStart.value = true;
-  lockRightTime;
+  if (rightIsStart.value) {
+    rightIsStart.value = false;
+  } else {
+    rightIsStart.value = true;
+    lockRightTime;
+  }
 };
 watch(
   () => router.currentRoute.value.path,

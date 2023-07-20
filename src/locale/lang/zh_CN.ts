@@ -18,6 +18,8 @@ export default {
     message: "我的消息",
     hello: "你好",
     record: "记录",
+    expand: "展开",
+    collapse: "折叠",
   },
   setting: {
     language: "语言",
@@ -37,5 +39,6 @@ export default {
     visitor: "访客",
     waterfallFlow: "瀑布流布局",
     instantMusicVideo: "短视频",
+    musicPlayer: "音乐播放器",
   },
 };

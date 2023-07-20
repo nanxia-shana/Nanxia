@@ -85,16 +85,16 @@ watch(mode, (val: string) => {
 watch(
   () => router.currentRoute.value.path,
   (newValue) => {
+    console.log(newValue.split("/"));
     selectedKeys.value.length = 0;
-    selectedKeys.value.push(newValue);
+    selectedKeys.value.push(`/${newValue.split("/")[1]}`);
   },
   { immediate: true },
 );
 onMounted(() => {
   console.log("Layout-Page");
 });
-const menuItem = (e) => {
-  // console.log(e);
+const menuItem = (e: any) => {
   router.push(e.key);
 };
 </script>

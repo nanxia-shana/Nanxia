@@ -18,6 +18,8 @@ export default {
     message: "Message ",
     hello: "Hello",
     record: "Record",
+    expand: "Expand",
+    collapse: "Collapse",
   },
   setting: {
     language: "Language",
@@ -37,5 +39,6 @@ export default {
     visitor: "Visitor",
     waterfallFlow: "Waterfall Flow Layout",
     instantMusicVideo: "Instant Music Video",
+    musicPlayer: "Music Player",
   },
 };

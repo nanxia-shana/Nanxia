@@ -18,6 +18,8 @@ export default {
     message: "メッセージ ",
     hello: "こんにちは",
     record: "記録",
+    expand: "展開する",
+    collapse: "折りたたむ",
   },
   setting: {
     language: "言語",
@@ -37,5 +39,6 @@ export default {
     visitor: "訪問者",
     waterfallFlow: "ウォーターフォールレイアウト",
     instantMusicVideo: "ショートビデオ",
+    musicPlayer: "音楽プレーヤー",
   },
 };

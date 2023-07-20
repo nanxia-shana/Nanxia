@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="right" :class="[rightRoute ? (rightRoute == 'mobile' ? 'rightFoldM' : 'rightFoldC') : '']">
       <div class="title" :class="{ titleShow: !rightRoute }">
         <span class="title-name">{{ refreshBtnName }}</span>
@@ -55,22 +55,46 @@ const refreshBtnName = ref<string>("");
 const tagColorList = ref(["pink", "red", "orange", "green", "cyan", "blue", "purple"]);
 const mobileDemoList = reactive([
   {
-    name: `${t("portfolio.waterfallFlow")}`,
+    name: `${t("portfolio.waterfallFlow")}(component)`,
     route: "/portfolio/mobile/waterfallFlow",
   },
   {
     name: `${t("portfolio.instantMusicVideo")}`,
     route: "/portfolio/mobile/instantMusicVideo",
   },
+  {
+    name: `${t("portfolio.musicPlayer")}`,
+    route: "/portfolio/mobile/musicPlayer",
+  },
 ]);
 const computerDemoList = reactive([
   {
-    name: `${t("portfolio.waterfallFlow")}`,
+    name: `${t("portfolio.waterfallFlow")}(component)`,
     route: "/portfolio/computer/waterfallFlow",
   },
 ]);
+onMounted(() => {
+  if (router.currentRoute.value.path === "/portfolio") rightRoute.value = "";
+  else if (router.currentRoute.value.path.indexOf("/mobile") != -1) rightRoute.value = "mobile";
+  else rightRoute.value = "computer";
+});
+watch(
+  () => router.currentRoute.value.path,
+  (newValue) => {
+    let lastRouteName = newValue.split("/").reverse();
+    if (lastRouteName.length < 3) {
+      rightRoute.value = "";
+      return;
+    }
+    refreshBtnName.value = t(`portfolio.${lastRouteName[0]}`);
+    if (newValue === "/portfolio") rightRoute.value = "";
+    else if (newValue.indexOf("/mobile") != -1) rightRoute.value = "mobile";
+    else rightRoute.value = "computer";
+  },
+  { immediate: true },
+);
 const toPortfolio = () => {
-  rightRoute.value = "";
+  // rightRoute.value = "";
   router.push("/portfolio");
 };
 const toMobile = () => {
@@ -84,23 +108,6 @@ const toComputer = () => {
 const toDemo = (item: any) => {
   router.push(item.route);
 };
-watch(
-  () => router.currentRoute.value.path,
-  (newValue) => {
-    let lastRouteName = newValue.split("/").reverse();
-    if (lastRouteName.length < 3) return;
-    refreshBtnName.value = t(`portfolio.${lastRouteName[0]}`);
-    if (newValue === "/portfolio") rightRoute.value = "";
-    else if (newValue.indexOf("/mobile") != -1) rightRoute.value = "mobile";
-    else rightRoute.value = "computer";
-  },
-  { immediate: true },
-);
-onMounted(() => {
-  if (router.currentRoute.value.path === "/portfolio") rightRoute.value = "";
-  else if (router.currentRoute.value.path.indexOf("/mobile") != -1) rightRoute.value = "mobile";
-  else rightRoute.value = "computer";
-});
 </script>
 <style lang="less" scoped>
 .portfolio {

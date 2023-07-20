@@ -11,6 +11,17 @@ const global = defineStore("global", {
       language: "",
       theme: "",
       mode: "",
+      music: {
+        musicMsg: {
+          url: "",
+          imgUrl: "file05.jpeg",
+          name: "II. Largo appassionato",
+          author: "Ludwig van Beethoven",
+        },
+        musicLength: 0,
+        musicCurTime: 0,
+        musicIsPlay: false,
+      },
     };
   },
   actions: {
@@ -31,6 +42,15 @@ const global = defineStore("global", {
       this.mode = mode;
       localStorage.setItem("Shana-mode", mode);
       document.head.querySelector("#mode-link")?.setAttribute("href", `./src/theme/mode/mode-${mode}.css`);
+    },
+    playMusic(musicIsPlay: boolean) {
+      this.music.musicIsPlay = musicIsPlay;
+    },
+    musicCurTimeSync(musicCurTime: number) {
+      this.music.musicCurTime = musicCurTime;
+    },
+    musicLengthSync(musicLength: number) {
+      this.music.musicLength = musicLength;
     },
   },
 });

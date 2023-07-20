@@ -59,13 +59,13 @@ const curLang = ref<string>(language.value);
 const curTheme = ref<string>(theme.value);
 const curMode = ref<boolean>(mode.value == "light" ? true : false);
 
-const changeLang = (e) => {
+const changeLang = (e: any) => {
   store.switchLang(e.target.value);
 };
-const changeTheme = (e) => {
+const changeTheme = (e: any) => {
   store.switchTheme(e.target.value);
 };
-const changeMode = (e) => {
+const changeMode = (e: any) => {
   curMode.value = !curMode.value;
   store.switchMode(e ? "light" : "dark");
 };

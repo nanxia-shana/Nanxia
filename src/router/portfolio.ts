@@ -32,6 +32,17 @@ const portfolioRouter = [
           },
         },
       },
+      {
+        path: "/portfolio/mobile/musicPlayer",
+        name: "MusicPlayer",
+        component: () => import("@/views/portfolio/mobile/MusicPlayer.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "音乐播放器",
+            "/en-US": "Music Player",
+          },
+        },
+      },
     ],
   },
   {

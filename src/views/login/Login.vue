@@ -158,7 +158,7 @@ const passInput = (length: number) => {
   left: 0;
   z-index: -1;
   filter: blur(20px);
-  transition: all 0.2s ease-out;
+  // transition: filter 0.2s;
 }
 .loginBox,
 .registerBox {
@@ -246,9 +246,9 @@ const passInput = (length: number) => {
   align-self: flex-end;
   transition: color 0.2s ease-out;
   cursor: pointer;
+  user-select: none;
 }
 .forget:hover {
   color: var(--primary-color);
-  user-select: none;
 }
 </style>

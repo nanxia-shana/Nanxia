@@ -126,6 +126,7 @@ onBeforeUnmount(() => {
       top: 4.6%;
       left: 4%;
       z-index: 4;
+      user-select: none;
       &-topbar {
         width: 100%;
         height: 4%;
