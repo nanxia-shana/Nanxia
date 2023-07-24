@@ -11,12 +11,37 @@
         </div>
       </div>
     </div>
-    <div class="music-mid">
-      <img class="music-mid-stick" :class="{ stickOn: !musicIsPlay }" src="@/assets/images/stick_bg.png" alt="stick_bg" />
-      <div class="music-mid-wrapper">
-        <img class="music-mid-wrapper-cd" src="@/assets/images/cd_wrapper.png" alt="CDwrapper" />
+    <div class="music-mid" @click="lyricShow = !lyricShow">
+      <div v-show="!lyricShow" class="music-mid-cover">
+        <img
+          class="music-mid-cover-stick"
+          :class="{ stickOn: !musicIsPlay }"
+          src="@/assets/images/stick_bg.png"
+          alt="stick_bg" />
+        <div class="music-mid-cover-wrapper">
+          <img class="music-mid-cover-wrapper-cd" src="@/assets/images/cd_wrapper.png" alt="CDwrapper" />
+        </div>
+        <img class="music-mid-cover-img" :class="{ imgRotate: musicIsPlay }" :src="getImageUrl(musicImgUrl)" alt="cover" />
       </div>
-      <img class="music-mid-cover" :class="{ imgRotate: musicIsPlay }" :src="getImageUrl(musicImgUrl)" alt="cover" />
+      <div v-show="lyricShow" class="music-mid-lyric">
+        <div id="lyricBox">
+          <div class="lyric" :id="value[0]" v-for="(value, key) in lyricMap" :key="key">
+            <span>
+              {{ value[1][0] ? value[1][0] : "&nbsp" }}
+            </span>
+            <span v-show="tlyricShow">
+              {{ value[1][1] ? value[1][1] : "&nbsp" }}
+            </span>
+          </div>
+        </div>
+        <div
+          v-if="musicTlyric"
+          class="tlyricBox"
+          :style="`background-color: ${tlyricShow ? '#fff' : 'none'};color: ${tlyricShow ? '#666' : '#fff'}`"
+          @click.stop="tlyricShow = !tlyricShow">
+          译
+        </div>
+      </div>
     </div>
     <div class="music-bot">
       <div class="music-bot-icon">
@@ -27,55 +52,136 @@
       <div class="music-bot-progress">
         <span class="music-bot-progress-time" style="transform-origin: 0 50%">{{ formatter(musicCurTime) }}</span>
         <div class="music-bot-progress-line">
-          <a-slider v-model:value="musicCurTime" :tooltip-open="false" :max="musicLength" @change="musicDrag" />
+          <a-slider v-model:value="musicCurTime" :tooltip-open="false" :max="musicDuration" @change="musicDrag" />
         </div>
-        <span class="music-bot-progress-time" style="transform-origin: 100% 50%">{{ formatter(musicLength) }}</span>
+        <span class="music-bot-progress-time" style="transform-origin: 100% 50%">{{ formatter(musicDuration) }}</span>
       </div>
       <div class="music-bot-operate">
         <svg-icon name="circulation" className="botIcon2" style="transform: rotateY(180deg)"></svg-icon>
-        <svg-icon name="lastsong" className="botIcon3" @click="checkSong"></svg-icon>
+        <svg-icon name="lastsong" className="botIcon3" @click="checkSong(false)"></svg-icon>
         <div @click="playMusic">
           <svg-icon v-if="musicIsPlay" name="pause" className="botIcon4"></svg-icon>
           <svg-icon v-else name="nopause" className="botIcon4"></svg-icon>
         </div>
-        <svg-icon name="nextsong" className="botIcon3" @click="checkSong"></svg-icon>
+        <svg-icon name="nextsong" className="botIcon3" @click="checkSong(true)"></svg-icon>
         <svg-icon name="menu" className="botIcon2"></svg-icon>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, inject } from "vue";
+import { inject, reactive, ref, onMounted } from "vue";
+import { binarySearchRange } from "@/utils/tools";
 import useGlobalStore from "@/store/modules/global";
-import { storeToRefs } from "pinia";
 const store = useGlobalStore();
-const { music } = storeToRefs(store);
 import { useRouter } from "vue-router";
 const router = useRouter();
-const musicImgUrl = ref<string>(music.value.musicMsg.imgUrl);
-const musicName = ref<string>(music.value.musicMsg.name);
-const musicAuthor = ref<string>(music.value.musicMsg.author);
-const musicLength: number = inject("musicLength");
-const musicCurTime: number = inject("musicCurTime");
+const musicId = ref<number>(inject("musicId"));
+const musicImgUrl: string = inject("musicImgUrl");
+const musicName: string = inject("musicName");
+const musicAuthor: string = inject("musicAuthor");
+const musicLyric = ref<string>(inject("musicLyric"));
+const musicTlyric = ref<string>(inject("musicTlyric"));
+const musicDuration = ref<number>(inject("musicDuration"));
+const musicCurTime = ref<number>(inject("musicCurTime"));
 const musicIsPlay: boolean = inject("musicIsPlay");
 const audioPlayerRef: any = inject("audioPlayerRef");
+
+const lyricShow = ref<boolean>(false);
+const tlyricShow = ref<boolean>(false);
+const lyricMap = reactive(new Map());
+const tlyricMap = reactive(new Map());
+let i: number;
+let timeArray = [];
+let centerTop = 160;
+onMounted(async () => {
+  await formatLyric();
+  operateLyric();
+});
 const formatter = (value: number) => {
   return `${Math.floor(value / 60)}:${Math.floor(value % 60) < 10 ? "0" + Math.floor(value % 60) : Math.floor(value % 60)}`;
 };
-const musicDrag = (e: number) => {
+const musicDrag = async (e: number) => {
   audioPlayerRef.value.currentTime = e;
 };
 const playMusic = () => {
   if (audioPlayerRef.value.paused == true) {
-    store.musicLengthSync(Math.floor(audioPlayerRef.value.duration));
     audioPlayerRef.value.play();
   } else {
     audioPlayerRef.value.pause();
   }
 };
-const checkSong = () => {
-  audioPlayerRef.value.currentTime = 0;
-  audioPlayerRef.value.play();
+const checkSong = (flag: boolean) => {
+  let item: any;
+  if (flag) item = store.nextMusic(musicId.value);
+  else item = store.lastMusic(musicId.value);
+  if (item) {
+    audioPlayerRef.value.load();
+    audioPlayerRef.value.addEventListener("canplay", async () => {
+      musicDuration.value = audioPlayerRef.value.duration;
+      audioPlayerRef.value.play();
+      await formatLyric();
+      operateLyric();
+    });
+  } else {
+    alert("歌曲不存在");
+  }
+};
+const formatLyric = async () => {
+  lyricMap.clear();
+  if (!musicLyric.value) {
+    lyricMap.set(0, ["暂无歌词", ""]);
+    return;
+  }
+  if (musicTlyric.value) {
+    let tlyricList = musicTlyric.value.split("\\n");
+    let tlyricTime: number;
+    let tlyric: string;
+    tlyricList.forEach((item) => {
+      if (item.indexOf("]") !== -1) {
+        let m = Number(item.split("]")[0].split("[")[1].split(".")[0].split(":")[0]);
+        let s = Number(item.split("]")[0].split("[")[1].split(".")[0].split(":")[1]);
+        tlyricTime = m * 60 + s;
+        tlyric = item.split("]")[1];
+        tlyricMap.set(tlyricTime, tlyric);
+      }
+    });
+  } else {
+    tlyricMap.set(0, "");
+  }
+  let lyricList = musicLyric.value.split("\\n");
+  let lyricTime: number;
+  let lyric: string;
+  lyricList.forEach((item) => {
+    if (item.indexOf("]") !== -1) {
+      let m = Number(item.split("]")[0].split("[")[1].split(".")[0].split(":")[0]);
+      let s = Number(item.split("]")[0].split("[")[1].split(".")[0].split(":")[1]);
+      lyricTime = m * 60 + s;
+      lyric = item.split("]")[1];
+      lyricMap.set(lyricTime, [lyric, tlyricMap.get(lyricTime)]);
+    }
+  });
+};
+const operateLyric = () => {
+  timeArray.length = 0;
+  Array.from(document.querySelectorAll(".lyric")).forEach((item) => {
+    timeArray.push(Number(item.id));
+  });
+  audioPlayerRef.value.addEventListener("timeupdate", () => {
+    i = binarySearchRange(timeArray, musicCurTime.value)[0];
+    if (i > -1) {
+      Array.from(document.querySelectorAll(".lyric")).forEach((item: HTMLElement) => {
+        item.style.color = "rgba(255, 255, 255, 0.55)";
+      });
+      document.getElementById(timeArray[i]).style.color = "rgba(255, 255, 255, 1)";
+      centerTop = -(
+        document.getElementById(timeArray[i]).offsetTop +
+        document.getElementById(timeArray[i]).offsetHeight / 2 -
+        160
+      );
+      document.getElementById("lyricBox").style.top = `${centerTop}px`;
+    }
+  });
 };
 const getImageUrl = (name: string) => {
   return new URL(`/src/assets/images/${name}`, import.meta.url).href;
@@ -155,63 +261,119 @@ const getImageUrl = (name: string) => {
     height: 350px;
     position: relative;
     z-index: 2;
-    &-stick {
-      width: 86px;
-      object-fit: contain;
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      z-index: 3;
-      transform: translateX(-18px);
-      transform-origin: 15px 15px;
-      transition: transform 0.6s ease-out;
-    }
-    .stickOn {
-      transform: translateX(-18px) rotateZ(-30deg);
-      transition: transform 0.6s ease-out;
-    }
-    &-wrapper {
-      width: 188px;
-      height: 188px;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 48%;
-      left: 50%;
-      transform: translate(-94px, -100px);
-      &-cd {
-        width: 186px;
-        height: 186px;
-        border-radius: 50%;
-      }
-    }
+    cursor: pointer;
     &-cover {
-      width: 126px;
-      height: 126px;
-      border-radius: 50%;
-      object-fit: cover;
-      position: absolute;
-      top: 48%;
-      left: 50%;
+      &-stick {
+        width: 86px;
+        object-fit: contain;
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        z-index: 3;
+        transform: translateX(-18px);
+        transform-origin: 15px 15px;
+        transition: transform 0.6s ease-out;
+      }
+      .stickOn {
+        transform: translateX(-18px) rotateZ(-30deg);
+        transition: transform 0.6s ease-out;
+      }
+      &-wrapper {
+        width: 188px;
+        height: 188px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        transform: translate(-94px, -100px);
+        &-cd {
+          width: 186px;
+          height: 186px;
+          border-radius: 50%;
+        }
+      }
+      &-img {
+        width: 126px;
+        height: 126px;
+        border-radius: 50%;
+        object-fit: cover;
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        z-index: 3;
+        transform: translate(-63px, -70px);
+        animation: rotateInfinity 8s linear infinite forwards;
+        -webkit-animation: rotateInfinity linear 8s infinite forwards;
+        animation-play-state: paused;
+      }
+      @keyframes rotateInfinity {
+        0% {
+          transform: translate(-63px, -70px) rotateZ(0);
+        }
+        100% {
+          transform: translate(-63px, -70px) rotateZ(360deg);
+        }
+      }
+      .imgRotate {
+        animation-play-state: running;
+      }
+    }
+
+    &-lyric {
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
       z-index: 3;
-      transform: translate(-63px, -70px);
-      animation: rotateInfinity 8s linear infinite forwards;
-      -webkit-animation: rotateInfinity linear 8s infinite forwards;
-      animation-play-state: paused;
-    }
-    @keyframes rotateInfinity {
-      0% {
-        transform: translate(-63px, -70px) rotateZ(0);
+      #lyricBox {
+        overflow: visible;
+        padding: 160px 20px 150px;
+        transition: 0.8s top cubic-bezier(0.645, 0.045, 0.355, 1);
+        position: absolute;
+        z-index: 4;
+        // background: linear-gradient(to top, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+        // -webkit-background-clip: text;
+        // -webkit-text-fill-color: transparent;
+        // mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+        .lyric {
+          width: 100%;
+          margin-bottom: 5px;
+          color: rgba(255, 255, 255, 0.55);
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          span {
+            font-size: 14px;
+            font-weight: 540;
+            transition: 0.3s color cubic-bezier(0.645, 0.045, 0.355, 1);
+          }
+        }
       }
-      100% {
-        transform: translate(-63px, -70px) rotateZ(360deg);
+      .tlyricBox {
+        width: 30px;
+        height: 16px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        transform: scale(0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 0;
+        right: 8px;
+        z-index: 5;
       }
     }
-    .imgRotate {
-      animation-play-state: running;
+    &-lyric::-webkit-scrollbar {
+      display: none;
     }
   }
   &-bot {

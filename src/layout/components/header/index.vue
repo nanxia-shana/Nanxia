@@ -53,20 +53,25 @@
       </div>
       <div class="music-control">
         <div class="music-control-progress" :class="{ breathLight: musicIsPlay }">
-          <a-slider v-model:value="musicCurTime" :tip-formatter="formatter" :max="musicLength" @change="musicDrag" />
+          <a-slider v-model:value="musicCurTime" :tip-formatter="formatter" :max="musicDuration" @change="musicDrag" />
         </div>
         <div class="music-control-icon">
-          <backward-outlined class="music-control-icon-item" @click="checkSong" />
+          <backward-outlined class="music-control-icon-item" @click="checkSong(false)" />
           <div @click="playMusic">
             <pause-outlined v-if="musicIsPlay" class="music-control-icon-item" />
             <caret-right-outlined v-else class="music-control-icon-item" />
           </div>
-          <forward-outlined class="music-control-icon-item" @click="checkSong" />
+          <forward-outlined class="music-control-icon-item" @click="checkSong(true)" />
         </div>
       </div>
     </div>
   </div>
-  <ul v-show="menuRVisible" :style="{ left: menuLeft + 'px', top: menuTop + 'px' }" class="contextmenu">
+  <ul
+    v-show="menuRVisible"
+    :style="{ left: menuLeft + 'px', top: menuTop + 'px' }"
+    class="contextmenu"
+    @mouseenter="musicShow = true"
+    @mouseleave="musicShow = false">
     <li @click="musicLock = true">{{ t("common.expand") }}</li>
     <li @click="musicLock = false">{{ t("common.collapse") }}</li>
   </ul>
@@ -93,20 +98,36 @@ import { watch, ref, onMounted, inject } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const store = useGlobalStore();
-const { language, music } = storeToRefs(store);
+const { language } = storeToRefs(store);
 let today: string = timeFormat(new Date(), language.value, "yyyy-MM-dd");
 let week: string = getWeekDate(new Date(), language.value, 3);
 const isFold = ref<boolean>(true);
 const musicShow = ref<boolean>(false);
 const musicLock = ref<boolean>(false);
-const musicImgUrl = ref<string>(music.value.musicMsg.imgUrl);
-const musicLength = inject("musicLength");
-const musicCurTime = inject("musicCurTime");
-const musicIsPlay = inject("musicIsPlay");
+const musicId = ref<number>(inject("musicId"));
+const musicImgUrl: string = inject("musicImgUrl");
+const musicDuration = ref<number>(inject("musicDuration"));
+const musicCurTime: number = inject("musicCurTime");
+const musicIsPlay: boolean = inject("musicIsPlay");
 const audioPlayerRef: any = inject("audioPlayerRef");
 const menuRVisible = ref<boolean>(false);
 const menuLeft = ref<number>(0);
 const menuTop = ref<number>(0);
+onMounted(() => {
+  document.addEventListener("click", () => {
+    menuRVisible.value = false;
+  });
+  document.addEventListener("mousedown", (e) => {
+    const { button } = e;
+    if (button === 2) {
+      menuRVisible.value = false;
+    }
+  });
+});
+watch(language, (val: string) => {
+  today = timeFormat(new Date(), val, "yyyy-MM-dd");
+  week = getWeekDate(new Date(), val, 3);
+});
 const menuUnfold = () => {
   isFold.value = false;
 };
@@ -125,17 +146,24 @@ const musicDrag = (e: number) => {
 };
 const playMusic = () => {
   if (audioPlayerRef.value.paused == true) {
-    store.musicLengthSync(Math.floor(audioPlayerRef.value.duration));
     audioPlayerRef.value.play();
   } else {
     audioPlayerRef.value.pause();
   }
 };
-const checkSong = () => {
-  audioPlayerRef.value.currentTime = 0;
-  audioPlayerRef.value.play();
+const checkSong = (flag: boolean) => {
+  let item: any;
+  if (flag) item = store.nextMusic(musicId.value);
+  else item = store.lastMusic(musicId.value);
+  if (item) {
+    audioPlayerRef.value.load();
+    audioPlayerRef.value.addEventListener("canplay", () => {
+      musicDuration.value = audioPlayerRef.value.duration;
+      audioPlayerRef.value.play();
+    });
+  }
 };
-const rightClick = (e) => {
+const rightClick = (e: any) => {
   menuRVisible.value = true;
   menuLeft.value = e.pageX;
   menuTop.value = e.pageY;
@@ -143,21 +171,6 @@ const rightClick = (e) => {
 const getImageUrl = (name: string) => {
   return new URL(`/src/assets/images/${name}`, import.meta.url).href;
 };
-onMounted(() => {
-  document.addEventListener("click", () => {
-    menuRVisible.value = false;
-  });
-  document.addEventListener("mousedown", (e) => {
-    const { button } = e;
-    if (button === 2) {
-      menuRVisible.value = false;
-    }
-  });
-});
-watch(language, (val: string) => {
-  today = timeFormat(new Date(), val, "yyyy-MM-dd");
-  week = getWeekDate(new Date(), val, 3);
-});
 </script>
 <style lang="less" scoped>
 .header {

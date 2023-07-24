@@ -85,7 +85,6 @@ watch(mode, (val: string) => {
 watch(
   () => router.currentRoute.value.path,
   (newValue) => {
-    console.log(newValue.split("/"));
     selectedKeys.value.length = 0;
     selectedKeys.value.push(`/${newValue.split("/")[1]}`);
   },

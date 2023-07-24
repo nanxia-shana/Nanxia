@@ -11,16 +11,16 @@ const global = defineStore("global", {
       language: "",
       theme: "",
       mode: "",
+      musicList: [],
       music: {
-        musicMsg: {
-          url: "",
-          imgUrl: "file05.jpeg",
-          name: "II. Largo appassionato",
-          author: "Ludwig van Beethoven",
-        },
-        musicLength: 0,
-        musicCurTime: 0,
-        musicIsPlay: false,
+        id: 1,
+        url: "/src/assets/audios/川田まみ - 光芒.mp3",
+        imgUrl: "file05.jpeg",
+        name: "II. Largo appassionato",
+        author: "Ludwig van Beethoven",
+        lyric: "",
+        tlyric: "",
+        duration: 0,
       },
     };
   },
@@ -43,14 +43,61 @@ const global = defineStore("global", {
       localStorage.setItem("Shana-mode", mode);
       document.head.querySelector("#mode-link")?.setAttribute("href", `./src/theme/mode/mode-${mode}.css`);
     },
-    playMusic(musicIsPlay: boolean) {
-      this.music.musicIsPlay = musicIsPlay;
+    musicLoadMsg(musicInfo: any) {
+      this.music.id = musicInfo.id;
+      this.music.url = musicInfo.url;
+      this.music.imgUrl = musicInfo.imgUrl;
+      this.music.name = musicInfo.name;
+      this.music.author = musicInfo.author;
+      this.music.lyric = musicInfo.lyric;
+      this.music.tlyric = musicInfo.tlyric;
     },
-    musicCurTimeSync(musicCurTime: number) {
-      this.music.musicCurTime = musicCurTime;
+    loadingMusic(array: any) {
+      this.musicList = array;
     },
-    musicLengthSync(musicLength: number) {
-      this.music.musicLength = musicLength;
+    nextMusic(id: number) {
+      const index = this.musicList.findIndex((item: any) => item.id === id);
+      if (index !== -1) {
+        let nextItem: any;
+        if (index < this.musicList.length - 1) {
+          nextItem = this.musicList[index + 1];
+        } else if (index === this.musicList.length - 1) {
+          nextItem = this.musicList[0];
+        }
+        this.music.id = nextItem.id;
+        this.music.url = nextItem.url;
+        this.music.imgUrl = nextItem.imgUrl;
+        this.music.name = nextItem.name;
+        this.music.author = nextItem.author;
+        this.music.lyric = nextItem.lyric;
+        this.music.tlyric = nextItem.tlyric;
+        return nextItem;
+      } else {
+        console.log("next:传入ID不存在于歌单中");
+        return false;
+      }
+    },
+    lastMusic(id: number) {
+      const index = this.musicList.findIndex((item: any) => item.id === id);
+      if (index !== -1) {
+        let lastItem: any;
+        if (index > 0) {
+          lastItem = this.musicList[index - 1];
+        } else if (index === 0) {
+          lastItem = this.musicList[this.musicList.length - 1];
+        }
+        this.music.id = lastItem.id;
+        this.music.url = lastItem.url;
+        this.music.imgUrl = lastItem.imgUrl;
+        this.music.name = lastItem.name;
+        this.music.author = lastItem.author;
+        this.music.lyric = lastItem.lyric;
+        this.music.tlyric = lastItem.tlyric;
+        return lastItem;
+      } else {
+        console.log("last:传入ID不存在于歌单中");
+        return false;
+      }
     },
   },
 });

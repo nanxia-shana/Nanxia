@@ -26,7 +26,7 @@ class ZWRequest {
     this.interceptors = config.interceptors;
     this.instance.interceptors.request.use(
       (config) => {
-        console.log("共有的请求时成功拦截");
+        // console.log("共有的请求时成功拦截");
         return config;
       },
       (error) => {
@@ -36,7 +36,7 @@ class ZWRequest {
     );
     this.instance.interceptors.response.use(
       (res) => {
-        console.log("共有的返回时成功的拦截", res);
+        // console.log("共有的返回时成功的拦截", res);
         return res;
       },
       (error) => {
@@ -64,7 +64,7 @@ class ZWRequest {
             res = config.interceptors?.responseInterceptor(res);
           }
           resolve(res);
-          console.log("封装的request-res", res);
+          // console.log("封装的request-res", res);
         })
         .catch((error) => {
           console.log("封装的request-error", error);

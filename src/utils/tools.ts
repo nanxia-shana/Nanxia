@@ -82,4 +82,38 @@ const getWeekDateJP = (date: Date): string => {
   var week = weeks[day];
   return week;
 };
-export { timeFormatCN, timeFormat, getWeekDate };
+
+// 二分法查找数字在有序数组的哪个区间
+const binarySearchRange = (arr: any, target: number) => {
+  let left = 0;
+  let right = arr.length - 1;
+  if (arr[left] > target) {
+    return [0, 0];
+  } else if (arr[right] < target) {
+    return [right, right];
+  }
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] == target) {
+      const start = i;
+      const end = i;
+      return [start, end];
+    }
+  }
+  // 找到左边界
+  while (left + 1 < right) {
+    let mid = Math.floor((left + right) / 2);
+    if (arr[mid] < target) {
+      left = mid;
+    } else {
+      right = mid;
+    }
+  }
+  const start = left;
+  const end = right;
+  if (start <= end) {
+    return [start, end];
+  } else {
+    return [-1, -1];
+  }
+};
+export { timeFormatCN, timeFormat, getWeekDate, binarySearchRange };
