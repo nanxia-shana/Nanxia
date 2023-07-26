@@ -10,6 +10,7 @@
           <svg-icon name="back" className="topIcon2"></svg-icon>
         </div>
       </div>
+      <svg-icon name="shareMusic" className="topIcon1"></svg-icon>
     </div>
     <div class="music-mid" @click="lyricShow = !lyricShow">
       <div v-show="!lyricShow" class="music-mid-cover">
@@ -45,9 +46,17 @@
     </div>
     <div class="music-bot">
       <div class="music-bot-icon">
-        <svg-icon name="love" className="botIcon1"></svg-icon>
-        <svg-icon name="comment" className="botIcon1"></svg-icon>
-        <svg-icon name="shareMusic" className="botIcon1"></svg-icon>
+        <svg-icon name="loveempty" className="botIcon1"></svg-icon>
+        <div class="music-bot-icon-item">
+          <svg-icon name="download" className="botIcon1"></svg-icon>
+          <div class="music-bot-icon-item-lb">vip</div>
+        </div>
+        <div class="music-bot-icon-chang">唱</div>
+        <div class="music-bot-icon-item">
+          <svg-icon name="comment" className="botIcon1"></svg-icon>
+          <div class="music-bot-icon-item-lt">10w+</div>
+        </div>
+        <svg-icon name="menuright" className="botIcon1"></svg-icon>
       </div>
       <div class="music-bot-progress">
         <span class="music-bot-progress-time" style="transform-origin: 0 50%">{{ formatter(musicCurTime) }}</span>
@@ -70,10 +79,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { inject, reactive, ref, onMounted } from "vue";
+import { inject, reactive, ref, onMounted, watch } from "vue";
 import { binarySearchRange } from "@/utils/tools";
 import useGlobalStore from "@/store/modules/global";
 const store = useGlobalStore();
+import { storeToRefs } from "pinia";
+const { music } = storeToRefs(store);
 import { useRouter } from "vue-router";
 const router = useRouter();
 const musicId = ref<number>(inject("musicId"));
@@ -98,6 +109,16 @@ onMounted(async () => {
   await formatLyric();
   operateLyric();
 });
+watch(
+  () => music.value,
+  async () => {
+    await formatLyric();
+    operateLyric();
+  },
+  {
+    deep: true,
+  },
+);
 const formatter = (value: number) => {
   return `${Math.floor(value / 60)}:${Math.floor(value % 60) < 10 ? "0" + Math.floor(value % 60) : Math.floor(value % 60)}`;
 };
@@ -195,6 +216,7 @@ const getImageUrl = (name: string) => {
   display: flex;
   flex-direction: column;
   position: relative;
+  user-select: none;
   &-bg {
     width: 100%;
     height: 100%;
@@ -209,34 +231,33 @@ const getImageUrl = (name: string) => {
   &-top {
     width: 100%;
     height: 36px;
+    padding: 0 10px 0 0;
     display: flex;
     align-items: center;
     position: relative;
     z-index: 2;
-
     &-msg {
       flex: 1;
       height: 100%;
       margin-left: 10px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      transform: scale(0.97);
-      transform-origin: 0 100%;
+      align-items: center;
       &-name {
         font-size: 12px;
         color: #fff;
-        line-height: 13px;
+        transform: scale(0.95);
+        transform-origin: 50% 100%;
       }
       &-author {
         display: flex;
         align-items: center;
         transform: scale(0.8);
-        transform-origin: 0 0;
+        transform-origin: 50% 0;
+        cursor: pointer;
         span {
           font-size: 12px;
           color: #ccc;
-          line-height: 16px;
         }
       }
     }
@@ -252,7 +273,6 @@ const getImageUrl = (name: string) => {
       margin-top: 2px;
       fill: #cccccc;
       transform: rotateY(180deg);
-      cursor: pointer;
     }
   }
   &-mid {
@@ -390,10 +410,59 @@ const getImageUrl = (name: string) => {
       display: flex;
       align-items: center;
       justify-content: center;
+      &-chang {
+        width: 26px;
+        height: 26px;
+        margin: 0 15px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        font-size: 14px;
+        color: #fff;
+        transform: scale(0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+      }
+      &-item {
+        position: relative;
+        cursor: pointer;
+        &-lt {
+          height: 16px;
+          padding: 0 4px;
+          border-radius: 8px;
+          background-color: #eee;
+          font-size: 14px;
+          font-weight: bold;
+          line-height: 16px;
+          color: #aaa;
+          transform: scale(0.6);
+          box-sizing: border-box;
+          position: absolute;
+          top: -4px;
+          left: 16px;
+        }
+        &-lb {
+          height: 16px;
+          padding: 0 4px;
+          border-radius: 8px;
+          background-color: #eee;
+          font-size: 14px;
+          font-weight: bold;
+          line-height: 16px;
+          color: #aaa;
+          transform: scale(0.6);
+          box-sizing: border-box;
+          position: absolute;
+          bottom: 0px;
+          left: 22px;
+        }
+      }
       .botIcon1 {
-        width: 14px;
-        height: 14px;
-        margin: 0 30px;
+        width: 18px;
+        height: 18px;
+        margin: 0 16px;
         fill: #fff;
         cursor: pointer;
       }
@@ -405,7 +474,7 @@ const getImageUrl = (name: string) => {
       align-items: center;
       justify-content: center;
       &-line {
-        width: 66%;
+        width: 78%;
         margin: 0 1px;
       }
       &-time {
@@ -421,23 +490,23 @@ const getImageUrl = (name: string) => {
       align-items: center;
       justify-content: center;
       .botIcon2 {
-        width: 15px;
-        height: 15px;
-        margin: 0 15px;
+        width: 18px;
+        height: 18px;
+        margin: 0 14px;
         fill: #fff;
         cursor: pointer;
       }
       .botIcon3 {
-        width: 20px;
-        height: 20px;
-        margin: 0 16px;
+        width: 18px;
+        height: 18px;
+        margin: 0 14px;
         fill: #fff;
         cursor: pointer;
       }
       .botIcon4 {
-        width: 24px;
-        height: 24px;
-        margin: 0 16px;
+        width: 40px;
+        height: 40px;
+        margin: 0 14px;
         fill: #fff;
         cursor: pointer;
       }
