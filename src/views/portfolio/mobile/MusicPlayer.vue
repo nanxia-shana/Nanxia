@@ -12,7 +12,7 @@
       </div>
       <svg-icon name="shareMusic" className="topIcon1"></svg-icon>
     </div>
-    <div class="music-mid" @click="lyricShow = !lyricShow">
+    <div class="music-mid" :style="`height:${lyricShow ? '390' : '370'}px`" @click="lyricShow = !lyricShow">
       <div v-show="!lyricShow" class="music-mid-cover">
         <img
           class="music-mid-cover-stick"
@@ -35,28 +35,36 @@
             </span>
           </div>
         </div>
-        <div
-          v-if="musicTlyric"
-          class="tlyricBox"
-          :style="`background-color: ${tlyricShow ? '#fff' : 'none'};color: ${tlyricShow ? '#666' : '#fff'}`"
-          @click.stop="tlyricShow = !tlyricShow">
-          译
-        </div>
       </div>
     </div>
     <div class="music-bot">
-      <div class="music-bot-icon">
-        <svg-icon name="loveempty" className="botIcon1"></svg-icon>
-        <div class="music-bot-icon-item">
+      <div class="music-bot-icon" :style="lyricShow ? 'justify-content: space-between; align-items: flex-end' : ''">
+        <div style="display: flex; align-items: center">
+          <svg-icon name="loveempty" :className="lyricShow ? 'botLoveLyrc' : 'botIcon1'"></svg-icon>
+          <svg-icon v-show="lyricShow" name="mvplay" className="botIcon1" style="margin: 0" @click="musicMV"></svg-icon>
+        </div>
+        <div v-show="!lyricShow" class="music-bot-icon-item">
           <svg-icon name="download" className="botIcon1"></svg-icon>
           <div class="music-bot-icon-item-lb">vip</div>
         </div>
-        <div class="music-bot-icon-chang">唱</div>
-        <div class="music-bot-icon-item">
+        <div v-show="!lyricShow" class="music-bot-icon-item">
+          <div v-show="!lyricShow" class="music-bot-icon-chang">唱</div>
+          <div class="music-bot-icon-item-lt" style="left: 30px">352</div>
+        </div>
+        <div v-show="!lyricShow" class="music-bot-icon-item">
           <svg-icon name="comment" className="botIcon1"></svg-icon>
           <div class="music-bot-icon-item-lt">10w+</div>
         </div>
-        <svg-icon name="menuright" className="botIcon1"></svg-icon>
+        <div style="display: flex; align-items: center">
+          <div
+            v-show="musicTlyric && lyricShow"
+            class="music-bot-icon-tlyric"
+            :style="`color: ${tlyricShow ? '#fff' : 'rgba(222, 222, 222, 0.6)'}`"
+            @click.stop="tlyricShow = !tlyricShow">
+            译
+          </div>
+          <svg-icon name="menuright" :className="lyricShow ? 'botMenuLyrc' : 'botIcon1'"></svg-icon>
+        </div>
       </div>
       <div class="music-bot-progress">
         <span class="music-bot-progress-time" style="transform-origin: 0 50%">{{ formatter(musicCurTime) }}</span>
@@ -67,15 +75,23 @@
       </div>
       <div class="music-bot-operate">
         <svg-icon name="circulation" className="botIcon2" style="transform: rotateY(180deg)"></svg-icon>
-        <svg-icon name="lastsong" className="botIcon3" @click="checkSong(false)"></svg-icon>
+        <svg-icon name="lastsong" className="botIcon2" @click="checkSong(false)"></svg-icon>
         <div @click="playMusic">
           <svg-icon v-if="musicIsPlay" name="pause" className="botIcon4"></svg-icon>
           <svg-icon v-else name="nopause" className="botIcon4"></svg-icon>
         </div>
-        <svg-icon name="nextsong" className="botIcon3" @click="checkSong(true)"></svg-icon>
-        <svg-icon name="menu" className="botIcon2"></svg-icon>
+        <svg-icon name="nextsong" className="botIcon2" @click="checkSong(true)"></svg-icon>
+        <svg-icon name="menu" className="botIcon3" @click="musicList"></svg-icon>
       </div>
     </div>
+    <div class="music-list" v-show="musicListShow">
+      <div class="music-list-title">当前播放<span>(250)</span></div>
+      <div class="music-list-icon">
+        <div class="music-list-icon-left"></div>
+        <div class="music-list-icon-right"></div>
+      </div>
+    </div>
+    <div class="music-msg" :class="{ msgShow: phoneMsgShow }">{{ phoneMsg }}</div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -87,6 +103,8 @@ import { storeToRefs } from "pinia";
 const { music } = storeToRefs(store);
 import { useRouter } from "vue-router";
 const router = useRouter();
+const phoneMsgShow = ref<boolean>(false);
+const phoneMsg = ref<string>("暂无MV");
 const musicId = ref<number>(inject("musicId"));
 const musicImgUrl: string = inject("musicImgUrl");
 const musicName: string = inject("musicName");
@@ -102,6 +120,7 @@ const lyricShow = ref<boolean>(false);
 const tlyricShow = ref<boolean>(false);
 const lyricMap = reactive(new Map());
 const tlyricMap = reactive(new Map());
+const musicListShow = ref<boolean>(false);
 let i: number;
 let timeArray = [];
 let centerTop = 160;
@@ -125,6 +144,13 @@ const formatter = (value: number) => {
 const musicDrag = async (e: number) => {
   audioPlayerRef.value.currentTime = e;
 };
+const musicMV = () => {
+  phoneMsg.value = "暂无MV";
+  phoneMsgShow.value = true;
+  setTimeout(() => {
+    phoneMsgShow.value = false;
+  }, 3300);
+};
 const playMusic = () => {
   if (audioPlayerRef.value.paused == true) {
     audioPlayerRef.value.play();
@@ -147,6 +173,9 @@ const checkSong = (flag: boolean) => {
   } else {
     alert("歌曲不存在");
   }
+};
+const musicList = () => {
+  musicListShow.value = true;
 };
 const formatLyric = async () => {
   lyricMap.clear();
@@ -278,7 +307,7 @@ const getImageUrl = (name: string) => {
   &-mid {
     overflow: hidden;
     width: 100%;
-    height: 350px;
+    padding-bottom: 4px;
     position: relative;
     z-index: 2;
     cursor: pointer;
@@ -376,21 +405,6 @@ const getImageUrl = (name: string) => {
           }
         }
       }
-      .tlyricBox {
-        width: 30px;
-        height: 16px;
-        border: 1px solid #fff;
-        border-radius: 4px;
-        font-size: 12px;
-        transform: scale(0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        bottom: 0;
-        right: 8px;
-        z-index: 5;
-      }
     }
     &-lyric::-webkit-scrollbar {
       display: none;
@@ -406,7 +420,7 @@ const getImageUrl = (name: string) => {
     z-index: 2;
     &-icon {
       width: 100%;
-      height: 40px;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -438,10 +452,11 @@ const getImageUrl = (name: string) => {
           line-height: 16px;
           color: #aaa;
           transform: scale(0.6);
+          transform-origin: 0 50%;
           box-sizing: border-box;
           position: absolute;
           top: -4px;
-          left: 16px;
+          left: 26px;
         }
         &-lb {
           height: 16px;
@@ -453,17 +468,57 @@ const getImageUrl = (name: string) => {
           line-height: 16px;
           color: #aaa;
           transform: scale(0.6);
+          transform-origin: 0 50%;
           box-sizing: border-box;
           position: absolute;
           bottom: 0px;
-          left: 22px;
+          left: 27px;
         }
+      }
+
+      &-tlyric {
+        min-width: 30px;
+        height: 20px;
+        padding: 4px;
+        border: 1px solid rgba(222, 222, 222, 0.6);
+        border-radius: 10px;
+        font-size: 12px;
+        color: rgba(222, 222, 222, 0.6);
+        transform: scale(0.8);
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
       }
       .botIcon1 {
         width: 18px;
         height: 18px;
         margin: 0 16px;
         fill: #fff;
+        cursor: pointer;
+        transition: all 0s;
+        cursor: pointer;
+      }
+      .botLoveLyrc {
+        width: 16px;
+        height: 16px;
+        margin: 0 10px;
+        fill: #fff;
+        cursor: pointer;
+        transition: all 0s;
+        cursor: pointer;
+      }
+      .botMenuLyrc {
+        width: 10px;
+        height: 10px;
+        padding: 2px;
+        margin: 0 10px;
+        box-sizing: content-box;
+        border-radius: 50%;
+        border: 1px solid rgba(222, 222, 222, 0.6);
+        fill: rgba(222, 222, 222, 0.6);
+        transition: all 0s;
         cursor: pointer;
       }
     }
@@ -485,7 +540,10 @@ const getImageUrl = (name: string) => {
       }
     }
     &-operate {
-      margin-top: 18px;
+      width: 100%;
+      height: 50px;
+      padding-bottom: 20px;
+      box-sizing: content-box;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -497,8 +555,8 @@ const getImageUrl = (name: string) => {
         cursor: pointer;
       }
       .botIcon3 {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         margin: 0 14px;
         fill: #fff;
         cursor: pointer;
@@ -510,6 +568,60 @@ const getImageUrl = (name: string) => {
         fill: #fff;
         cursor: pointer;
       }
+    }
+  }
+  &-list {
+    width: 90%;
+    height: 66%;
+    margin: auto;
+    border-radius: 14px;
+    background-color: rebeccapurple;
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    z-index: 5;
+  }
+  &-msg {
+    visibility: hidden;
+    opacity: 0;
+    width: fit-content;
+    padding: 2px 10px;
+    margin: auto;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    z-index: 8;
+  }
+  .msgShow {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    animation: msghidden 3s 0.3s ease-out forwards;
+  }
+  @keyframes msghidden {
+    0% {
+      opacity: 1;
+      visibility: visible;
+    }
+    90% {
+      opacity: 1;
+      visibility: visible;
+    }
+    99% {
+      opacity: 0;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
     }
   }
 }
