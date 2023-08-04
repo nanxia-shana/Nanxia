@@ -38,6 +38,9 @@
           </div>
         </div>
       </div>
+      <div class="computer-box-fullScreen" @click="fullScreen">
+        <svg-icon name="fullScreen" className="icon1"></svg-icon>
+      </div>
       <div class="computer-box-mac" :class="{ macShow: !macShow }">
         <router-view v-slot="{ Component }">
           <!-- <transition name="fade"> -->
@@ -64,11 +67,15 @@ const macShow = ref<boolean>(true);
 let today: string = timeFormat(new Date(), language.value, "yyyy/MM/dd");
 let week: string = getWeekDate(new Date(), language.value, 2);
 let nowtime = ref();
+const lastRouteName = ref<string>("");
 const setIphoneTime = () => {
   curTime.value = timeFormatCN(new Date(), "hh:mm:ss");
 };
 const keydown = () => {
   console.log("object");
+};
+const fullScreen = () => {
+  router.push(`/showPage/${lastRouteName.value}`);
 };
 watch(language, (val: string) => {
   today = timeFormat(new Date(), val, "yyyy/MM/dd");
@@ -77,8 +84,9 @@ watch(language, (val: string) => {
 watch(
   () => router.currentRoute.value.path,
   (newValue) => {
-    let lastRouteName = newValue.split("/").reverse()[0];
-    if (lastRouteName === "portfolio" || lastRouteName === "computer" || lastRouteName === "mobile") macShow.value = true;
+    lastRouteName.value = newValue.split("/").reverse()[0];
+    if (lastRouteName.value === "portfolio" || lastRouteName.value === "computer" || lastRouteName.value === "mobile")
+      macShow.value = true;
     else macShow.value = false;
   },
   { immediate: true },
@@ -211,6 +219,23 @@ onBeforeUnmount(() => {
             transform: scale(0.76);
           }
         }
+      }
+    }
+    &-fullScreen {
+      width: 5%;
+      height: 6%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      bottom: 18.5%;
+      right: 8%;
+      z-index: 5;
+      cursor: pointer;
+      .icon1 {
+        width: 100%;
+        height: 100%;
+        fill: #000;
       }
     }
     &-mac {

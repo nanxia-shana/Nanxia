@@ -43,6 +43,17 @@ const portfolioRouter = [
           },
         },
       },
+      {
+        path: "/portfolio/mobile/AMap",
+        name: "AMap",
+        component: () => import("@/views/portfolio/mobile/AMap.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "高德地图",
+            "/en-US": "AMap",
+          },
+        },
+      },
     ],
   },
   {
@@ -65,6 +76,17 @@ const portfolioRouter = [
           title: {
             "/zh-CN": "瀑布流",
             "/en-US": "WaterfallFlow",
+          },
+        },
+      },
+      {
+        path: "/portfolio/computer/GEO-SVG-Map",
+        name: "GEO-SVG-MapC",
+        component: () => import("@/views/portfolio/computer/GEO-SVG-Map.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "地图（SVG）",
+            "/en-US": "GEO-SVG-Map",
           },
         },
       },

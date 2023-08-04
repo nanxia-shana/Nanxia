@@ -8,7 +8,7 @@
     @mousemove="mousemove($event)">
     <Waterfall
       :list="cardList"
-      :breakpoints="{ 740: { rowPerView: 6 }, 600: { rowPerView: 5 } }"
+      :breakpoints="isShowPage ? {} : { 740: { rowPerView: 6 }, 600: { rowPerView: 5 } }"
       backgroundColor="rgba(51, 51, 51, 1)">
       <template #item="{ item }">
         <div class="card">
@@ -22,13 +22,16 @@
 <script lang="ts" setup>
 import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
 import "vue-waterfall-plugin-next/dist/style.css";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, watch } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const cardList = reactive<any[]>([]);
 const iphone = ref(null); // 使用 ref 引用 DOM 元素
 let flag = ref<boolean>(false); //判断鼠标是否在iphone内且按住未松
 // 由于渲染时候对数据的两次赋值，则会出现一次闪现，需要防抖
 const pictureList = ["deskBack2", "file01", "file02", "file03", "file04", "file05", "file06"];
 let startIndex: number = 0;
+const isShowPage = ref<boolean>(false);
 const getImageUrl = (name: string) => {
   return new URL(`/src/assets/images/${name}.jpeg`, import.meta.url).href;
 };
@@ -57,6 +60,14 @@ onMounted(() => {
     }
   });
 });
+watch(
+  () => router.currentRoute.value.path,
+  (newValue) => {
+    if (newValue.indexOf("showPage") != -1) isShowPage.value = true;
+    else isShowPage.value = false;
+  },
+  { immediate: true },
+);
 const getList = () => {
   for (let i = startIndex; i < startIndex + 30; i++) {
     cardList.push({

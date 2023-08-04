@@ -66,11 +66,19 @@ const mobileDemoList = reactive([
     name: `${t("portfolio.musicPlayer")}`,
     route: "/portfolio/mobile/musicPlayer",
   },
+  {
+    name: `${t("portfolio.AMap")}`,
+    route: "/portfolio/mobile/AMap",
+  },
 ]);
 const computerDemoList = reactive([
   {
     name: `${t("portfolio.waterfallFlow")}(component)`,
     route: "/portfolio/computer/waterfallFlow",
+  },
+  {
+    name: `${t("portfolio.GEOSVGMap")}`,
+    route: "/portfolio/computer/GEO-SVG-Map",
   },
 ]);
 onMounted(() => {
@@ -86,7 +94,7 @@ watch(
       rightRoute.value = "";
       return;
     }
-    refreshBtnName.value = t(`portfolio.${lastRouteName[0]}`);
+    refreshBtnName.value = t(`portfolio.${lastRouteName[0].match(/[a-zA-Z]/g).join("")}`);
     if (newValue === "/portfolio") rightRoute.value = "";
     else if (newValue.indexOf("/mobile") != -1) rightRoute.value = "mobile";
     else rightRoute.value = "computer";

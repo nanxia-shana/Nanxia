@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "animate.css": "^4.1.1",
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
     "echarts": "^5.4.2",
+    "jquery": "^3.7.0",
     "pinia": "^2.0.35",
     "swiper": "^10.0.3",
     "vue": "^3.2.47",

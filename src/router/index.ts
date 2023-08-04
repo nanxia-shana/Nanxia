@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import layout from "@/layout/index.vue";
 import personRouter from "./person";
 import portfolioRouter from "./portfolio";
+import showpageRouter from "./showpageRouter";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -73,6 +74,18 @@ const routes: Array<RouteRecordRaw> = [
       },
       ...personRouter,
     ],
+  },
+  {
+    path: "/showPage",
+    name: "ShowPage",
+    component: () => import("@/views/showpage/Showpage.vue"),
+    meta: {
+      title: {
+        "/zh-CN": "展示页",
+        "/en-US": "Show Page",
+      },
+    },
+    children: [...showpageRouter],
   },
   {
     path: "/login",

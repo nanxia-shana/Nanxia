@@ -40,5 +40,7 @@ export default {
     waterfallFlow: "ウォーターフォールレイアウト",
     instantMusicVideo: "ショートビデオ",
     musicPlayer: "音楽プレーヤー",
+    GEOSVGMap: "地图（SVG）",
+    AMap: "AMap",
   },
 };

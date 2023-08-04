@@ -40,5 +40,7 @@ export default {
     waterfallFlow: "Waterfall Flow Layout",
     instantMusicVideo: "Instant Music Video",
     musicPlayer: "Music Player",
+    GEOSVGMap: "GEO SVG Map",
+    AMap: "AMap",
   },
 };

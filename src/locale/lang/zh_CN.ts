@@ -40,5 +40,7 @@ export default {
     waterfallFlow: "瀑布流布局",
     instantMusicVideo: "短视频",
     musicPlayer: "音乐播放器",
+    GEOSVGMap: "地图（SVG）",
+    AMap: "高德地图",
   },
 };

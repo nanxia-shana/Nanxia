@@ -66,4 +66,8 @@ export default defineConfig({
       },
     },
   },
+  // ...其他配置项
+  optimizeDeps: {
+    include: ["jquery"],
+  },
 });
