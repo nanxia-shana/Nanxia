@@ -1,4 +1,6 @@
-const portfolioRouter = [
+import { RouteRecordRaw } from "vue-router";
+
+const portfolioRouter: Array<RouteRecordRaw> = [
   {
     path: "/portfolio/mobile",
     name: "Mobile",
@@ -91,6 +93,17 @@ const portfolioRouter = [
         },
       },
     ],
+  },
+  {
+    path: "/portfolio/webgl",
+    name: "Webgl",
+    component: () => import("@/views/portfolio/webGL/ThreeJs.vue"),
+    meta: {
+      title: {
+        "/zh-CN": "Webgl",
+        "/en-US": "Webgl",
+      },
+    },
   },
 ];
 

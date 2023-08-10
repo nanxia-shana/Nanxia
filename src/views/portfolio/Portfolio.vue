@@ -27,6 +27,18 @@
             >
           </div>
         </div>
+        <div class="box-item">
+          <span class="box-item-name" @click="toMobile">{{ t("portfolio.mobile") }} :</span>
+          <div class="box-item-box">
+            <a-tag
+              :color="tagColorList[index % 7]"
+              v-for="(item, index) in webglDemoList"
+              :key="index"
+              @click="toDemo(item)"
+              >{{ item.name }}</a-tag
+            >
+          </div>
+        </div>
       </div>
     </div>
 
@@ -79,6 +91,12 @@ const computerDemoList = reactive([
   {
     name: `${t("portfolio.GEOSVGMap")}`,
     route: "/portfolio/computer/GEO-SVG-Map",
+  },
+]);
+const webglDemoList = reactive([
+  {
+    name: `webGl`,
+    route: "/portfolio/webgl",
   },
 ]);
 onMounted(() => {
@@ -205,6 +223,7 @@ const toDemo = (item: any) => {
         font-size: 16px;
         font-weight: bold;
         white-space: nowrap;
+        color: var(--primary-color);
       }
     }
     .titleShow {

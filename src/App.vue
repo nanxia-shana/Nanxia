@@ -62,7 +62,7 @@ onMounted(() => {
   store.loadingMusic([
     {
       id: 1,
-      url: "/src/assets/audios/II. Largo appassionato.mp3",
+      url: "https://nanxia-1309728409.cos.ap-chongqing.myqcloud.com/Shana/audio/II.%20Largo%20appassionato.mp3?q-sign-algorithm=sha1&q-ak=AKIDreHsuJOeCEWJ1Z784Dcnpn1PVHqk1j9GdvT0dk9vzsLkXi7im70Ina59cXd0oBCZ&q-sign-time=1691717762;1691721362&q-key-time=1691717762;1691721362&q-header-list=host&q-url-param-list=&q-signature=0c4dbb6f2d507405720cbec64d99d253e18f78ae&x-cos-security-token=31w43EzqUQ2WoAYqS9Lfae6104Qum9haff4f13e0f4858c7054694bdff35e19491EwdO_wEiPlXEkTucVU1uhMMixB1NpmFo5u1-92WOIJrAhMvjUpLdKotGM40sUjCB7AMYoEFgSrv0osrpxSWXaE0uF7SL4sebQHct8GEz74JQuy_xto_9J72bWP8fitXbJzVe5ZAGtBbBm8jHhqs1F2xiXc0O1qfPCvM5-FQ_sgmP8CbUA9vjdLVSrPrhWlM",
       imgUrl: "file05.jpeg",
       name: "II. Largo appassionato",
       author: "Ludwig van Beethoven",
@@ -71,7 +71,7 @@ onMounted(() => {
     },
     {
       id: 2,
-      url: "/src/assets/audios/川田まみ - 光芒.mp3",
+      url: "https://nanxia-1309728409.cos.ap-chongqing.myqcloud.com/Shana/audio/%E5%B7%9D%E7%94%B0%E3%81%BE%E3%81%BF%20-%20%E5%85%89%E8%8A%92.mp3?q-sign-algorithm=sha1&q-ak=AKIDBGZ0Z5WroicWd_Jvc8gtytNGbhBHncg9IvRbzuJIM-QLUvl1YYMlbQgTiRvJCVFI&q-sign-time=1691717791;1691721391&q-key-time=1691717791;1691721391&q-header-list=host&q-url-param-list=&q-signature=b7feb55859451c71d674f8472ad30237c68ab5d5&x-cos-security-token=31w43EzqUQ2WoAYqS9Lfae6104Qum9ha24db1385a91c293c33aebeabca6cb87c1EwdO_wEiPlXEkTucVU1uh-Sl5oh7shG5l-3mtU5KMt70dwPcOkX8gqPP3EN-nJ5Hvs_lheYsBYusi-tUOA3MY9dhFdZfgp1slPtjO6jJPH7tUKWh33Ao3VfMua5PoJ-noE8x08ZgtoeFVzpZX9wchwoBiL2WdaXhtJ_AaOK6EAp-6lc6hsA1jXEfyR0BqiB",
       imgUrl: "guangmang.png",
       name: "光芒",
       author: "川田まみ",
@@ -81,7 +81,8 @@ onMounted(() => {
     },
     {
       id: 3,
-      url: "/src/assets/audios/コツキミヤ - mirage.flac",
+      // url: "/src/assets/audios/コツキミヤ - mirage.flac",
+      url: "https://nanxia-1309728409.cos.ap-chongqing.myqcloud.com/Shana/audio/%E3%82%B3%E3%83%84%E3%82%AD%E3%83%9F%E3%83%A4%20-%20mirage.flac?q-sign-algorithm=sha1&q-ak=AKIDGqA_s9E1AtD9hRezL_sPIeWSzFgljmtpc8AIjk1m0Ca4MhH0sewMujbQgGR_Cx2Q&q-sign-time=1691717805;1691721405&q-key-time=1691717805;1691721405&q-header-list=host&q-url-param-list=&q-signature=ebaa6ffa1a6f8610faed93f2f08b450778beeca2&x-cos-security-token=31w43EzqUQ2WoAYqS9Lfae6104Qum9hadd4283636c8d2b44241872ffc08cb9081EwdO_wEiPlXEkTucVU1uq8OfoP45HlSzcGjVh9TDdAU5xOh0cLzwZ90xZp5PJrT3vji2jsF83ihMLX17fpZs2cVkFOnR5Iwre903d3tBdsZzQqjyE8d-hI5j24dxoHbUwlQrslY7GHziA81KErlYC6t4mND0ZVw-decjaTpjF34rpKIrk4z8uFAy6qshU0g",
       imgUrl: "コツキミヤ.jpg",
       name: "コツキミヤ",
       author: "mirage",

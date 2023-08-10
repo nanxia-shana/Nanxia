@@ -240,7 +240,7 @@ const init = () => {
 .map {
   width: 100%;
   height: 100%;
-  background-color: #505050;
+  background-color: rgba(80, 80, 80, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
