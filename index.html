@@ -7,9 +7,57 @@
     <title>Shana - Record everything about you</title>
     <link id="mode-link" rel="stylesheet" type="text/css" href="./src/theme/mode/mode-light.css" />
     <link id="theme-link" rel="stylesheet" type="text/css" href="./src/theme/theme-violet.css" />
+    <!-- <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script> -->
+    <script>
+      // 小帅哥： https://unpkg.com/live2d-widget-model-chitose@1.0.5/assets/chitose.model.json
+      // ⭐萌娘：https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json
+      // 白猫：https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json
+      // 黑猫： https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json
+      // 小可爱（女）：https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json
+      // 小可爱（男）：https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json
+      // 初音：https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json
+      // 圣职者妹妹：https://unpkg.com/live2d-widget-model-z16@1.0.5/assets/z16.model.json
+      // 茶杯犬：https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json
+      // 绿毛妹妹：https://unpkg.com/live2d-widget-model-tsumiki@1.0.5/assets/tsumiki.model.json
+      // 金龟子妹妹：https://unpkg.com/live2d-widget-model-unitychan@1.0.5/assets/unitychan.model.json
+      // https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json
+      // https://unpkg.com/live2d-widget-model-ni-j@1.0.5/assets/ni-j.model.json
+      // 小阿狸： https://unpkg.com/live2d-widget-model-nico@1.0.5/assets/nico.model.json
+      // https://unpkg.com/live2d-widget-model-nietzsche@1.0.5/assets/nietzche.model.json
+      // https://unpkg.com/live2d-widget-model-nipsilon@1.0.5/assets/nipsilon.model.json
+      // 女学生： https://unpkg.com/live2d-widget-model-hibiki@1.0.5/assets/hibiki.model.json
+
+      // L2Dwidget.init({
+      //   model: {
+      //     jsonPath: "https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json",
+      //     scale: 1,
+      //     hHeadPos: 0.5,
+      //     vHeadPos: 0.618,
+      //   },
+      //   display: { position: "right", width: 100, height: 200, hOffset: 0, vOffset: 0 },
+      //   mobile: { show: true, scale: 0.5 },
+      //   react: { opacityDefault: 0.7, opacityOnHover: 0.2 },
+      // });
+    </script>
+    <link rel="stylesheet" href="/src/assets/live2d/css/live2d.css" />
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <div id="landlord">
+      <div class="message" style="opacity: 0"></div>
+      <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+      <div class="hide-button">隐藏</div>
+    </div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      var message_Path = "/src/assets/live2d/";
+      var home_Path = "https://haremu.com/";
+    </script>
+    <script type="text/javascript" src="/src/assets/live2d/js/live2d.js"></script>
+    <script type="text/javascript" src="/src/assets/live2d/js/message.js"></script>
+    <script type="text/javascript">
+      loadlive2d("live2d", "/src/assets/live2d/model/tia/model.json");
+    </script>
   </body>
 </html>
