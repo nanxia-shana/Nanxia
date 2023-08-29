@@ -104,6 +104,30 @@ const portfolioRouter: Array<RouteRecordRaw> = [
         "/en-US": "Webgl",
       },
     },
+    children: [
+      {
+        path: "/portfolio/webgl/sphere",
+        name: "Sphere",
+        component: () => import("@/components/threeJs/Sphere.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "球体",
+            "/en-US": "Sphere",
+          },
+        },
+      },
+      {
+        path: "/portfolio/webgl/earth",
+        name: "Earth",
+        component: () => import("@/components/threeJs/Earth.vue"),
+        meta: {
+          title: {
+            "/zh-CN": "地球",
+            "/en-US": "Earth",
+          },
+        },
+      },
+    ],
   },
 ];
 

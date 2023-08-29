@@ -1,14 +1,12 @@
 <template>
   <div class="three">
-    <!-- <Sphere /> -->
-    <Earth />
+    <router-view v-slot="{ Component }">
+      <component :is="Component" />
+    </router-view>
   </div>
 </template>
 
-<script lang="ts" setup>
-// import Sphere from "@/components/threeJs/Sphere.vue";
-import Earth from "@/components/threeJs/Earth.vue";
-</script>
+<script lang="ts" setup></script>
 
 <style lang="less" scoped>
 .three {

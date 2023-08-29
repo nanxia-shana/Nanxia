@@ -3,7 +3,7 @@
     <div id="container"></div>
     <div id="panel"></div>
     <div class="tool">
-      <div class="tool-search" v-if="false">
+      <div class="tool-search" v-if="true">
         <input class="tool-search-input" type="text" v-model="searchValue" />
         <div class="tool-search-nav">
           <svg-icon name="nav" className="icon"></svg-icon>
@@ -16,7 +16,7 @@
         </div>
         <div class="tool-nav-line">
           <div class="tool-nav-line-left"></div>
-          <svg-icon name="exchange" className="icon1"></svg-icon>
+          <svg-icon name="exchange" className="icon1" @click="exchange()"></svg-icon>
         </div>
         <div class="tool-nav-end">
           <div class="tool-nav-end-point"></div>
@@ -26,25 +26,25 @@
           <div
             class="tool-nav-type-item"
             :class="{ itemSel: navType == 'Driving' }"
-            @click="initNav([116.379028, 39.865042], [116.427281, 39.903719], 'Driving')">
+            @click="initNav(startValue, endValue, 'Driving')">
             驾车
           </div>
           <div
             class="tool-nav-type-item"
             :class="{ itemSel: navType == 'Walking' }"
-            @click="initNav([116.379028, 39.865042], [116.427281, 39.903719], 'Walking')">
+            @click="initNav(startValue, endValue, 'Walking')">
             步行
           </div>
           <div
             class="tool-nav-type-item"
             :class="{ itemSel: navType == 'Riding' }"
-            @click="initNav([116.379028, 39.865042], [116.427281, 39.903719], 'Riding')">
+            @click="initNav(startValue, endValue, 'Riding')">
             骑行
           </div>
           <div
             class="tool-nav-type-item"
             :class="{ itemSel: navType == 'Transfer' }"
-            @click="initNav([116.379028, 39.865042], [116.427281, 39.903719], 'Transfer')">
+            @click="initNav(startValue, endValue, 'Transfer')">
             公交地铁
           </div>
         </div>
@@ -61,11 +61,11 @@ window._AMapSecurityConfig = {
 };
 let map = shallowRef(null);
 const searchValue = ref("");
-const startValue = ref("");
-const endValue = ref("");
+const startValue = ref("北京");
+const endValue = ref("滨江");
 const navType = ref("Driving");
 onMounted(() => {
-  // initMap();
+  initMap();
 });
 const initMap = () => {
   AMapLoader.load({
@@ -87,6 +87,7 @@ const initMap = () => {
       console.log(e);
     });
 };
+
 const initNav = (startIn, endIn, type) => {
   AMapLoader.load({
     key: "c73e9afb6ff55e23cdb5dbb04587a36a", // 申请好的Web端开发者Key，首次调用 load 时必填
@@ -102,8 +103,6 @@ const initNav = (startIn, endIn, type) => {
         zoom: 11, //初始化地图级别
         // center: [105.602725, 37.076636], //初始化地图中心点位置,不传自动定位
       });
-      var start = new AMap.LngLat(startIn[0], startIn[1]);
-      var end = new AMap.LngLat(endIn[0], endIn[1]);
       var option = {
         map: map,
         panel: "panel",
@@ -112,22 +111,40 @@ const initNav = (startIn, endIn, type) => {
       switch (type) {
         case "Driving":
           var driving = new AMap.Driving(option);
-          driving.search(start, end, function (status, result) {
-            // 未出错时，result即是对应的路线规划方案
-            console.log("navDriving", status, result);
-          });
+          driving.search(
+            [
+              { keyword: startIn, city: "" },
+              { keyword: endIn, city: "" },
+            ],
+            function (status, result) {
+              // 未出错时，result即是对应的路线规划方案
+              console.log("navDriving", status, result);
+            },
+          );
           break;
         case "Walking":
           var walking = new AMap.Walking(option);
-          walking.search(start, end, function (status, result) {
-            console.log("navWalking", status, result);
-          });
+          walking.search(
+            [
+              { keyword: startIn, city: "" },
+              { keyword: endIn, city: "" },
+            ],
+            function (status, result) {
+              console.log("navWalking,步行路线数据查询失败", status, result);
+            },
+          );
           break;
         case "Riding":
           var riding = new AMap.Riding(option);
-          riding.search(start, end, function (status, result) {
-            console.log("navRiding", status, result);
-          });
+          riding.search(
+            [
+              { keyword: startIn, city: "" },
+              { keyword: endIn, city: "" },
+            ],
+            function (status, result) {
+              console.log("navRiding", status, result);
+            },
+          );
           break;
         case "Transfer":
           var transOptions = {
@@ -137,21 +154,39 @@ const initNav = (startIn, endIn, type) => {
             policy: AMap.TransferPolicy.LEAST_TIME,
           };
           var transfer = new AMap.Transfer(transOptions);
-          transfer.search(start, end, function (status, result) {
-            console.log("navTransfer", status, result);
-          });
+          transfer.search(
+            [
+              { keyword: startIn, city: "" },
+              { keyword: endIn, city: "" },
+            ],
+            function (status, result) {
+              console.log("navTransfer", status, result);
+            },
+          );
           break;
         default:
           var driving = new AMap.Driving(option);
-          driving.search(start, end, function (status, result) {
-            // 未出错时，result即是对应的路线规划方案
-            console.log("navDriving", status, result);
-          });
+          driving.search(
+            [
+              { keyword: startIn, city: "" },
+              { keyword: endIn, city: "" },
+            ],
+            function (status, result) {
+              // 未出错时，result即是对应的路线规划方案
+              console.log("navDriving", status, result);
+            },
+          );
       }
     })
     .catch((e) => {
       console.log(e);
     });
+};
+const exchange = () => {
+  let temp = startValue.value;
+  startValue.value = endValue.value;
+  endValue.value = temp;
+  initNav(startValue.value, endValue.value, navType.value);
 };
 </script>
 <style lang="less" scoped>

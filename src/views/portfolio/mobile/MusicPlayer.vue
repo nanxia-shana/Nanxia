@@ -113,7 +113,7 @@ const musicLyric = ref<string>(inject("musicLyric"));
 const musicTlyric = ref<string>(inject("musicTlyric"));
 const musicDuration = ref<number>(inject("musicDuration"));
 const musicCurTime = ref<number>(inject("musicCurTime"));
-const musicIsPlay: boolean = inject("musicIsPlay");
+const musicIsPlay = ref<boolean>(inject("musicIsPlay"));
 const audioPlayerRef: any = inject("audioPlayerRef");
 
 const lyricShow = ref<boolean>(false);
@@ -152,10 +152,21 @@ const musicMV = () => {
   }, 3300);
 };
 const playMusic = () => {
-  if (audioPlayerRef.value.paused == true) {
-    audioPlayerRef.value.play();
+  if (audioPlayerRef.value.readyState == 4) {
+    if (audioPlayerRef.value.paused == true) {
+      audioPlayerRef.value.play();
+    } else {
+      audioPlayerRef.value.pause();
+    }
   } else {
-    audioPlayerRef.value.pause();
+    audioPlayerRef.value.load();
+
+    audioPlayerRef.value.addEventListener("durationchange", function () {
+      musicDuration.value = audioPlayerRef.value.duration;
+    });
+    audioPlayerRef.value.addEventListener("canplay", async () => {
+      audioPlayerRef.value.play();
+    });
   }
 };
 const checkSong = (flag: boolean) => {
@@ -163,10 +174,12 @@ const checkSong = (flag: boolean) => {
   if (flag) item = store.nextMusic(musicId.value);
   else item = store.lastMusic(musicId.value);
   if (item) {
+    musicIsPlay.value = false;
     audioPlayerRef.value.load();
     audioPlayerRef.value.addEventListener("canplay", async () => {
       musicDuration.value = audioPlayerRef.value.duration;
       audioPlayerRef.value.play();
+      musicIsPlay.value = true;
       await formatLyric();
       operateLyric();
     });
@@ -571,13 +584,13 @@ const getImageUrl = (name: string) => {
     }
   }
   &-list {
-    width: 90%;
+    width: 96%;
     height: 66%;
     margin: auto;
-    border-radius: 14px;
-    background-color: rebeccapurple;
+    border-radius: 14px 14px 0 0;
+    background-color: #333;
     position: absolute;
-    bottom: 12px;
+    bottom: 0px;
     left: 0;
     right: 0;
     z-index: 5;

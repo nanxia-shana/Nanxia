@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="box-item">
-          <span class="box-item-name" @click="toMobile">{{ t("portfolio.mobile") }} :</span>
+          <span class="box-item-name" @click="toWebGL">WebGL :</span>
           <div class="box-item-box">
             <a-tag
               :color="tagColorList[index % 7]"
@@ -67,7 +67,7 @@ const refreshBtnName = ref<string>("");
 const tagColorList = ref(["pink", "red", "orange", "green", "cyan", "blue", "purple"]);
 const mobileDemoList = reactive([
   {
-    name: `${t("portfolio.waterfallFlow")}(component)`,
+    name: `${t("portfolio.waterfallFlow")}`,
     route: "/portfolio/mobile/waterfallFlow",
   },
   {
@@ -85,7 +85,7 @@ const mobileDemoList = reactive([
 ]);
 const computerDemoList = reactive([
   {
-    name: `${t("portfolio.waterfallFlow")}(component)`,
+    name: `${t("portfolio.waterfallFlow")}`,
     route: "/portfolio/computer/waterfallFlow",
   },
   {
@@ -95,8 +95,12 @@ const computerDemoList = reactive([
 ]);
 const webglDemoList = reactive([
   {
-    name: `webGl`,
-    route: "/portfolio/webgl",
+    name: `Sphere`,
+    route: "/portfolio/webgl/sphere",
+  },
+  {
+    name: `Earth`,
+    route: "/portfolio/webgl/earth",
   },
 ]);
 onMounted(() => {
@@ -130,6 +134,10 @@ const toMobile = () => {
 const toComputer = () => {
   rightRoute.value = "computer";
   router.push("/portfolio/computer");
+};
+const toWebGL = () => {
+  rightRoute.value = "webgl";
+  router.push("/portfolio/webgl");
 };
 const toDemo = (item: any) => {
   router.push(item.route);
