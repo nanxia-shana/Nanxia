@@ -1,16 +1,16 @@
 <template>
   <div class="person">
     <span class="title">{{ t("common.person") }}</span>
-    <div class="message">
-      <div class="message-avater" @click="avaterModify" @mouseenter="avaterFocus" @mouseleave="avatarBlur">
+    <div class="msg">
+      <div class="msg-avater" @click="avaterModify" @mouseenter="avaterFocus" @mouseleave="avatarBlur">
         <img src="@/assets/images/Iraina3.jpg" alt="avater" />
-        <div class="message-modify" :class="{ modifyShow: avaterIsModify }">
+        <div class="msg-modify" :class="{ modifyShow: avaterIsModify }">
           <edit-outlined :style="{ fontSize: '40px', color: '#aaa' }" />
         </div>
       </div>
-      <div class="message-nickname">
-        <span class="message-nickname-name">Nickname :</span>
-        <div class="message-nickname-input">
+      <div class="msg-nickname">
+        <span class="msg-nickname-name">Nickname :</span>
+        <div class="msg-nickname-input">
           <a-input
             :disabled="!isEditNickname"
             v-model:value="nickname"
@@ -120,7 +120,7 @@ const toCharacter = () => {
     font-size: 38px;
     font-weight: 600;
   }
-  .message {
+  .msg {
     width: 100%;
     padding: 40px 20px 20px;
     display: flex;
