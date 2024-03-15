@@ -48,16 +48,24 @@ provide("musicIsPlay", musicIsPlay);
 provide("audioPlayerRef", audioPlayerRef);
 onMounted(() => {
   audioPlayerRef.value.preload = "none";
-  instance.proxy.$request
-    .get("/user/getMusicList", {
-      currentPage: 0,
-      pageSize: 5,
-    })
-    .then((res: any) => {
-      console.log(res);
-      // store.loadingMusic(res.data);
-      // store.musicLoadMsg(res.data[1]);
-    });
+  // instance.proxy.$request
+  //   .get("/user/getMusicList", {
+  //     currentPage: 0,
+  //     pageSize: 5,
+  //   })
+  //   .then((res: any) => {
+  //     console.log(res);
+  //     // store.loadingMusic(res.data);
+  //     // store.musicLoadMsg(res.data[1]);
+  //   });
+  // instance.proxy.$request
+  // .post("/user/addUser", {
+  //   userName: "甘雨",
+  //   password: 'ganyu',
+  // })
+  // .then((res: any) => {
+  //   console.log(res);
+  // });
 
   store.loadingMusic([
     {
