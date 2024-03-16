@@ -32,11 +32,6 @@
       </div>
     </div>
     <a-button type="primary" class="buttonP" @click="toCharacter">Character Card</a-button>
-    <div style="width: 800px; height: 30px; background-color:bisque;">{{!!cropperData.option.img}}----------{{ cropperData.option.img }}</div>
-    
-    <a-button type="primary" @click="rotateLeft">左旋转</a-button>
-    <a-button type="primary" @click="rotateRight">右旋转</a-button>
-    <a-button type="primary" @click="getCropDataBase64">确认截图</a-button>
     <a-modal v-model:visible="visible" title="Avatar" width="800px" :confirm-loading="confirmLoading" @ok="handleOk">
       <div class="modalBox">
         <div class="modalBox-left">
@@ -63,10 +58,11 @@
           </a-upload-dragger>
         </div>
       </div>
-      <div style="width: 300px; height: 300px; background-color:aqua;" v-if="!!cropperData.option.img">
-        <div>啊啊啊啊啊啊</div>
-        <vueCropper
-          style="width: 90%; height: 90%"
+      <div class="modalCropper" v-if="!!cropperData.option.img">
+        <span>调节裁剪框制作头像</span>
+        <div class="modalCropper-box">
+          <vueCropper
+          style="width: 300px; height: 300px; margin-top: 10px;"
           ref="cropper"
           :img="cropperData.option.img"
           :outputSize="cropperData.option.outputSize"
@@ -74,7 +70,14 @@
           :autoCrop="cropperData.option.autoCrop"
           :autoCropWidth="cropperData.option.autoCropWidth"
           :autoCropHeight="cropperData.option.autoCropHeight"
-        ></vueCropper>
+          :centerBox="cropperData.option.centerBox"
+          />
+        </div>
+        <div class="modalCropper-btn">
+          <a-button type="primary" @click="rotateLeft">左旋转</a-button>
+          <a-button type="primary" @click="rotateRight">右旋转</a-button>
+          <a-button type="primary" @click="getCropDataBase64">确认截图</a-button>
+        </div>
       </div>
     </a-modal>
   </div>
@@ -103,8 +106,9 @@ let cropperData = reactive({
     outputSize: 1, //outputSize 0~1
     outputType: 'jpg', //裁剪生成图片的格式
     autoCrop: true, //是否默认生成截图框
-    autoCropWidth: 150,//默认生成截图框宽度
-    autoCropHeight: 150,//默认生成截图框高度
+    autoCropWidth: 300,//默认生成截图框宽度
+    autoCropHeight: 300,//默认生成截图框高度
+    centerBox: true,//截图框是否被限制在图片里面
   },
 })
 const cropper: any = ref({})
@@ -144,9 +148,7 @@ const handldBeforeUpload = (file: any) => {
   reader.onload = function () {
     const URL = window.URL || window.webkitURL
     cropperData.option.img = URL.createObjectURL(file)
-    // cropperData.option.img = String(this.result)
-    avaterCutUrl = URL.createObjectURL(file)
-    console.log(cropperData.option.img,"aaaaaaaa");
+    // avaterCutUrl = URL.createObjectURL(file)
     return false
   }
   return false
@@ -177,6 +179,7 @@ const rotateRight = () => {
 }
 function getCropDataBase64() {
   cropper.value.getCropData((data: any) => {
+    console.log(data,"aaaaaaaaaa")
     avaterCutUrl.value = data
   })
 }
@@ -267,12 +270,20 @@ const toCharacter = () => {
       width: 150px;
       height: 150px;
       object-fit: contain;
+      border-radius: 50%;
     }
   }
   &-right {
     width: 70%;
     padding: 0 5%;
   }
+}
+.modalCropper{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>
 <style>
