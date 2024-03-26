@@ -45,9 +45,7 @@
             :maxCount="1"
             :show-upload-list="false"
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            :beforeUpload="handldBeforeUpload"
-            @drop="handleDrop"
-            @change="handleChange">
+            :beforeUpload="handldBeforeUpload">
             <p class="ant-upload-drag-icon">
               <inbox-outlined></inbox-outlined>
             </p>
@@ -58,7 +56,7 @@
           </a-upload-dragger>
         </div>
       </div>
-      <div class="modalCropper" v-if="!!cropperData.option.img">
+      <div class="modalCropper" v-if="!!cropperData.isShow">
         <span>调节裁剪框制作头像</span>
         <div class="modalCropper-box">
           <vueCropper
@@ -70,25 +68,25 @@
           :autoCrop="cropperData.option.autoCrop"
           :autoCropWidth="cropperData.option.autoCropWidth"
           :autoCropHeight="cropperData.option.autoCropHeight"
+          :fixed="true"
           :centerBox="cropperData.option.centerBox"
+          @realTime="getCropDataBase64"
           />
         </div>
         <div class="modalCropper-btn">
-          <a-button type="primary" @click="rotateLeft">左旋转</a-button>
-          <a-button type="primary" @click="rotateRight">右旋转</a-button>
-          <a-button type="primary" @click="getCropDataBase64">确认截图</a-button>
+          <UndoOutlined class="modalCropper-btn-item" @click="rotateLeft" />
+          <RedoOutlined class="modalCropper-btn-item" @click="rotateRight" />
         </div>
       </div>
     </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
-// // 导入VueCropper
+// 导入VueCropper
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from "vue-cropper";
-import { ref, reactive, toRefs, getCurrentInstance } from "vue";
-import type { UploadChangeParam } from "ant-design-vue";
-import { EditOutlined, InboxOutlined, CheckCircleOutlined } from "@ant-design/icons-vue";
+import { ref, reactive, getCurrentInstance } from "vue";
+import { EditOutlined, InboxOutlined, CheckCircleOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons-vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 const instance: any = getCurrentInstance();
@@ -104,12 +102,13 @@ let cropperData = reactive({
   option: {
     img: "", //裁剪图片的地址
     outputSize: 1, //outputSize 0~1
-    outputType: 'jpg', //裁剪生成图片的格式
+    outputType: 'jpeg', //裁剪生成图片的格式
     autoCrop: true, //是否默认生成截图框
     autoCropWidth: 300,//默认生成截图框宽度
     autoCropHeight: 300,//默认生成截图框高度
     centerBox: true,//截图框是否被限制在图片里面
   },
+  isShow: false,
 })
 const cropper: any = ref({})
 let avaterCutUrl = ref<any>(new URL('@/assets/images/Iraina3.jpg', import.meta.url).href)
@@ -129,7 +128,7 @@ const avaterFocus = () => {
 const avatarBlur = () => {
   avaterIsModify.value = false;
 };
-const handldBeforeUpload = (file: any) => {
+const handldBeforeUpload = async (file: any) => {
   // 判断文件格式
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
@@ -142,32 +141,16 @@ const handldBeforeUpload = (file: any) => {
     instance.proxy.$message.error('Image must smaller than 2MB!');
     return false
   }
-  // 获取文件的base64赋值给
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = function () {
-    const URL = window.URL || window.webkitURL
-    cropperData.option.img = URL.createObjectURL(file)
-    // avaterCutUrl = URL.createObjectURL(file)
+  // 判断图片的宽高
+  const URL = window.URL || window.webkitURL
+  const isWH = await readImageWH(URL.createObjectURL(file))
+  if (!isWH) {
+    instance.proxy.$message.error('图片“宽度x高度”至少为“150x150”像素');
     return false
   }
+  cropperData.isShow = true
+  cropperData.option.img = URL.createObjectURL(file)
   return false
-};
-const handleDrop = (e: DragEvent) => {
-  console.log("文件被拖入", e);
-};
-const handleChange = (info: UploadChangeParam) => {
-  const status = info.file.status;
-  if (status !== "uploading") {
-    console.log(info.file, info.fileList);
-  }
-  if (status === "done") {
-    console.log("done");
-    instance.proxy.$message.success(`${info.file.name} file uploaded successfully.`);
-  } else if (status === "error") {
-    console.log("error");
-    instance.proxy.$message.error(`${info.file.name} file upload failed.`);
-  }
 };
 //向左旋转图片
 const rotateLeft = () => {
@@ -177,11 +160,28 @@ const rotateLeft = () => {
 const rotateRight = () => {
   cropper.value.rotateRight()
 }
-function getCropDataBase64() {
+const getCropDataBase64 = () => {
   cropper.value.getCropData((data: any) => {
-    console.log(data,"aaaaaaaaaa")
     avaterCutUrl.value = data
   })
+}
+function readImageWH(base64StrOrUrl: any) {
+	return new Promise((resolve) => {
+		// 创建Image对象(相当于html中的img标签)，在内存中加载图片，并未插到DOM中，所以不可见
+		let img = new Image()
+		// 加载成功
+		img.onload = () => {
+			resolve(img.width > 150 && img.height > 150)
+		}
+		// 加载失败，返回false
+		img.onerror = () => {
+			resolve(false)
+		}
+		// 网络图片时支持跨域请求
+		img.crossOrigin = 'anonymous'
+		// src属性设置一定要放在onload之后，否则在IE11上报错
+		img.src = base64StrOrUrl
+	})
 }
 const submitNickname = (nickname: any) => {
   isEditNickname.value = false;
@@ -284,6 +284,21 @@ const toCharacter = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  &-btn{
+    width: 300px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    &-item{
+      padding: 2px;
+      margin-left: 16px;
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+      font-size: 22px;
+      color: var(--primary-color);
+    }
+  }
 }
 </style>
 <style>

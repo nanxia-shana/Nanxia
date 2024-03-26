@@ -43,4 +43,11 @@ export default {
     GEOSVGMap: "地图（SVG）",
     AMap: "高德地图",
   },
+  person: {
+    nickname: "Nickname",
+    avatar: "上传头像",
+    uploadDesc1: "点击或拖动图片至此处",
+    uploadDesc2: "图片宽度*高度至少为150*150像素，大小不超过2MB",
+    uploadDesc3: "30天内还可以编辑 5 次",
+  },
 };
