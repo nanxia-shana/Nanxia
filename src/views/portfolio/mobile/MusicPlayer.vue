@@ -1,5 +1,5 @@
 <template>
-  <div class="music">
+  <div class="music" @click="closeWindow">
     <div class="music-bg"></div>
     <div class="music-top">
       <svg-icon name="back" className="topIcon1" @click="router.push('/portfolio/mobile')"></svg-icon>
@@ -12,7 +12,7 @@
       </div>
       <svg-icon name="shareMusic" className="topIcon1"></svg-icon>
     </div>
-    <div class="music-mid" :style="`height:${lyricShow ? '390' : '370'}px`" @click="lyricShow = !lyricShow">
+    <div class="music-mid" @click="lyricShow = !lyricShow">
       <div v-show="!lyricShow" class="music-mid-cover">
         <img
           class="music-mid-cover-stick"
@@ -24,7 +24,7 @@
         </div>
         <img class="music-mid-cover-img" :class="{ imgRotate: musicIsPlay }" :src="getImageUrl(musicImgUrl)" alt="cover" />
       </div>
-      <div v-show="lyricShow" class="music-mid-lyric">
+      <div v-show="lyricShow" class="music-mid-lyric" id="lyricWindow">
         <div id="lyricBox">
           <div class="lyric" :id="value[0]" v-for="(value, key) in lyricMap" :key="key">
             <span>
@@ -49,7 +49,7 @@
         </div>
         <div v-show="!lyricShow" class="music-bot-icon-item">
           <div v-show="!lyricShow" class="music-bot-icon-chang">唱</div>
-          <div class="music-bot-icon-item-lt" style="left: 30px">352</div>
+          <div class="music-bot-icon-item-lt" style="left: 3rem">352</div>
         </div>
         <div v-show="!lyricShow" class="music-bot-icon-item">
           <svg-icon name="comment" className="botIcon1"></svg-icon>
@@ -59,7 +59,7 @@
           <div
             v-show="musicTlyric && lyricShow"
             class="music-bot-icon-tlyric"
-            :style="`color: ${tlyricShow ? '#fff' : 'rgba(222, 222, 222, 0.6)'}`"
+            :style="`color: ${tlyricShow ? '#fff' : 'rgba(222, 222, 222, .6)'}`"
             @click.stop="tlyricShow = !tlyricShow">
             译
           </div>
@@ -81,11 +81,11 @@
           <svg-icon v-else name="nopause" className="botIcon4"></svg-icon>
         </div>
         <svg-icon name="nextsong" className="botIcon2" @click="checkSong(true)"></svg-icon>
-        <svg-icon name="menu" className="botIcon3" @click="musicList"></svg-icon>
+        <svg-icon name="menu" className="botIcon3" @click.stop="musicListWindow"></svg-icon>
       </div>
     </div>
-    <div class="music-list" v-show="musicListShow">
-      <div class="music-list-title">当前播放<span>(250)</span></div>
+    <div class="music-list" v-show="musicListShow" @click.stop="() => {}">
+      <div class="music-list-title">当前播放<span>{{musicList.length}}</span></div>
       <div class="music-list-icon">
         <div class="music-list-icon-left"></div>
         <div class="music-list-icon-right"></div>
@@ -100,7 +100,7 @@ import { binarySearchRange } from "@/utils/tools";
 import useGlobalStore from "@/store/modules/global";
 const store = useGlobalStore();
 import { storeToRefs } from "pinia";
-const { music } = storeToRefs(store);
+const { music, musicList } = storeToRefs(store);
 import { useRouter } from "vue-router";
 const router = useRouter();
 const phoneMsgShow = ref<boolean>(false);
@@ -116,7 +116,7 @@ const musicCurTime = ref<number>(inject("musicCurTime"));
 const musicIsPlay = ref<boolean>(inject("musicIsPlay"));
 const audioPlayerRef: any = inject("audioPlayerRef");
 
-const lyricShow = ref<boolean>(false);
+const lyricShow = ref<boolean>(true);
 const tlyricShow = ref<boolean>(false);
 const lyricMap = reactive(new Map());
 const tlyricMap = reactive(new Map());
@@ -138,6 +138,9 @@ watch(
     deep: true,
   },
 );
+const closeWindow = () => {
+  musicListShow.value = false
+};
 const formatter = (value: number) => {
   return `${Math.floor(value / 60)}:${Math.floor(value % 60) < 10 ? "0" + Math.floor(value % 60) : Math.floor(value % 60)}`;
 };
@@ -187,7 +190,7 @@ const checkSong = (flag: boolean) => {
     alert("歌曲不存在");
   }
 };
-const musicList = () => {
+const musicListWindow = () => {
   musicListShow.value = true;
 };
 const formatLyric = async () => {
@@ -234,15 +237,15 @@ const operateLyric = () => {
     i = binarySearchRange(timeArray, musicCurTime.value)[0];
     if (i > -1) {
       Array.from(document.querySelectorAll(".lyric")).forEach((item: HTMLElement) => {
-        item.style.color = "rgba(255, 255, 255, 0.55)";
+        item.style.color = "rgba(255, 255, 255, .55)";
       });
       document.getElementById(timeArray[i]).style.color = "rgba(255, 255, 255, 1)";
-      centerTop = -(
-        document.getElementById(timeArray[i]).offsetTop +
-        document.getElementById(timeArray[i]).offsetHeight / 2 -
-        160
-      );
-      document.getElementById("lyricBox").style.top = `${centerTop}px`;
+      console.log(document.getElementById("lyricBox").offsetHeight, document.getElementById(timeArray[i]).offsetTop, document.getElementById(timeArray[i]).offsetHeight, "aaaaaaaaaaa")
+      centerTop =
+        document.getElementById("lyricWindow").offsetHeight / 2 -
+        document.getElementById(timeArray[i]).offsetTop -
+        document.getElementById(timeArray[i]).offsetHeight / 2;
+      document.getElementById("lyricBox").style.top = `${centerTop / 10}rem`;
     }
   });
 };
@@ -272,8 +275,8 @@ const getImageUrl = (name: string) => {
   }
   &-top {
     width: 100%;
-    height: 36px;
-    padding: 0 10px 0 0;
+    height: 3.6rem;
+    padding: 0 1rem 0 0;
     display: flex;
     align-items: center;
     position: relative;
@@ -281,103 +284,104 @@ const getImageUrl = (name: string) => {
     &-msg {
       flex: 1;
       height: 100%;
-      margin-left: 10px;
+      margin-left: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       &-name {
-        font-size: 12px;
+        font-size: 1.2rem;
         color: #fff;
-        transform: scale(0.95);
+        transform: scale(.95);
         transform-origin: 50% 100%;
       }
       &-author {
         display: flex;
         align-items: center;
-        transform: scale(0.8);
+        transform: scale(.8);
         transform-origin: 50% 0;
         cursor: pointer;
         span {
-          font-size: 12px;
+          font-size: 1.2rem;
           color: #ccc;
         }
       }
     }
     .topIcon1 {
-      width: 26px;
-      height: 26px;
+      width: 2.6rem;
+      height: 2.6rem;
       fill: #dddddd;
       cursor: pointer;
     }
     .topIcon2 {
-      width: 16px;
-      height: 16px;
-      margin-top: 2px;
+      width: 1.6rem;
+      height: 1.6rem;
+      margin-top: .2rem;
       fill: #cccccc;
       transform: rotateY(180deg);
     }
   }
   &-mid {
+    flex: 1;
     overflow: hidden;
     width: 100%;
-    padding-bottom: 4px;
+    padding-bottom: .4rem;
     position: relative;
     z-index: 2;
     cursor: pointer;
     &-cover {
       &-stick {
-        width: 86px;
+        width: 8.6rem;
         object-fit: contain;
         position: absolute;
-        top: -14px;
+        top: -1.4rem;
         left: 50%;
         z-index: 3;
-        transform: translateX(-18px);
-        transform-origin: 15px 15px;
-        transition: transform 0.6s ease-out;
+        transform: translateX(-1.8rem);
+        transform-origin: 1.5rem 1.5rem;
+        transition: transform .6s ease-out;
       }
       .stickOn {
-        transform: translateX(-18px) rotateZ(-30deg);
-        transition: transform 0.6s ease-out;
+        transform: translateX(-1.8rem) rotateZ(-30deg);
+        transition: transform .6s ease-out;
       }
       &-wrapper {
-        width: 188px;
-        height: 188px;
+        width: 18.8rem;
+        height: 18.8rem;
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.25);
+        background-color: rgba(255, 255, 255, .25);
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
         top: 48%;
         left: 50%;
-        transform: translate(-94px, -100px);
+        transform: translate(-9.4rem, -10rem);
         &-cd {
-          width: 186px;
-          height: 186px;
+          width: 18.6rem;
+          height: 18.6rem;
           border-radius: 50%;
         }
       }
       &-img {
-        width: 126px;
-        height: 126px;
+        width: 12.6rem;
+        height: 12.6rem;
         border-radius: 50%;
         object-fit: cover;
         position: absolute;
         top: 48%;
         left: 50%;
         z-index: 3;
-        transform: translate(-63px, -70px);
+        transform: translate(-6.3rem, -7.0rem);
         animation: rotateInfinity 8s linear infinite forwards;
         -webkit-animation: rotateInfinity linear 8s infinite forwards;
         animation-play-state: paused;
       }
       @keyframes rotateInfinity {
         0% {
-          transform: translate(-63px, -70px) rotateZ(0);
+          transform: translate(-6.3rem, -7rem) rotateZ(0);
         }
         100% {
-          transform: translate(-63px, -70px) rotateZ(360deg);
+          transform: translate(-6.3rem, -7rem) rotateZ(360deg);
         }
       }
       .imgRotate {
@@ -395,8 +399,8 @@ const getImageUrl = (name: string) => {
       z-index: 3;
       #lyricBox {
         overflow: visible;
-        padding: 160px 20px 150px;
-        transition: 0.8s top cubic-bezier(0.645, 0.045, 0.355, 1);
+        padding: 16rem 2rem 15rem;
+        transition: 0.8s top cubic-bezier(.645, .045, .355, 1);
         position: absolute;
         z-index: 4;
         // background: linear-gradient(to top, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
@@ -405,16 +409,16 @@ const getImageUrl = (name: string) => {
         // mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
         .lyric {
           width: 100%;
-          margin-bottom: 5px;
-          color: rgba(255, 255, 255, 0.55);
+          margin-bottom: .5rem;
+          color: rgba(255, 255, 255, .55);
           text-align: center;
           display: flex;
           flex-direction: column;
           align-items: center;
           span {
-            font-size: 14px;
+            font-size: 1.4rem;
             font-weight: 540;
-            transition: 0.3s color cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: .3s color cubic-bezier(.645, .045, .355, 1);
           }
         }
       }
@@ -425,7 +429,6 @@ const getImageUrl = (name: string) => {
   }
   &-bot {
     width: 100%;
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -433,19 +436,18 @@ const getImageUrl = (name: string) => {
     z-index: 2;
     &-icon {
       width: 100%;
-      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       &-chang {
-        width: 26px;
-        height: 26px;
-        margin: 0 15px;
+        width: 2.6rem;
+        height: 2.6rem;
+        margin: 0 1.5rem;
         border: 2px solid #fff;
         border-radius: 50%;
-        font-size: 14px;
+        font-size: 1.4rem;
         color: #fff;
-        transform: scale(0.7);
+        transform: scale(.7);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -456,48 +458,48 @@ const getImageUrl = (name: string) => {
         position: relative;
         cursor: pointer;
         &-lt {
-          height: 16px;
-          padding: 0 4px;
-          border-radius: 8px;
+          height: 1.6rem;
+          padding: 0 .4rem;
+          border-radius: .8rem;
           background-color: #eee;
-          font-size: 14px;
+          font-size: 1.4rem;
           font-weight: bold;
-          line-height: 16px;
+          line-height: 1.6rem;
           color: #aaa;
-          transform: scale(0.6);
+          transform: scale(.6);
           transform-origin: 0 50%;
           box-sizing: border-box;
           position: absolute;
-          top: -4px;
-          left: 26px;
+          top: -.4rem;
+          left: 2.6rem;
         }
         &-lb {
-          height: 16px;
-          padding: 0 4px;
-          border-radius: 8px;
+          height: 1.6rem;
+          padding: 0 .4rem;
+          border-radius: .8rem;
           background-color: #eee;
-          font-size: 14px;
+          font-size: 1.4rem;
           font-weight: bold;
-          line-height: 16px;
+          line-height: 1.6rem;
           color: #aaa;
-          transform: scale(0.6);
+          transform: scale(.6);
           transform-origin: 0 50%;
           box-sizing: border-box;
           position: absolute;
-          bottom: 0px;
-          left: 27px;
+          bottom: 0;
+          left: 2.7rem;
         }
       }
 
       &-tlyric {
-        min-width: 30px;
-        height: 20px;
-        padding: 4px;
-        border: 1px solid rgba(222, 222, 222, 0.6);
-        border-radius: 10px;
-        font-size: 12px;
-        color: rgba(222, 222, 222, 0.6);
-        transform: scale(0.8);
+        min-width: 3rem;
+        height: 2rem;
+        padding: .4rem;
+        border: 1px solid rgba(222, 222, 222, .6);
+        border-radius: 1rem;
+        font-size: 1.2rem;
+        color: rgba(222, 222, 222, .6);
+        transform: scale(.8);
         box-sizing: border-box;
         display: flex;
         justify-content: center;
@@ -505,79 +507,79 @@ const getImageUrl = (name: string) => {
         cursor: pointer;
       }
       .botIcon1 {
-        width: 18px;
-        height: 18px;
-        margin: 0 16px;
+        width: 1.8rem;
+        height: 1.8rem;
+        margin: 0 1.6rem;
         fill: #fff;
         cursor: pointer;
         transition: all 0s;
         cursor: pointer;
       }
       .botLoveLyrc {
-        width: 16px;
-        height: 16px;
-        margin: 0 10px;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0 1rem;
         fill: #fff;
         cursor: pointer;
         transition: all 0s;
         cursor: pointer;
       }
       .botMenuLyrc {
-        width: 10px;
-        height: 10px;
-        padding: 2px;
-        margin: 0 10px;
+        width: 1rem;
+        height: 1rem;
+        padding: .2rem;
+        margin: 0 1rem;
         box-sizing: content-box;
         border-radius: 50%;
-        border: 1px solid rgba(222, 222, 222, 0.6);
-        fill: rgba(222, 222, 222, 0.6);
+        border: 1px solid rgba(222, 222, 222, .6);
+        fill: rgba(222, 222, 222, .6);
         transition: all 0s;
         cursor: pointer;
       }
     }
     &-progress {
       width: 100%;
-      height: 40px;
+      height: 4rem;
       display: flex;
       align-items: center;
       justify-content: center;
       &-line {
         width: 78%;
-        margin: 0 1px;
+        margin: 0 .1rem;
       }
       &-time {
-        margin-top: -4px;
-        font-size: 12px;
+        margin-top: -.4rem;
+        font-size: 1.2rem;
         color: #fff;
-        transform: scale(0.9);
+        transform: scale(.9);
       }
     }
     &-operate {
       width: 100%;
-      height: 50px;
-      padding-bottom: 20px;
+      height: 5rem;
+      padding-bottom: 2rem;
       box-sizing: content-box;
       display: flex;
       align-items: center;
       justify-content: center;
       .botIcon2 {
-        width: 18px;
-        height: 18px;
-        margin: 0 14px;
+        width: 1.8rem;
+        height: 1.8rem;
+        margin: 0 1.4rem;
         fill: #fff;
         cursor: pointer;
       }
       .botIcon3 {
-        width: 16px;
-        height: 16px;
-        margin: 0 14px;
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0 1.4rem;
         fill: #fff;
         cursor: pointer;
       }
       .botIcon4 {
-        width: 40px;
-        height: 40px;
-        margin: 0 14px;
+        width: 4rem;
+        height: 4rem;
+        margin: 0 1.4rem;
         fill: #fff;
         cursor: pointer;
       }
@@ -587,28 +589,53 @@ const getImageUrl = (name: string) => {
     width: 96%;
     height: 66%;
     margin: auto;
-    border-radius: 14px 14px 0 0;
-    background-color: #333;
+    padding: 2rem 1.4rem 1.4rem;
+    border-radius: 1.4rem 1.4rem 0 0;
+    background-color: #800;
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 5;
+    &-title{
+      width: fit-content;
+      font-size: 1.2rem;
+      color: #fff;
+      letter-spacing: 1px;
+      position: relative;
+      span{
+        display: inline-block;
+        transform: scale(.8);
+        position: absolute;
+        top: -.4rem;
+        right: -.8rem;
+      }
+    }
+  }
+  &-list::before{
+    content: "";
+    width: 2.4rem;
+    height: .2rem;
+    border-radius: 1px;
+    background-color: rgba(222, 222, 222, .3);
+    position: absolute;
+    top: .6rem;
+    left: calc(50% - 1.2rem);
   }
   &-msg {
     visibility: hidden;
     opacity: 0;
     width: fit-content;
-    padding: 2px 10px;
+    padding: .2rem 1rem;
     margin: auto;
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.6);
-    font-size: 12px;
+    border-radius: .4rem;
+    background-color: rgba(0, 0, 0, .6);
+    font-size: 1.2rem;
     color: #fff;
     text-align: center;
-    transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: opacity .3s cubic-bezier(.645, .045, .355, 1);
     position: absolute;
-    top: 80px;
+    top: 8rem;
     left: 0;
     right: 0;
     z-index: 8;
@@ -616,8 +643,8 @@ const getImageUrl = (name: string) => {
   .msgShow {
     visibility: visible;
     opacity: 1;
-    transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    animation: msghidden 3s 0.3s ease-out forwards;
+    transition: opacity .3s cubic-bezier(.645, .045, .355, 1);
+    animation: msghidden 3s .3s ease-out forwards;
   }
   @keyframes msghidden {
     0% {

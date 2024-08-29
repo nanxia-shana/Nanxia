@@ -1,6 +1,6 @@
 <template>
   <a-layout style="height: 100%">
-    <a-layout-sider v-model:collapsed="collapsed" :theme="curMode" :trigger="null" collapsible>
+    <a-layout-sider breakpoint="md" v-model:collapsed="collapsed" :theme="curMode" :trigger="null" collapsible>
       <div class="logo">
         <img src="@/assets/images/logo.png" alt="" />
       </div>
@@ -120,15 +120,16 @@ const menuItem = (e: any) => {
 .paint {
   overflow: hidden;
   width: 100%;
-  max-height: 92px;
+  height: 92px;
   margin: 10px 0;
   display: flex;
+  // flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   background-color: var(--primary-color1);
   border-radius: 10px;
-  transition: max-height 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   &-icon {
     width: 30px;
     height: 30px;
@@ -142,8 +143,8 @@ const menuItem = (e: any) => {
   }
 }
 .paintFold {
-  max-height: 184px;
-  transition: max-height 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  height: 184px;
+  transition: height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .paintB {
   overflow: hidden;
