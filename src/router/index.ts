@@ -109,6 +109,17 @@ const routes: Array<RouteRecordRaw> = [
       },
     },
   },
+  {
+    path: "/mm",
+    name: "mm",
+    component: () => import("@/views/portfolio/mobile/MusicPlayer.vue"),
+    meta: {
+      title: {
+        "/zh-CN": "404",
+        "/en-US": "404",
+      },
+    },
+  },
 ];
 
 const router = createRouter({

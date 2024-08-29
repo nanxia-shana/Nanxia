@@ -74,6 +74,7 @@ const global = defineStore("global", {
         return nextItem;
       } else {
         console.log("next:传入ID不存在于歌单中");
+        console.log("netx:传入的值不存在");
         return false;
       }
     },

@@ -55,6 +55,7 @@ export default defineConfig({
   },
   // 请求接口配置
   server: {
+    host: "172.29.12.113",
     //同plugins同级
     port: 5173, //本地端口号
     proxy: {

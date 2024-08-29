@@ -1,6 +1,7 @@
 <template>
   <div class="character">
     <span class="title">{{ t("common.person") }}</span>
+    <a href="https://www.baidu.com/" target="_blank" rel="noopener">百度一下</a>
   </div>
 </template>
 <script lang="ts" setup>
