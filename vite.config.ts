@@ -49,6 +49,7 @@ export default defineConfig({
           // "link-color": "#1DA57A",
           // "border-radius-base": "2px",
         },
+        additionalData: '@import "./src/assets/css/foundation/mixin/variable.less";',
         javascriptEnabled: true,
       },
     },

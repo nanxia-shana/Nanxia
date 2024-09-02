@@ -116,7 +116,7 @@ const musicCurTime = ref<number>(inject("musicCurTime"));
 const musicIsPlay = ref<boolean>(inject("musicIsPlay"));
 const audioPlayerRef: any = inject("audioPlayerRef");
 
-const lyricShow = ref<boolean>(true);
+const lyricShow = ref<boolean>(false);
 const tlyricShow = ref<boolean>(false);
 const lyricMap = reactive(new Map());
 const tlyricMap = reactive(new Map());
@@ -345,43 +345,50 @@ const getImageUrl = (name: string) => {
         transition: transform .6s ease-out;
       }
       &-wrapper {
-        width: 18.8rem;
-        height: 18.8rem;
+        width: 80%;
+        max-width: 36rem;
+        aspect-ratio: 1 / 1;
         border-radius: 50%;
         background-color: rgba(255, 255, 255, .25);
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
-        top: 48%;
-        left: 50%;
-        transform: translate(-9.4rem, -10rem);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
         &-cd {
-          width: 18.6rem;
-          height: 18.6rem;
+          width: 99%;
+          max-width: 35.5rem;
+          aspect-ratio: 1 / 1;
           border-radius: 50%;
         }
       }
       &-img {
-        width: 12.6rem;
-        height: 12.6rem;
+        width: 56%;
+        max-width: 25rem;
+        aspect-ratio: 1 / 1;
         border-radius: 50%;
         object-fit: cover;
         position: absolute;
-        top: 48%;
-        left: 50%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
         z-index: 3;
-        transform: translate(-6.3rem, -7.0rem);
         animation: rotateInfinity 8s linear infinite forwards;
         -webkit-animation: rotateInfinity linear 8s infinite forwards;
         animation-play-state: paused;
       }
       @keyframes rotateInfinity {
         0% {
-          transform: translate(-6.3rem, -7rem) rotateZ(0);
+          transform: rotateZ(0);
         }
         100% {
-          transform: translate(-6.3rem, -7rem) rotateZ(360deg);
+          transform: rotateZ(360deg);
         }
       }
       .imgRotate {
@@ -436,9 +443,10 @@ const getImageUrl = (name: string) => {
     z-index: 2;
     &-icon {
       width: 100%;
+      max-width: 45rem;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-around;
       &-chang {
         width: 2.6rem;
         height: 2.6rem;
@@ -556,12 +564,13 @@ const getImageUrl = (name: string) => {
     }
     &-operate {
       width: 100%;
+      max-width: 45rem;
       height: 5rem;
       padding-bottom: 2rem;
       box-sizing: content-box;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-around;
       .botIcon2 {
         width: 1.8rem;
         height: 1.8rem;

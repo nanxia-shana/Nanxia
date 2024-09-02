@@ -4,10 +4,12 @@
       <component :is="Component" @contextmenu.stop="rightClick" />
     </router-view>
   </a-config-provider>
+  <music-player></music-player>
   <audio v-show="false" ref="audioPlayerRef" controls @play="musicPlaying" @pause="musicPause" @timeupdate="musicTimeupdate">
     <source :src="musicUrl" type="audio/mpeg" />
     <source :src="musicUrl" type="audio/flac" />
   </audio>
+  
 </template>
 
 <script setup lang="ts">
@@ -19,6 +21,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import useGlobalStore from "@/store/modules/global";
 import { storeToRefs } from "pinia";
+import musicPlayer from '@/components/music-player/index.vue';
 const instance: any = getCurrentInstance();
 const store = useGlobalStore();
 const { language, music } = storeToRefs(store);
@@ -139,11 +142,11 @@ const rightClick = (e) => {
 const musicPlaying = () => {
   musicDuration.value = audioPlayerRef.value.duration;
   musicIsPlay.value = true;
-  console.log("paly");
+  console.log("Paly music");
 };
 const musicPause = () => {
   musicIsPlay.value = false;
-  console.log("pause");
+  console.log("Pause music");
 };
 const musicTimeupdate = (e: any) => {
   musicCurTime.value = Math.floor(e.srcElement.currentTime);

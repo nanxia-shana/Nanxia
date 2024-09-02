@@ -1,12 +1,15 @@
 <template>
-  <a-layout style="height: 100%">
-    <a-layout-sider breakpoint="md" v-model:collapsed="collapsed" :theme="curMode" :trigger="null" collapsible>
+  <a-layout style="height: 100%" @click="collapsed = true">
+    <a-layout-sider class="sider" breakpoint="md" collapsed-width="0" v-model:collapsed="collapsed" :theme="curMode" @click.stop="() => {}">
+      <div class="sider-menu">
+        <svg-icon name="menu" className="icon" @click.stop="collapsed = !collapsed"></svg-icon>
+      </div>
       <div class="logo">
         <img src="@/assets/images/logo.png" alt="" />
       </div>
       <div class="paintBox">
         <a-tooltip placement="rightBottom" title="快速入口" color="#404040  ">
-          <div class="paint" :class="[!collapsed ? '' : 'paintFold']">
+          <div class="paint">
             <svg-icon name="huiyuan" className="paint-icon"></svg-icon>
             <svg-icon name="jiankong" className="paint-icon"></svg-icon>
             <svg-icon name="search" className="paint-icon"></svg-icon>
@@ -41,9 +44,6 @@
           <span> {{ t("common.setting") }} </span>
         </a-menu-item>
       </a-menu>
-      <div class="triggerBox" :class="[!collapsed ? 'triggerUnfold' : 'triggerFold']" @click="() => (collapsed = !collapsed)">
-        <right-outlined class="trigger" />
-      </div>
     </a-layout-sider>
     <a-layout class="right">
       <a-layout-header style="padding: 0">
@@ -63,7 +63,6 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   FieldTimeOutlined,
-  RightOutlined,
   SettingOutlined,
 } from "@ant-design/icons-vue";
 import NanHeader from "@/layout/components/header/index.vue";
@@ -98,6 +97,35 @@ const menuItem = (e: any) => {
 };
 </script>
 <style lang="less" scoped>
+.sider{
+  position: relative;
+  @media (max-width: @md) {
+    height: 100%;
+    position: absolute;
+    z-index: 99;
+  }
+  &-menu{
+    width: 5rem;
+    height: 4rem;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    z-index: 100;
+    user-select: none;
+    @media (max-width: @md) {
+      display: none;
+    }
+    .icon{
+      width: 3rem;
+      height: 3rem;
+      cursor: pointer;
+    }
+  }
+}
 .right {
   background-color: var(--background-color1);
 }
@@ -107,6 +135,7 @@ const menuItem = (e: any) => {
 .logo {
   width: 100%;
   height: 64px;
+  transform: translateX(1.2rem);
   img {
     width: 100%;
     height: 100%;
@@ -119,9 +148,9 @@ const menuItem = (e: any) => {
 }
 .paint {
   overflow: hidden;
-  width: 100%;
+  width: calc(100% + 30px);
   height: 92px;
-  margin: 10px 0;
+  margin: 10px auto;
   display: flex;
   // flex-direction: column;
   flex-wrap: wrap;
@@ -141,10 +170,6 @@ const menuItem = (e: any) => {
     transform: scale(1.3);
     transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   }
-}
-.paintFold {
-  height: 184px;
-  transition: height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .paintB {
   overflow: hidden;
@@ -173,35 +198,5 @@ const menuItem = (e: any) => {
 .paintBFold {
   height: 0px;
   transition: height 0s;
-}
-.triggerBox {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--primary-color1);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
-  .trigger {
-    font-size: 20px;
-    color: var(--primary-color);
-    transition: all 0.6s cubic-bezier(0.2, 0, 0, 1) 0s;
-  }
-}
-.triggerUnfold {
-  position: absolute;
-  top: 88px;
-  left: 174px;
-  .trigger {
-    transform: rotateY(180deg);
-  }
-}
-.triggerFold {
-  position: absolute;
-  top: 88px;
-  left: 54px;
 }
 </style>
