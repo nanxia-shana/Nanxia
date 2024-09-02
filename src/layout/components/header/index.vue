@@ -6,10 +6,10 @@
       </template>
       {{ t("common.record") }}
     </a-button>
-    <div class="user" @mouseenter="menuUnfold" @mouseleave="menuFold">
+    <div class="user" @mouseenter="isFold = false" @mouseleave="isFold = true">
       <div class="avatar">
         <img class="avatar-img" :class="{ imgUnfold: !isFold }" src="@/assets/images/Iraina3.jpg" alt="avatar" />
-        <div class="avatar-menu" :class="{ menuUnfold: !isFold }">
+        <div class="avatar-menu" :class="{ menuUnfold: !isFold }">                               
           <div class="avatar-menu-top">
             <svg-icon name="vip" className="icon-user"></svg-icon>
             <svg-icon name="message" className="icon-user"></svg-icon>
@@ -38,11 +38,28 @@
           </div>
         </div>
       </div>
-      <span class="name">Iraina</span>
     </div>
-    <span class="hello">{{ t("common.hello") }}</span>
-    <span class="date">{{ today }}，{{ week }}</span>
+    <div class="wordBox">
+      <div class="word">  
+        <span class="word-date">{{ today }}，{{ week }}</span>
+        <span class="word-hello">{{ t("common.hello") }}</span>
+        <span class="word-name">&nbsp; Iraina</span>
+        <span class="word-date sm">{{ today }}，{{ week }}</span>
+        <span class="word-hello sm">{{ t("common.hello") }}</span>
+        <span class="word-name sm">&nbsp; Iraina</span>
+        <span class="word-date sm">{{ today }}，{{ week }}</span>
+        <span class="word-hello sm">{{ t("common.hello") }}</span>
+        <span class="word-name sm">&nbsp; Iraina</span>
+        <span class="word-date sm">{{ today }}，{{ week }}</span>
+        <span class="word-hello sm">{{ t("common.hello") }}</span>
+        <span class="word-name sm">&nbsp; Iraina</span>
+      </div>
+    </div>
+    <div>
+      
+    </div>
     <div
+      v-if="false"
       class="music"
       :class="{ musicShow: musicShow, musicLock: musicLock }"
       @mouseenter="musicShow = true"
@@ -128,12 +145,6 @@ watch(language, (val: string) => {
   today = timeFormat(new Date(), val, "yyyy-MM-dd");
   week = getWeekDate(new Date(), val, 3);
 });
-const menuUnfold = () => {
-  isFold.value = false;
-};
-const menuFold = () => {
-  isFold.value = true;
-};
 const logout = () => {
   router.push("/login");
 };
@@ -173,243 +184,7 @@ const getImageUrl = (name: string) => {
 };
 </script>
 <style lang="less" scoped>
-.header {
-  width: inherit;
-  height: inherit;
-  background: var(--background-color3);
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-  .user {
-    margin: 0 16px 0 10px;
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    cursor: pointer;
-    .avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      position: relative;
-      &-img {
-        width: 100%;
-        height: 100%;
-        margin-top: 0px;
-        transform: scale(1);
-        border-radius: 50%;
-        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-        display: block;
-        position: relative;
-        z-index: 9;
-      }
-      &-menu {
-        overflow: hidden;
-        width: 200px;
-        height: 0px;
-        background-color: var(--background-color3);
-        border-radius: 4px;
-        box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.06);
-        transform: translateX(25px);
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: absolute;
-        top: 25px;
-        right: -100%;
-        z-index: 7;
-        cursor: default;
-        &-top {
-          width: 100%;
-          height: 50px;
-          border-bottom: 1px solid var(--border-color-base);
-          display: flex;
-          justify-content: space-between;
-        }
-        &-mid {
-          width: 100%;
-          padding: 5px 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          &-item {
-            width: 100%;
-            height: 40px;
-            padding-left: 16px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-          }
-          &-item:hover {
-            color: var(--primary-color);
-            background-color: var(--primary-color1);
-          }
-          &-item span {
-            margin-left: 10px;
-          }
-        }
-      }
-      .imgUnfold {
-        margin-top: 20px;
-        transform: scale(1.3);
-        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-      }
-      .menuUnfold {
-        opacity: 1;
-        height: 260px;
-        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-        top: 45px;
-      }
-    }
-    .name {
-      margin-right: 20px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary-color);
-    }
-  }
-  .hello,
-  .date {
-    font-size: 18px;
-    font-weight: 550;
-    color: var(--primary-color);
-  }
-  .date {
-    margin: 0 30px;
-    color: var(--font-color2);
-    font-style: italic;
-  }
-  .music {
-    overflow: hidden;
-    width: 40px;
-    height: 46px;
-    border-radius: 23px;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    position: relative;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    &-img {
-      overflow: hidden;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      animation: rotateInfinity 8s linear infinite forwards;
-      -webkit-animation: rotateInfinity linear 8s infinite forwards;
-      position: absolute;
-      top: 2px;
-      right: 0;
-      left: 0;
-      z-index: 1;
-      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-      animation-play-state: paused;
-      cursor: pointer;
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-    }
-    @keyframes rotateInfinity {
-      0% {
-        transform: rotateZ(0);
-      }
-      100% {
-        transform: rotateZ(360deg);
-      }
-    }
-    .imgRotate {
-      animation-play-state: running;
-    }
-
-    &-control {
-      width: 120px;
-      height: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      &-progress {
-        width: 90px;
-        height: 20px;
-        .ant-slider {
-          margin: 5px 6px;
-        }
-      }
-      &-icon {
-        width: 100px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        &-item {
-          font-size: 20px;
-          line-height: 20px;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  .musicShow {
-    width: 160px;
-    background-color: rgba(160, 123, 255, 0.1);
-    border: 1px solid rgba(192, 163, 255, 0.3);
-    box-shadow: 0 0 6rem 0 rgba(160, 123, 255, 0.3);
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    .music-img {
-      left: 2px;
-      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    }
-  }
-  .musicLock {
-    width: 160px;
-    background-color: rgba(160, 123, 255, 0.1);
-    border: 1px solid rgba(192, 163, 255, 0.3);
-    box-shadow: 0 0 6rem 0 rgba(160, 123, 255, 0.3);
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    .music-img {
-      left: 2px;
-      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    }
-  }
-}
-.icon-user {
-  margin: 10px 20px;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
-
-.contextmenu {
-  width: 100px;
-  padding: 5px 0;
-  margin: 0;
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-  list-style-type: none;
-  font-size: 12px;
-  font-weight: 400;
-  color: #333;
-  position: fixed; //关键样式设置固定定位
-  z-index: 3000;
-}
-
-.contextmenu li {
-  width: 100%;
-  height: 36px;
-  margin: 0;
-  text-align: center;
-  line-height: 36px;
-  cursor: pointer;
-}
-.contextmenu li:hover {
-  background: #eee;
-}
+@import '@/assets/css/layout/header';
 </style>
 <style lang="less">
 .ant-slider-step,
@@ -426,10 +201,10 @@ const getImageUrl = (name: string) => {
   margin-top: -3px !important;
 }
 .breathLight .ant-slider-handle {
-  animation: pointBlink 2s ease-out infinite;
-  -webkit-animation: pointBlink ease-out 2s infinite;
+  animation: point-blink 2s ease-out infinite;
+  -webkit-animation: point-blink ease-out 2s infinite;
 }
-@keyframes pointBlink {
+@keyframes point-blink {
   0% {
     box-shadow: 0 0 3px 1px rgba(160, 123, 255, 0.2);
     border: 1px solid rgba(160, 123, 255, 0.1);

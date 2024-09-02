@@ -4,6 +4,7 @@ const app = createApp(App);
 import "animate.css";
 // 导入初始化css
 import "../src/assets/css/reset.css";
+import '../src/assets/css/foundation/mixin/variable.less';
 // 导入router
 import router from "./router";
 app.use(router);

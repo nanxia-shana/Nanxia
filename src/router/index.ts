@@ -110,13 +110,13 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/mm",
-    name: "mm",
+    path: "/musicPlayer",
+    name: "musicPlayer",
     component: () => import("@/views/portfolio/mobile/MusicPlayer.vue"),
     meta: {
       title: {
-        "/zh-CN": "404",
-        "/en-US": "404",
+        "/zh-CN": "音乐播放",
+        "/en-US": "musicPlayer",
       },
     },
   },
