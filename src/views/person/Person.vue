@@ -1,6 +1,7 @@
 <template>
   <div class="person">
     <span class="title">{{ t("common.person") }}</span>
+    <div id="lottie" style="width: 100px; height: 100px;"></div>
     <div class="msg">
       <div class="msg-avater" @click="avaterModify" @mouseenter="avaterFocus" @mouseleave="avatarBlur">
         <img src="@/assets/images/Iraina3.jpg" alt="avater" />
@@ -16,7 +17,7 @@
             v-model:value="nickname"
             show-count
             allow-clear
-            :maxlength="8"
+            :maxlength="8"                                                                        
             @pressEnter="submitNickname" />
         </div>
         <edit-outlined
@@ -82,10 +83,13 @@
   </div>
 </template>
 <script lang="ts" setup>
+// 导入Lottie-web依赖
+import Lottie from "lottie-web";
+import LottieLego from '@/assets/lottieFiles/Lottie-Lego.json';
 // 导入VueCropper
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from "vue-cropper";
-import { ref, reactive, getCurrentInstance } from "vue";
+import { ref, reactive, getCurrentInstance, onMounted } from "vue";
 import { EditOutlined, InboxOutlined, CheckCircleOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons-vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -112,6 +116,16 @@ let cropperData = reactive({
 })
 const cropper: any = ref({})
 let avaterCutUrl = ref<any>(new URL('@/assets/images/Iraina3.jpg', import.meta.url).href)
+onMounted(() => {
+  let animation = Lottie.loadAnimation({
+    container: document.getElementById("lottie"),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    // path: 'src/assets/lottieFiles/Lottie-Lego.json'
+    animationData: LottieLego
+  })
+})
 const avaterModify = () => {
   visible.value = true;
 };
@@ -241,17 +255,26 @@ const toCharacter = () => {
       margin-bottom: 30px;
       display: flex;
       align-items: center;
+      @media (max-width: @md) {
+        flex-wrap: wrap;
+      }
       &-name {
         width: 100px;
-        margin-right: 60px;
         font-size: 18px;
         font-weight: 600;
         display: inline-block;
         text-align: end;
+        @media (max-width: @md) {
+          text-align: start;
+        }
       }
       &-input {
-        width: 220px;
-        margin-right: 30px;
+        width: 22rem;
+        margin: 0 3rem 0 6rem;
+        @media (max-width: @md) {
+          width: 18rem;
+          margin: 1rem 3rem 1rem 0;
+        }
       }
     }
   }

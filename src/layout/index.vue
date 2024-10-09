@@ -1,5 +1,5 @@
 <template>
-  <a-layout style="height: 100%" @click="collapsed = true">
+  <a-layout style="height: 100%" @click="closeSider">
     <a-layout-sider class="sider" breakpoint="md" collapsed-width="0" v-model:collapsed="collapsed" :theme="curMode" @click.stop="() => {}">
       <div class="sider-menu">
         <svg-icon name="menu" className="icon" @click.stop="collapsed = !collapsed"></svg-icon>
@@ -58,6 +58,7 @@
   </a-layout>
 </template>
 <script lang="ts" setup>
+import { getModels } from '@/utils/tools';
 import {
   HomeOutlined,
   UserOutlined,
@@ -92,6 +93,10 @@ watch(
 onMounted(() => {
   console.log("Layout-Page");
 });
+const closeSider = () => {
+  if(getModels())
+    collapsed.value = true
+};
 const menuItem = (e: any) => {
   router.push(e.key);
 };
@@ -131,6 +136,7 @@ const menuItem = (e: any) => {
 }
 .content {
   background-color: var(--background-color3);
+  overflow: auto;
 }
 .logo {
   width: 100%;

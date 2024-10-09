@@ -156,7 +156,7 @@ const musicTimeupdate = (e: any) => {
 #app {
   /* min-width: 1200px;
   min-height: 800px; */
-  width: 100vw;
+  /* width: 100vw; */
   height: 100vh;
 }
 * {

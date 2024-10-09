@@ -113,13 +113,14 @@ onBeforeUnmount(() => {
 </script>
 <style lang="less" scoped>
 .mobile {
-  overflow: auto;
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   &-item {
     width: 300px;
     height: 600px;
+    margin-left: 1rem;
     margin-top: 60px;
     border-radius: 40px;
     display: flex;
@@ -252,8 +253,7 @@ onBeforeUnmount(() => {
   }
 
   &-left {
-    margin-left: 2%;
-    margin-right: 4%;
+    margin-right: 2rem;
     // transform-style: preserve-3d;
     // transform: rotateX(15deg) rotateY(20deg);
   }

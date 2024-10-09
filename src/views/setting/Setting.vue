@@ -40,7 +40,7 @@
         <span class="box-item-name">{{ t("setting.theme") }} :</span>
         <a-radio-group v-model:value="curTheme" @change="changeTheme">
           <a-radio-button value="violet">{{ t("setting.violet") }}</a-radio-button>
-          <a-radio-button value="green" disabled>{{ t("setting.green") }}</a-radio-button>
+          <a-radio-button value="green">{{ t("setting.green") }}</a-radio-button>
         </a-radio-group>
       </div>
     </div>
@@ -92,6 +92,10 @@ onMounted(() => {
     overflow-y: auto;
     &-item {
       margin-bottom: 30px;
+      @media (max-width: @md) {
+        display: flex;
+        flex-direction: column;
+      }
       &-name {
         width: 100px;
         margin-right: 60px;
@@ -99,6 +103,10 @@ onMounted(() => {
         font-weight: 600;
         display: inline-block;
         text-align: end;
+        @media (max-width: @md) {
+          text-align: start;
+          margin-bottom: 2rem;
+        }
       }
     }
   }

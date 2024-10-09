@@ -1,3 +1,12 @@
+// 判断设备是否为手机
+const getModels = () => {
+  let userAgentInfo = navigator.userAgent;
+  let mobileAgents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+  return mobileAgents.reduce((prev, ua) => {
+    return userAgentInfo.includes(ua) || prev;
+  }, false);
+}
+
 // 转换为日期格式
 const timeFormat = (date: Date, lang: string, fmt: string): string => {
   if (lang == "zh_CN") {
@@ -116,4 +125,4 @@ const binarySearchRange = (arr: any, target: number) => {
     return [-1, -1];
   }
 };
-export { timeFormatCN, timeFormat, getWeekDate, binarySearchRange };
+export { getModels, timeFormatCN, timeFormat, getWeekDate, binarySearchRange };

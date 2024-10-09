@@ -148,8 +148,8 @@ const toDemo = (item: any) => {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-wrap: wrap;
   .left {
-    min-width: 280px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -198,7 +198,7 @@ const toDemo = (item: any) => {
           // width: 100%;
           width: fit-content;
           padding: 6px;
-          border: 1px solid #c0a8ff;
+          border: 1px solid var(--primary-color);
           border-radius: 4px;
           display: flex;
           flex-wrap: wrap;
@@ -225,7 +225,7 @@ const toDemo = (item: any) => {
       display: flex;
       justify-content: center;
       align-items: baseline;
-      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transition: opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       &-name {
         margin-right: 10px;
         font-size: 16px;
@@ -235,9 +235,9 @@ const toDemo = (item: any) => {
       }
     }
     .titleShow {
-      visibility: hidden;
+      display: none;
       opacity: 0;
-      transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transition: opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
   }
   .rightFoldM {
