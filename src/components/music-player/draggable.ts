@@ -1,3 +1,5 @@
+import { getModels } from "@/utils/tools";
+
 // 是否为手机
 let isMobile = getModels();
 // 窗口宽高
@@ -9,13 +11,6 @@ clientH = window.innerHeight || document.documentElement.clientHeight || documen
 // 是否移动
 let Moving = false;
 
-function getModels() {
-  let userAgentInfo = navigator.userAgent;
-  let mobileAgents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
-  return mobileAgents.reduce((prev, ua) => {
-    return userAgentInfo.includes(ua) || prev;
-  }, false);
-}
 document.addEventListener("DOMContentLoaded", function () {
   // 传入监听类型（触摸开始：鼠标按下）
   let eventType = isMobile ? "touchstart" : "mousedown";

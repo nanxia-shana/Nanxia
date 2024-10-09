@@ -14,12 +14,12 @@
     </div>
     <div class="music-mid" @click="lyricShow = !lyricShow">
       <div v-show="!lyricShow" class="music-mid-cover">
-        <img
-          class="music-mid-cover-stick"
-          :class="{ stickOn: !musicIsPlay }"
-          src="@/assets/images/stick_bg.png"
-          alt="stick_bg" />
         <div class="music-mid-cover-wrapper">
+          <img
+            class="music-mid-cover-wrapper-stick"
+            :class="{ stickOn: !musicIsPlay }"
+            src="@/assets/images/stick_bg.png"
+            alt="stick_bg" />
           <img class="music-mid-cover-wrapper-cd" src="@/assets/images/cd_wrapper.png" alt="CDwrapper" />
         </div>
         <img class="music-mid-cover-img" :class="{ imgRotate: musicIsPlay }" :src="getImageUrl(musicImgUrl)" alt="cover" />
@@ -329,21 +329,6 @@ const getImageUrl = (name: string) => {
     z-index: 2;
     cursor: pointer;
     &-cover {
-      &-stick {
-        width: 8.6rem;
-        object-fit: contain;
-        position: absolute;
-        top: -1.4rem;
-        left: 50%;
-        z-index: 3;
-        transform: translateX(-1.8rem);
-        transform-origin: 1.5rem 1.5rem;
-        transition: transform .6s ease-out;
-      }
-      .stickOn {
-        transform: translateX(-1.8rem) rotateZ(-30deg);
-        transition: transform .6s ease-out;
-      }
       &-wrapper {
         width: 80%;
         max-width: 36rem;
@@ -359,6 +344,21 @@ const getImageUrl = (name: string) => {
         bottom: 0;
         left: 0;
         margin: auto;
+        .stickOn {
+          transform: translateX(-1.8rem) rotateZ(-30deg);
+          transition: transform .6s ease-out;
+        }
+        &-stick {
+          width: 40%;
+          object-fit: contain;
+          position: absolute;
+          top: -35%;
+          left: 50%;
+          z-index: 3;
+          transform: translateX(-1.8rem);
+          transform-origin: 1.5rem 1.5rem;
+          transition: transform .6s ease-out;
+        }
         &-cd {
           width: 99%;
           max-width: 35.5rem;

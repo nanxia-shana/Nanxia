@@ -179,7 +179,7 @@ onBeforeUnmount(() => {
         color: #aaa;
       }
       &-tips {
-        margin: 1% 0 14%;
+        margin: 1% 0 0;
         font-size: 12px;
         color: #fff;
         letter-spacing: 1px;
@@ -187,7 +187,6 @@ onBeforeUnmount(() => {
         transform: scale(0.7);
       }
       &-btn {
-        width: 14%;
         height: fit-content;
         display: flex;
         align-items: center;
