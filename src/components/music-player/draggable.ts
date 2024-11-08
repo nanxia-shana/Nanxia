@@ -71,13 +71,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function mousemove(e: any) {
+    // btnW = box.getBoundingClientRect().width;
+    // btnH = box.getBoundingClientRect().height;
     e = e || window.event;
     if (dragging) {
       Moving = !(offsetDown.x === getOffset(e).x && offsetDown.y === getOffset(e).y);
       // 在拖拽过程中更新元素的位置
       let x = getOffset(e).x - btnW / 2;
       let y = getOffset(e).y - btnH / 2;
-      if (x > 5 && x < clientW - btnW - 125) {
+      if (x > 5 && x < clientW - btnW - 5) {
         offset.x = x;
       }
       if (y > 5 && y < clientH - btnH - 5) {

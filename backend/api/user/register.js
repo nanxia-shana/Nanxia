@@ -1,0 +1,30 @@
+const express = require("express");
+const router = express.Router();
+
+const sleep = require("../../common/sleep");
+const res_time = 1000;
+
+const resData = {
+  message: "成功注册账号。",
+};
+
+router.post("/", (req, res) => {
+  try {
+    console.log("user.01.01_register - headers: ", req.headers);
+    console.log("user.01.01_register - queries: ", req.query);
+    console.log("user.01.01_register - bodys: ", req.body);
+
+    sleep(res_time).then((_) => {
+      console.log(`响应时间：${res_time}`);
+      res.status(200).send(resData);
+    });
+  } catch (error) {
+    res.status(error.status || 500).json({
+      message: error.message,
+      status_code: error.statusCode,
+      path: `${req.method}:${req.originalUrl}`,
+    });
+  }
+});
+
+module.exports = router;

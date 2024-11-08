@@ -49,8 +49,10 @@
 import Input from "./components/input.vue";
 import Button from "./components/button.vue";
 // import Base from "./components/base.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
+import { aesEncrypt, md5} from "@/utils/authentication"
+import { debounce } from "@/utils/tools";
 const userInput = ref<InstanceType<typeof Input>>(null);
 const passwordInput = ref<InstanceType<typeof Input>>(null);
 const userInputR = ref<InstanceType<typeof Input>>(null);
@@ -63,6 +65,7 @@ const passwordRegisterV = ref<boolean>(false);
 const router = useRouter();
 const isLoginPage = ref<boolean>(true);
 const loading = ref(false);
+const instance: any = getCurrentInstance();
 onMounted(() => {
   userInput.value?.input?.focus();
   passwordInput.value?.input.addEventListener("keydown", (event) => {
@@ -87,21 +90,93 @@ onMounted(() => {
   passwordInputR.value?.button.addEventListener("focus", () => {
     passwordInputR.value?.input?.focus();
   });
+  userInput.value?.input.addEventListener("blur", () => {
+    const backgrounbStatu = (userInput.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInput.value?.inputMsg.length > 7 ? 1 : 0)
+    if (backgrounbStatu == 2) {
+      background.value.style.filter = `blur(0)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else if (backgrounbStatu == 1) {
+      background.value.style.filter = `blur(10px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else {
+      background.value.style.filter = `blur(20px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    }
+  });
+  passwordInput.value?.input.addEventListener("blur", () => {
+    const backgrounbStatu = (userInput.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInput.value?.inputMsg.length > 7 ? 1 : 0)
+    if (backgrounbStatu == 2) {
+      background.value.style.filter = `blur(0)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else if (backgrounbStatu == 1) {
+      background.value.style.filter = `blur(10px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else {
+      background.value.style.filter = `blur(20px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    }
+  });
+  userInputR.value?.input.addEventListener("blur", () => {
+    const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
+    if (backgrounbStatu == 2) {
+      background.value.style.filter = `blur(0)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else if (backgrounbStatu == 1) {
+      background.value.style.filter = `blur(10px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else {
+      background.value.style.filter = `blur(20px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    }
+  });
+  passwordInputR.value?.input.addEventListener("blur", () => {
+    const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
+    if (backgrounbStatu == 2) {
+      background.value.style.filter = `blur(0)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else if (backgrounbStatu == 1) {
+      background.value.style.filter = `blur(10px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    } else {
+      background.value.style.filter = `blur(20px)`;
+      background.value.style.transition = `filter 0.5s ease-out`;
+    }
+  });
 });
-const login = () => {
+const login = async () => {
   loading.value = true;
-  if (userInput.value?.inputMsg && passwordInput.value?.inputMsg) {
-    setTimeout(() => {
+  if (userInput.value?.inputMsg.length > 5 && passwordInput.value?.inputMsg.length > 7) {
+    const res = await instance.proxy.$request.post("/user/login", {
+      username: aesEncrypt(userInput.value?.inputMsg),
+      password: md5(passwordInput.value?.inputMsg),
+    })
+    if (res.status == 200) {
       router.push("/");
       loading.value = false;
-    }, 1500);
-  } else {
-    setTimeout(() => {
+    } else {
       loading.value = false;
-    }, 1500);
+    }
+  } else {
+    loading.value = false;
   }
 };
-const register = () => {};
+const register = async () => {
+  loading.value = true;
+  if (userInputR.value?.inputMsg.length > 5 && passwordInputR.value?.inputMsg.length > 7) {
+    const res = await instance.proxy.$request.post("/user/register", {
+      username: aesEncrypt(userInputR.value?.inputMsg),
+      password: md5(passwordInputR.value?.inputMsg),
+    })
+    if (res.status == 200) {
+      router.push("/");
+      loading.value = false;
+    } else {
+      loading.value = false;
+    }
+  } else {
+    loading.value = false;
+  }
+};
 const iconClick = (num: number) => {
   if (num === 1) {
     userInput.value?.input?.focus();
@@ -130,8 +205,8 @@ const switchMode = () => {
   }, 300);
 };
 const passInput = (length: number) => {
-  const blurValue = 20 - length * 2;
-  background.value.style.filter = `blur(${blurValue}px)`;
+    // const blurValue = 16 - length * 2;
+    // background.value.style.filter = `blur(${blurValue}px)`;
 };
 </script>
 

@@ -1,14 +1,14 @@
 // 判断设备是否为手机
-const getModels = () => {
+export const getModels = () => {
   let userAgentInfo = navigator.userAgent;
   let mobileAgents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
   return mobileAgents.reduce((prev, ua) => {
     return userAgentInfo.includes(ua) || prev;
   }, false);
-}
+};
 
 // 转换为日期格式
-const timeFormat = (date: Date, lang: string, fmt: string): string => {
+export const timeFormat = (date: Date, lang: string, fmt: string): string => {
   if (lang == "zh_CN") {
     return timeFormatCN(date, fmt);
   } else if (lang == "en_US") {
@@ -18,7 +18,7 @@ const timeFormat = (date: Date, lang: string, fmt: string): string => {
   }
 };
 // 转换星期格式
-const getWeekDate = (date: Date, lang: string, fmt: number): string => {
+export const getWeekDate = (date: Date, lang: string, fmt: number): string => {
   if (lang == "zh_CN") {
     return getWeekDateCN(date, fmt);
   } else if (lang == "en_US") {
@@ -29,7 +29,7 @@ const getWeekDate = (date: Date, lang: string, fmt: number): string => {
 };
 
 // 转换为中国日期格式
-const timeFormatCN = (date: Date, fmt: string): string => {
+export const timeFormatCN = (date: Date, fmt: string): string => {
   var o = {
     "M+": date.getMonth() + 1, //月份
     "d+": date.getDate(), //日
@@ -51,19 +51,7 @@ const timeFormatCN = (date: Date, fmt: string): string => {
   }
   return fmt;
 };
-// 转换为中国星期格式
-const getWeekDateCN = (date: Date, fmt: number): string => {
-  var weeks2 = new Array("周日", "周一", "周二", "周三", "周四", "周五", "周六");
-  var weeks3 = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
-  var day = date.getDay();
-  if (fmt == 2) {
-    var week = weeks2[day];
-  } else {
-    var week = weeks3[day];
-  }
-  return week;
-};
-// 转换为英语格式日期
+// 转换为英语日期格式
 const timeFormatEN = (date: Date): string => {
   var month = ["Dec", "Jan", "Feb", "Mar", "Apr", "MayJun", "Jul", "Aug", "Sep", "Oct", "Nov"];
   var y = date.getFullYear(); //年份
@@ -77,6 +65,19 @@ const timeFormatEN = (date: Date): string => {
   return d + " " + M + " " + y;
 };
 
+// 转换为中国星期格式
+const getWeekDateCN = (date: Date, fmt: number): string => {
+  var weeks2 = new Array("周日", "周一", "周二", "周三", "周四", "周五", "周六");
+  var weeks3 = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+  var day = date.getDay();
+  if (fmt == 2) {
+    var week = weeks2[day];
+  } else {
+    var week = weeks3[day];
+  }
+  return week;
+};
+
 // 转换为英语星期格式
 const getWeekDateEN = (date: Date): string => {
   var weeks = new Array("Sunday", "Monday", "Therday", "Wednesday", "Thursday", "Firday", "Saturday");
@@ -84,6 +85,7 @@ const getWeekDateEN = (date: Date): string => {
   var week = weeks[day];
   return week;
 };
+
 // 转换为日本星期格式
 const getWeekDateJP = (date: Date): string => {
   var weeks = new Array("日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日");
@@ -93,7 +95,7 @@ const getWeekDateJP = (date: Date): string => {
 };
 
 // 二分法查找数字在有序数组的哪个区间
-const binarySearchRange = (arr: any, target: number) => {
+export const binarySearchRange = (arr: any, target: number) => {
   let left = 0;
   let right = arr.length - 1;
   if (arr[left] > target) {
@@ -125,4 +127,15 @@ const binarySearchRange = (arr: any, target: number) => {
     return [-1, -1];
   }
 };
-export { getModels, timeFormatCN, timeFormat, getWeekDate, binarySearchRange };
+
+// 防抖指令封装
+export const debounce = (fn: Function, time: number) => {
+  console.log("object");
+  let timeout = null;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      fn();
+    }, time);
+  };
+};
