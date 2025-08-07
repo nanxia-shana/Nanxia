@@ -4,7 +4,7 @@
       <template #icon>
         <coffee-outlined />
       </template>
-      {{ t("common.record") }}
+      {{ t("common.common02-008") }}
     </a-button>
     <div class="user" @mouseenter="isFold = false" @mouseleave="isFold = true">
       <div class="avatar">
@@ -17,11 +17,11 @@
           <div class="avatar-menu-mid">
             <div class="avatar-menu-mid-item">
               <user-outlined />
-              <span>{{ t("common.person") }}</span>
+              <span>{{ t("common.common02-004") }}</span>
             </div>
             <div class="avatar-menu-mid-item">
               <message-outlined />
-              <span>{{ t("common.message") }}</span>
+              <span>{{ t("common.common02-006") }}</span>
             </div>
             <div class="avatar-menu-mid-item">
               <read-outlined />
@@ -42,16 +42,16 @@
     <div class="wordBox">
       <div class="word">  
         <span class="word-date">{{ today }}，{{ week }}</span>
-        <span class="word-hello">{{ t("common.hello") }}</span>
+        <span class="word-hello">{{ t("common.common02-007") }}</span>
         <span class="word-name">&nbsp; Iraina</span>
         <span class="word-date sm">{{ today }}，{{ week }}</span>
-        <span class="word-hello sm">{{ t("common.hello") }}</span>
+        <span class="word-hello sm">{{ t("common.common02-007") }}</span>
         <span class="word-name sm">&nbsp; Iraina</span>
         <span class="word-date sm">{{ today }}，{{ week }}</span>
-        <span class="word-hello sm">{{ t("common.hello") }}</span>
+        <span class="word-hello sm">{{ t("common.common02-007") }}</span>
         <span class="word-name sm">&nbsp; Iraina</span>
         <span class="word-date sm">{{ today }}，{{ week }}</span>
-        <span class="word-hello sm">{{ t("common.hello") }}</span>
+        <span class="word-hello sm">{{ t("common.common02-007") }}</span>
         <span class="word-name sm">&nbsp; Iraina</span>
       </div>
     </div>
@@ -83,14 +83,14 @@
       </div>
     </div>
   </div>
-  <ul
+  <ul 
     v-show="menuRVisible"
     :style="{ left: menuLeft + 'px', top: menuTop + 'px' }"
     class="contextmenu"
     @mouseenter="musicShow = true"
     @mouseleave="musicShow = false">
-    <li @click="musicLock = true">{{ t("common.expand") }}</li>
-    <li @click="musicLock = false">{{ t("common.collapse") }}</li>
+    <li @click="musicLock = true">{{ t("common.common02-009") }}</li>
+    <li @click="musicLock = false">{{ t("common.common02-010") }}</li>
   </ul>
 </template>
 <script lang="ts" setup>

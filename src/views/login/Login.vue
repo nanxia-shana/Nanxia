@@ -52,7 +52,6 @@ import Button from "./components/button.vue";
 import { ref, onMounted, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import { aesEncrypt, md5} from "@/utils/authentication"
-import { debounce } from "@/utils/tools";
 const userInput = ref<InstanceType<typeof Input>>(null);
 const passwordInput = ref<InstanceType<typeof Input>>(null);
 const userInputR = ref<InstanceType<typeof Input>>(null);
@@ -71,13 +70,14 @@ onMounted(() => {
   passwordInput.value?.input.addEventListener("keydown", (event) => {
     if (event.keyCode === 13) {
       login();
-    }
+    }3
   });
   passwordInputR.value?.input.addEventListener("keydown", (event) => {
     if (event.keyCode === 13) {
       register();
     }
   });
+  passwordInputR.value
   userInput.value?.button.addEventListener("focus", () => {
     userInput.value?.input?.focus();
   });
@@ -90,65 +90,65 @@ onMounted(() => {
   passwordInputR.value?.button.addEventListener("focus", () => {
     passwordInputR.value?.input?.focus();
   });
-  userInput.value?.input.addEventListener("blur", () => {
-    const backgrounbStatu = (userInput.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInput.value?.inputMsg.length > 7 ? 1 : 0)
-    if (backgrounbStatu == 2) {
-      background.value.style.filter = `blur(0)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else if (backgrounbStatu == 1) {
-      background.value.style.filter = `blur(10px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else {
-      background.value.style.filter = `blur(20px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    }
-  });
-  passwordInput.value?.input.addEventListener("blur", () => {
-    const backgrounbStatu = (userInput.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInput.value?.inputMsg.length > 7 ? 1 : 0)
-    if (backgrounbStatu == 2) {
-      background.value.style.filter = `blur(0)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else if (backgrounbStatu == 1) {
-      background.value.style.filter = `blur(10px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else {
-      background.value.style.filter = `blur(20px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    }
-  });
-  userInputR.value?.input.addEventListener("blur", () => {
-    const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
-    if (backgrounbStatu == 2) {
-      background.value.style.filter = `blur(0)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else if (backgrounbStatu == 1) {
-      background.value.style.filter = `blur(10px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else {
-      background.value.style.filter = `blur(20px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    }
-  });
-  passwordInputR.value?.input.addEventListener("blur", () => {
-    const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
-    if (backgrounbStatu == 2) {
-      background.value.style.filter = `blur(0)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else if (backgrounbStatu == 1) {
-      background.value.style.filter = `blur(10px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    } else {
-      background.value.style.filter = `blur(20px)`;
-      background.value.style.transition = `filter 0.5s ease-out`;
-    }
-  });
+  // userInput.value?.input.addEventListener("blur", () => {
+  //   const backgrounbStatu = (userInput.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInput.value?.inputMsg.length > 7 ? 1 : 0)
+  //   if (backgrounbStatu == 2) {
+  //     background.value.style.filter = `blur(0)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else if (backgrounbStatu == 1) {
+  //     background.value.style.filter = `blur(10px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else {
+  //     background.value.style.filter = `blur(20px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   }
+  // });
+  // passwordInput.value?.input.addEventListener("blur", () => {
+  //   const backgrounbStatu = (userInput.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInput.value?.inputMsg.length > 7 ? 1 : 0)
+  //   if (backgrounbStatu == 2) {
+  //     background.value.style.filter = `blur(0)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else if (backgrounbStatu == 1) {
+  //     background.value.style.filter = `blur(10px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else {
+  //     background.value.style.filter = `blur(20px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   }
+  // });
+  // userInputR.value?.input.addEventListener("blur", () => {
+  //   const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
+  //   if (backgrounbStatu == 2) {
+  //     background.value.style.filter = `blur(0)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else if (backgrounbStatu == 1) {
+  //     background.value.style.filter = `blur(10px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else {
+  //     background.value.style.filter = `blur(20px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   }
+  // });
+  // passwordInputR.value?.input.addEventListener("blur", () => {
+  //   const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
+  //   if (backgrounbStatu == 2) {
+  //     background.value.style.filter = `blur(0)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else if (backgrounbStatu == 1) {
+  //     background.value.style.filter = `blur(10px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   } else {
+  //     background.value.style.filter = `blur(20px)`;
+  //     background.value.style.transition = `filter 0.5s ease-out`;
+  //   }
+  // });
 });
 const login = async () => {
   loading.value = true;
   if (userInput.value?.inputMsg.length > 5 && passwordInput.value?.inputMsg.length > 7) {
     const res = await instance.proxy.$request.post("/user/login", {
-      username: aesEncrypt(userInput.value?.inputMsg),
-      password: md5(passwordInput.value?.inputMsg),
+      username: aesEncrypt(userInput.value?.inputMsg, null),  // nanxia
+      password: md5(passwordInput.value?.inputMsg, null), // nanxia5201314
     })
     if (res.status == 200) {
       router.push("/");
@@ -164,8 +164,8 @@ const register = async () => {
   loading.value = true;
   if (userInputR.value?.inputMsg.length > 5 && passwordInputR.value?.inputMsg.length > 7) {
     const res = await instance.proxy.$request.post("/user/register", {
-      username: aesEncrypt(userInputR.value?.inputMsg),
-      password: md5(passwordInputR.value?.inputMsg),
+      username: aesEncrypt(userInputR.value?.inputMsg, null),
+      password: md5(passwordInputR.value?.inputMsg, null),
     })
     if (res.status == 200) {
       router.push("/");
@@ -205,8 +205,17 @@ const switchMode = () => {
   }, 300);
 };
 const passInput = (length: number) => {
-    // const blurValue = 16 - length * 2;
-    // background.value.style.filter = `blur(${blurValue}px)`;
+  const backgrounbStatu = (userInputR.value?.inputMsg.length > 5 ? 1 : 0) + (passwordInputR.value?.inputMsg.length > 7 ? 1 : 0)
+  if (backgrounbStatu == 2) {
+    background.value.style.filter = `blur(0)`;
+    background.value.style.transition = `filter 0.5s ease-out`;
+  } else if (backgrounbStatu == 1) {
+    background.value.style.filter = `blur(10px)`;
+    background.value.style.transition = `filter 0.5s ease-out`;
+  } else {
+    background.value.style.filter = `blur(20px)`;
+    background.value.style.transition = `filter 0.5s ease-out`;
+  }
 };
 </script>
 

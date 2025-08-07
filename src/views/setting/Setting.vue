@@ -1,19 +1,19 @@
 <template>
   <div class="setting">
-    <span class="title">{{ t("common.setting") }}</span>
+    <span class="title">{{ t("common.common02-005") }}</span>
     <div class="box">
       <div class="box-item">
         <div class="box-item-ddd"></div>
-        <span class="box-item-name">{{ t("setting.language") }} :</span>
+        <span class="box-item-name">{{ t("setting.setting01-001") }} :</span>
         <a-radio-group v-model:value="curLang" @change="changeLang">
-          <a-radio-button value="zh_CN">{{ t("setting.chinese") }}</a-radio-button>
-          <a-radio-button value="en_US">{{ t("setting.english") }}</a-radio-button>
-          <a-radio-button value="ja_JP">{{ t("setting.japanese") }}</a-radio-button>
+          <a-radio-button value="zh_CN">{{ t("setting.setting01-002") }}</a-radio-button>
+          <a-radio-button value="en_US">{{ t("setting.setting01-003") }}</a-radio-button>
+          <a-radio-button value="ja_JP">{{ t("setting.setting01-004") }}</a-radio-button>
         </a-radio-group>
       </div>
       <!-- 开关切换模式 -->
       <div class="box-item">
-        <span class="box-item-name">{{ t("setting.mode") }} :</span>
+        <span class="box-item-name">{{ t("setting.setting01-005") }} :</span>
         <!-- <a-switch v-model:checked="curMode" @change="changeMode" disabled /> -->
         <label class="switch">
           <span class="sun">
@@ -37,10 +37,10 @@
       </div>
       <!-- 切换主题 -->
       <div class="box-item">
-        <span class="box-item-name">{{ t("setting.theme") }} :</span>
+        <span class="box-item-name">{{ t("setting.setting01-006") }} :</span>
         <a-radio-group v-model:value="curTheme" @change="changeTheme">
-          <a-radio-button value="violet">{{ t("setting.violet") }}</a-radio-button>
-          <a-radio-button value="green">{{ t("setting.green") }}</a-radio-button>
+          <a-radio-button value="violet">{{ t("setting.setting01-007") }}</a-radio-button>
+          <a-radio-button value="green">{{ t("setting.setting01-008") }}</a-radio-button>
         </a-radio-group>
       </div>
     </div>

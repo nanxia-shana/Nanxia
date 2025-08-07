@@ -20,21 +20,21 @@
           class="computer-box-desktop-password"
           type="password"
           maxlength="6"
-          :placeholder="t('portfolio.enterpassword')"
+          :placeholder="t('portfolio.portfolio01-003')"
           @keydown.enter="keydown" />
-        <span class="computer-box-desktop-tips">{{ t("portfolio.mactips") }}</span>
+        <span class="computer-box-desktop-tips">{{ t("portfolio.portfolio01-004") }}</span>
         <div class="computer-box-desktop-btn">
           <div class="computer-box-desktop-btn-item">
             <div class="computer-box-desktop-btn-item-icon">
               <svg-icon name="close" className="macBtnIcon"></svg-icon>
             </div>
-            <span>{{ t("common.cancel") }}</span>
+            <span>{{ t("common.common01-003") }}</span>
           </div>
           <div class="computer-box-desktop-btn-item">
             <div class="computer-box-desktop-btn-item-icon">
               <svg-icon name="macuser" className="macBtnIcon"></svg-icon>
             </div>
-            <span>{{ t("portfolio.visitor") }}</span>
+            <span>{{ t("portfolio.portfolio01-005") }}</span>
           </div>
         </div>
       </div>

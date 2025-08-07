@@ -1,6 +1,6 @@
 <template>
   <div class="character">
-    <span class="title">{{ t("common.person") }}</span>
+    <span class="title">{{ t("common.common02-004") }}</span>
     <a href="https://www.baidu.com/" target="_blank" rel="noopener">百度一下</a>
   </div>
 </template>

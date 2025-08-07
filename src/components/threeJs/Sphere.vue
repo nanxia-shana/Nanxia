@@ -17,8 +17,8 @@ export default {
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
       camera.position.z = 5;
-      // camera.position.set(-1000, 0, 0);
-      // camera.lookAt(-2000, 0, 0);
+      // camera.position.set(-10, 0, 0);
+      // camera.lookAt(-20, 0, 0);
       const renderer = new THREE.WebGLRenderer();
 
       renderer.setSize(container.clientWidth, container.clientHeight);
@@ -35,8 +35,8 @@ export default {
 
       function animate() {
         requestAnimationFrame(animate);
-        // sphere.rotation.x += 0.001;
-        // sphere.rotation.y += 0.01;
+        sphere.rotation.x += 0.001;
+        sphere.rotation.y += 0.01;
         renderer.render(scene, camera);
       }
 

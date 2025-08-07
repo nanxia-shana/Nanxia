@@ -1,6 +1,6 @@
 <template>
   <div class="schodule">
-    <span class="title">{{ t("common.schedule") }}</span>
+    <span class="title">{{ t("common.common02-003") }}</span>
   </div>
 </template>
 <script lang="ts" setup>

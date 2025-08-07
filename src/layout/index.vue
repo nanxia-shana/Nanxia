@@ -25,23 +25,23 @@
       <a-menu v-model:selectedKeys="selectedKeys" :theme="curMode" mode="inline" @select="menuItem">
         <a-menu-item key="/home">
           <home-outlined />
-          <span> {{ t("common.home") }} </span>
+          <span> {{ t("common.common02-001") }} </span>
         </a-menu-item>
         <a-menu-item key="/portfolio">
           <video-camera-outlined />
-          <span> {{ t("common.portfolio") }} </span>
+          <span> {{ t("common.common02-002") }} </span>
         </a-menu-item>
         <a-menu-item key="/schedule">
           <field-time-outlined />
-          <span> {{ t("common.schedule") }} </span>
+          <span> {{ t("common.common02-003") }} </span>
         </a-menu-item>
         <a-menu-item key="/person">
           <user-outlined />
-          <span> {{ t("common.person") }} </span>
+          <span> {{ t("common.common02-004") }} </span>
         </a-menu-item>
         <a-menu-item key="/setting">
           <setting-outlined />
-          <span> {{ t("common.setting") }} </span>
+          <span> {{ t("common.common02-005") }} </span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -121,7 +121,7 @@ const menuItem = (e: any) => {
     left: 0;
     z-index: 100;
     user-select: none;
-    @media (max-width: @md) {
+    @media (max-width: 767px) {
       display: none;
     }
     .icon{

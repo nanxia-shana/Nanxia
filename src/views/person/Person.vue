@@ -1,6 +1,6 @@
 <template>
   <div class="person">
-    <span class="title">{{ t("common.person") }}</span>
+    <span class="title">{{ t("common.common02-004") }}</span>
     <div id="lottie" style="width: 100px; height: 100px;"></div>
     <div class="msg">
       <div class="msg-avater" @click="avaterModify" @mouseenter="avaterFocus" @mouseleave="avatarBlur">
@@ -61,17 +61,17 @@
         <span>调节裁剪框制作头像</span>
         <div class="modalCropper-box">
           <vueCropper
-          style="width: 300px; height: 300px; margin-top: 10px;"
-          ref="cropper"
-          :img="cropperData.option.img"
-          :outputSize="cropperData.option.outputSize"
-          :outputType="cropperData.option.outputType"
-          :autoCrop="cropperData.option.autoCrop"
-          :autoCropWidth="cropperData.option.autoCropWidth"
-          :autoCropHeight="cropperData.option.autoCropHeight"
-          :fixed="true"
-          :centerBox="cropperData.option.centerBox"
-          @realTime="getCropDataBase64"
+            style="width: 300px; height: 300px; margin-top: 10px;"
+            ref="cropper"
+            :img="cropperData.option.img"
+            :outputSize="cropperData.option.outputSize"
+            :outputType="cropperData.option.outputType"
+            :autoCrop="cropperData.option.autoCrop"
+            :autoCropWidth="cropperData.option.autoCropWidth"
+            :autoCropHeight="cropperData.option.autoCropHeight"
+            :fixed="true"
+            :centerBox="cropperData.option.centerBox"
+            @realTime="getCropDataBase64"
           />
         </div>
         <div class="modalCropper-btn">
@@ -122,6 +122,7 @@ onMounted(() => {
     renderer: 'svg',
     loop: true,
     autoplay: true,
+    // 两种引入方式
     // path: 'src/assets/lottieFiles/Lottie-Lego.json'
     animationData: LottieLego
   })
@@ -150,16 +151,16 @@ const handldBeforeUpload = async (file: any) => {
     return false
   }
   // 判断文件大小
-  const isLt2M = file.size / 1024 / 1024 < 2;
+  const isLt2M = file.size / 1024 / 1024 < 10;
   if (!isLt2M) {
-    instance.proxy.$message.error('Image must smaller than 2MB!');
+    instance.proxy.$message.error('Image must smaller than 10MB!');
     return false
   }
   // 判断图片的宽高
   const URL = window.URL || window.webkitURL
   const isWH = await readImageWH(URL.createObjectURL(file))
   if (!isWH) {
-    instance.proxy.$message.error('图片“宽度x高度”至少为“150x150”像素');
+    instance.proxy.$message.error('The picture "width x height" must be at least "150x150" pixels');
     return false
   }
   cropperData.isShow = true
@@ -280,15 +281,24 @@ const toCharacter = () => {
   }
 }
 .modalBox {
-  width: 100%;
-  height: 200px;
   display: flex;
   align-items: center;
+  transition: all .5s ease-out;
+  @media (max-width: @md) {
+    flex-direction: column;
+  }
   &-left {
     width: 30%;
     display: flex;
     justify-content: center;
     border-right: 1px solid var(--primary-color);
+    border-bottom: none;
+    @media (max-width: @md) {
+      padding-bottom: 5%;
+      margin-bottom: 5%;
+      border-right: none;
+      border-bottom: 1px solid var(--primary-color);
+    }
     img {
       width: 150px;
       height: 150px;

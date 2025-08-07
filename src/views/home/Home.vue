@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <span class="title">{{ t("common.home") }}</span>
+    <span class="title">{{ t("common.common02-001") }}</span>
   </div>
 </template>
 <script lang="ts" setup>

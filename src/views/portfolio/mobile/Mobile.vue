@@ -1,9 +1,9 @@
 <template>
   <div class="mobile">
     <div class="mobile-item mobile-left">
-      <img src="@/assets/images/iphone.png" alt="iphone" />
+      <img class="mobile-item-iphoneFrame" src="@/assets/images/iphone.png" alt="iphone" />
       <div class="mobile-item-iphone">
-        <div class="mobile-item-iphone-content backVideo" :class="{ isWindow: isWindow }">
+        <div class="mobile-item-iphone-content backImg" :class="{ isWindow: isWindow }">
           <div class="isWindowItem mobile-item-iphone-content-time">{{ curTime }}</div>
           <div class="isWindowItem mobile-item-iphone-content-status">
             <svg-icon name="iphonesignal" className="iphoneIcon1"></svg-icon>
@@ -15,10 +15,16 @@
               <span>{{ today }}</span>
               <span>{{ week }}</span>
             </div>
+            <div class="mobile-item-iphone-content-desktop-apps">
+              <div class="mobile-item-iphone-content-desktop-apps-item" v-for="(item, index) in appList" :key="index" @click="appClick(item.url)">
+                <img class="mobile-item-iphone-content-desktop-apps-item-icon" :src="item.path" alt="icon" />
+                <div class="mobile-item-iphone-content-desktop-apps-item-name">{{ item.name }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="mobile-item-window">
+      <div class="mobile-item-window" :class="{app: isApp}">
         <router-view v-slot="{ Component }">
           <transition
             name="custom-classes"
@@ -31,7 +37,7 @@
     </div>
     <!-- Right -->
     <div class="mobile-item mobile-right" @click="rightStart">
-      <img src="@/assets/images/iphone.png" alt="iphone" />
+      <img class="mobile-item-iphoneFrame" src="@/assets/images/iphone.png" alt="iphone" />
       <div class="mobile-item-iphone">
         <div class="mobile-item-iphone-content">
           <div class="mobile-item-iphone-content-time">{{ curTime }}</div>
@@ -56,12 +62,12 @@
 </template>
 <script lang="ts" setup>
 import { timeFormatCN, timeFormat, getWeekDate } from "@/utils/tools";
-import { ref, watch, onMounted, onBeforeUnmount } from "vue";
-// import { useI18n } from "vue-i18n";
+import { ref, watch, onMounted, onBeforeUnmount, reactive } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import useGlobalStore from "@/store/modules/global";
 import { storeToRefs } from "pinia";
-// const { t } = useI18n();
+const { t } = useI18n();
 const store = useGlobalStore();
 const { language } = storeToRefs(store);
 const router = useRouter();
@@ -70,6 +76,29 @@ const curTime = ref<string>(timeFormatCN(new Date(), "hh:mm"));
 let today: string = timeFormat(new Date(), language.value, "yyyy/MM/dd");
 let week: string = getWeekDate(new Date(), language.value, 3);
 const rightIsStart = ref<boolean>(false);
+const isApp = ref<boolean>(false)
+const appList = reactive([
+  {
+    path: new URL(`/src/assets/images/WaterfallFlow.jpg`, import.meta.url).href,
+    name: t("portfolio.portfolio01-006"),
+    url: "/portfolio/mobile/waterfallFlow",
+  },
+  {
+    path: new URL(`/src/assets/images/Tiktok.jpg`, import.meta.url).href,
+    name: t("portfolio.portfolio01-007"),
+    url: "/portfolio/mobile/instantMusicVideo",
+  },
+  {
+    path: new URL(`/src/assets/images/netease_cloud_music.jpg`, import.meta.url).href,
+    name: t("portfolio.portfolio01-008"),
+    url: "/portfolio/mobile/musicPlayer",
+  },
+  {
+    path: new URL(`/src/assets/images/Amap.jpg`, import.meta.url).href,
+    name: t("portfolio.portfolio01-010"),
+    url: "/portfolio/mobile/AMap",
+  },
+]);
 const lockRightTime = setTimeout(() => {
   rightIsStart.value = false;
 }, 15000);
@@ -90,8 +119,13 @@ watch(
   () => router.currentRoute.value.path,
   (newValue) => {
     let routeArray = newValue.split("/");
-    if (routeArray.reverse()[0] !== "mobile") isWindow.value = true;
-    else isWindow.value = false;
+    if (routeArray.reverse()[0] !== "mobile") {
+      isWindow.value = true;
+      isApp.value = true
+    } else {
+      isWindow.value = false;
+      isApp.value = false
+    }
   },
   { immediate: true },
 );
@@ -110,10 +144,15 @@ onBeforeUnmount(() => {
   clearInterval(nowtime.value);
   clearTimeout(lockRightTime);
 });
+const appClick = (url: string) => {
+  router.push(url)
+
+}
 </script>
 <style lang="less" scoped>
 .mobile {
   width: 100%;
+  padding: 0 0 30px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -127,7 +166,7 @@ onBeforeUnmount(() => {
     justify-content: center;
     align-items: center;
     position: relative;
-    img {
+    &-iphoneFrame {
       width: 300px;
       height: 600px;
       border-radius: 40px;
@@ -135,25 +174,28 @@ onBeforeUnmount(() => {
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 5;
+      z-index: 2;
       cursor: pointer;
       user-select: none;
     }
     &-iphone {
-      width: 260px;
+      overflow: hidden;
+      width: 262px;
       height: 565px;
+      border-radius: 20px;
       position: absolute;
-      top: 18.3px;
-      left: 20.3px;
-      z-index: 3;
+      top: 18px;
+      left: 19px;
+      z-index: 4;
       &-lock {
-        width: 272px;
-        height: 565px;
+        width: 100%;
+        height: 100%;
         position: absolute;
         top: 0;
-        left: -6px;
-        z-index: 4;
-        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        left: 0;
+        filter: blur(0);
+        opacity: 1;
+        transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
         &-video {
           width: 100%;
           height: 100%;
@@ -163,10 +205,9 @@ onBeforeUnmount(() => {
       .noStart {
         filter: blur(6px);
         opacity: 0;
-        transform: scale(0);
-        transition: all 1s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0s 1s;
+        transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
       }
-      .backVideo {
+      .backImg {
         background-image: url("../../../assets/images/deskBack2.jpeg");
       }
       &-content {
@@ -176,7 +217,6 @@ onBeforeUnmount(() => {
         // height: calc(100% - 26px);
         height: 100%;
         margin-left: -1px;
-        border-radius: 20px;
         background-image: url("../../../assets/images/deskBack.jpeg");
         background-position: 0 0;
         background-size: 100% 100%;
@@ -214,7 +254,6 @@ onBeforeUnmount(() => {
           position: absolute;
           top: 0;
           left: 0;
-          z-index: 2;
           &-time {
             margin-top: 40px;
             font-size: 50px;
@@ -231,6 +270,40 @@ onBeforeUnmount(() => {
               margin-right: 10px;
             }
           }
+          &-apps {
+            width: 94%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            &-item {
+              width: 20%;
+              height: 66px;
+              margin: 2.5%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: space-between;
+              cursor: pointer;
+              &-icon {
+                width: 100%;
+                aspect-ratio: 1/1;
+                border-radius: 8px;
+                object-fit: cover;
+                display: block;
+              }
+              &-name {
+                width: 100%;
+                color: #fff;
+                font-size: 12px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                text-align: center;
+                line-height: 13px;
+              }
+            }
+          }
         }
       }
       &-content::-webkit-scrollbar {
@@ -239,15 +312,17 @@ onBeforeUnmount(() => {
     }
 
     &-window {
-      // overflow-x: hidden;
-      // overflow-y: scroll;
       overflow: hidden;
-      width: calc(100% - 41px);
-      height: calc(100% - 57px);
+      width: 262px;
+      height: 544px;
       border-radius: 0 0 20px 20px;
       position: absolute;
-      top: 40px;
-      left: 21px;
+      top: 39px;
+      left: 19px;
+      z-index: 3;
+    }
+
+    .app{
       z-index: 5;
     }
   }
@@ -263,18 +338,14 @@ onBeforeUnmount(() => {
   }
 }
 .isWindow {
-  // background-image: none !important;
   .isWindowItem {
-    // color: #333;
     background-color: #333;
     transition: all 0s 0.6s;
   }
   .iphoneIcon1 {
-    // fill: #333;
     transition: all 0s 0.6s;
   }
   .iphoneIcon2 {
-    // fill: #333;
     transition: all 0s 0.6s;
   }
 }

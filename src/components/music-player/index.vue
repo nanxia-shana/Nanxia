@@ -25,8 +25,8 @@
     v-show="menuRVisible"
     :style="{ left: menuLeft + 'px', top: menuTop + 'px' }"
     class="contextmenu">
-    <li @click="router.push('/musicPlayer')">{{ t("common.expand") }}</li>
-    <li>{{ t("common.collapse") }}</li>
+    <li @click="router.push('/musicPlayer')">{{ t("common.common02-009") }}</li>
+    <li>{{ t("common.common02-010") }}</li>
   </ul>
 </template>
 <script lang="ts" setup>
